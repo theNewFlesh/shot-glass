@@ -1,0 +1,24 @@
+version: "3.4"
+volumes:
+  cache:
+services:
+  shot-glass:
+    container_name: shot-glass
+    image: shot-glass
+    build:
+      context: .
+      dockerfile: dev.dockerfile
+    ports:
+      - "2100:9000"
+      - "2180:8080"
+    userns_mode: "host"
+    user: ubuntu
+    volumes:
+      - ../:/home/ubuntu/shot-glass
+      - ./jupyter:/home/ubuntu/.jupyter
+      - ./ipython:/home/ubuntu/.ipython
+      - ../artifacts:/tmp/dash_artifacts
+      - ~/.ssh:/home/ubuntu/.ssh
+      # - /mnt/storage:/mnt/storage
+    working_dir: "/home/ubuntu"
+    command: "tail -f /dev/null"

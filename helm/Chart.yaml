@@ -1,0 +1,18 @@
+apiVersion: v2
+name: shot-glass
+version: 0.1.0
+home: https://github.com/theNewFlesh/shot-glass
+description: |
+  A cloud native service for working with Blender geometry.
+keywords:
+  - blender
+  - computer vision
+  - geometry
+  - 3D
+  - cloud
+type: application
+appVersion: "0.1.0"
+maintainers:
+  - name: Alex Braun
+    email: alexander.g.braun@gmail.com
+    url: http://alexgbraun.com

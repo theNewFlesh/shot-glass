@@ -1,0 +1,20 @@
+namespace: shot-glass
+
+container:
+  image: shot-glass
+  tag: latest
+  repo: /mnt/repos/shot-glass
+  storage_volume: /mnt/storage
+  port: 8080
+  image_pull_policy: IfNotPresent
+  command:
+    [
+      "python3.7",
+      "/home/ubuntu/shot-glass/python/shot_glass/server/app.py",
+    ]
+  env:
+    - name: REPO_ENV
+      value: "True"
+
+service:
+  port: 80
