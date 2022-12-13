@@ -1,5 +1,5 @@
 # Introduction
-A cloud native service for working with Blender geometry.
+Data Science for Procedural Geometry using Blender and Category Theory.
 
 See [documentation](https://theNewFlesh.github.io/shot-glass/) for details.
 
