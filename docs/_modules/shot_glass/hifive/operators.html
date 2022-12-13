@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shot_glass.hifive.operators &mdash; shot-glass  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> shot-glass
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#installation">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blender.html">blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hifive.html">hifive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../obj.html">obj</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotly.html">plotly</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">shot-glass</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>shot_glass.hifive.operators</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for shot_glass.hifive.operators</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">lunchbox.tools</span> <span class="k">as</span> <span class="nn">lbt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+
+<span class="kn">from</span> <span class="nn">shot_glass.hifive.hifive</span> <span class="kn">import</span> <span class="n">HiFive</span>
+<span class="kn">from</span> <span class="nn">shot_glass.hifive.operator_tools</span> <span class="kn">import</span> <span class="n">operator</span>
+<span class="kn">from</span> <span class="nn">shot_glass.utils</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">import</span> <span class="nn">shot_glass.blender.blender_tools</span> <span class="k">as</span> <span class="nn">blt</span>
+<span class="kn">import</span> <span class="nn">shot_glass.hifive.validators</span> <span class="k">as</span> <span class="nn">validators</span>
+<span class="kn">import</span> <span class="nn">shot_glass.obj.obj_tools</span> <span class="k">as</span> <span class="nn">obt</span>
+<span class="kn">import</span> <span class="nn">shot_glass.plotly.plotly_tools</span> <span class="k">as</span> <span class="nn">plot</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># JSON-OPERATORS----------------------------------------------------------------</span>
+<div class="viewcode-block" id="read_json"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operators.read_json">[docs]</a><span class="nd">@operator</span><span class="p">(</span>
+    <span class="n">fullpath</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">validators</span><span class="o">.</span><span class="n">has_json_extension</span><span class="p">,</span>
+        <span class="n">validators</span><span class="o">.</span><span class="n">file_exists</span><span class="p">,</span>
+        <span class="n">validators</span><span class="o">.</span><span class="n">is_records_json</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">read_json</span><span class="p">(</span><span class="n">fullpath</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Read HiFive data from JSON filepath or buffer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fullpath (str): Filepath of JSON data in records format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HiFive: HiFive instance with JSON data in it.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fullpath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">path_or_buf</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">v_x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">v_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">v_y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">v_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">v_z</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">v_z</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># enforce column order</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;i_id&#39;</span><span class="p">,</span> <span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_x&#39;</span><span class="p">,</span> <span class="s1">&#39;v_y&#39;</span><span class="p">,</span> <span class="s1">&#39;v_z&#39;</span><span class="p">]</span>
+    <span class="n">extra_cols</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">extra_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">,</span> <span class="n">extra_cols</span><span class="p">)))</span>
+    <span class="n">cols</span> <span class="o">+=</span> <span class="n">extra_cols</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
+
+    <span class="n">hifive</span> <span class="o">=</span> <span class="n">HiFive</span><span class="p">()</span>
+    <span class="n">hifive</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="k">return</span> <span class="n">hifive</span></div>
+
+
+<div class="viewcode-block" id="write_json"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operators.write_json">[docs]</a><span class="nd">@operator</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">is_hifive_instance</span><span class="p">],</span>
+    <span class="n">fullpath</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">has_json_extension</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">write_json</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">,</span> <span class="n">fullpath</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Write HiFive data to JSON filepath or string in records format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (HiFive): HiFive instance to be written.</span>
+<span class="sd">        fullpath (str): Target filepath.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HiFive: HiFive instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;HiFive data written to </span><span class="si">{</span><span class="n">fullpath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<span class="c1"># BLENDER-OPERATORS---------------------------------------------------------</span>
+<div class="viewcode-block" id="to_blender_scene"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operators.to_blender_scene">[docs]</a><span class="nd">@operator</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">is_hifive_instance</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">to_blender_scene</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a HiFive instance into a Blender scene.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (HiFive): HiFive instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bpy.types.Scene: Blender Scene instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">blt</span><span class="o">.</span><span class="n">dataframe_to_scene</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="from_blender_scene"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operators.from_blender_scene">[docs]</a><span class="nd">@operator</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">is_blender_scene</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">from_blender_scene</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a Blender Scene instance into HiFive data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        scene (bpy.types.Scene): Blender Scene instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HiFive: HiFive instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">HiFive</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">blt</span><span class="o">.</span><span class="n">scene_to_dataframe</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<span class="c1"># PLOTLY-OPERATORS----------------------------------------------------------</span>
+<div class="viewcode-block" id="to_plotly_figure"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operators.to_plotly_figure">[docs]</a><span class="nd">@operator</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">is_hifive_instance</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">to_plotly_figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Create a plotly figure of mesh data. Triangulates mesh.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (HiFive): HiFive instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: plotly Figure dictionary with mesh data inside.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">scene</span> <span class="o">=</span> <span class="n">to_blender_scene</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">blt</span><span class="o">.</span><span class="n">triangulate_all_objects</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">from_blender_scene</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
+
+    <span class="n">hi</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;v_x&#39;</span><span class="p">,</span> <span class="s1">&#39;v_y&#39;</span><span class="p">,</span> <span class="s1">&#39;v_z&#39;</span><span class="p">]</span>
+    <span class="n">min_</span> <span class="o">=</span> <span class="n">hi</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">max_</span> <span class="o">=</span> <span class="n">hi</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="c1"># create mesh3d</span>
+    <span class="n">hi</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_i_draw_order&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">hi</span> <span class="o">=</span> <span class="n">hi</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="s1">&#39;v_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;f_x_vals&#39;</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lbt</span><span class="o">.</span><span class="n">get_ordered_unique</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">hi</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;f_i_i&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">f_x_vals</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;f_i_j&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">f_x_vals</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;f_i_k&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">f_x_vals</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;v_x&#39;</span><span class="p">,</span> <span class="s1">&#39;v_y&#39;</span><span class="p">,</span> <span class="s1">&#39;v_z&#39;</span><span class="p">,</span> <span class="s1">&#39;f_i_i&#39;</span><span class="p">,</span> <span class="s1">&#39;f_i_j&#39;</span><span class="p">,</span> <span class="s1">&#39;f_i_k&#39;</span><span class="p">]</span>
+    <span class="n">verts</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;v_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;f_id&#39;</span><span class="p">)[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">v_x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">v_y</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">v_z</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">f_i_i</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">f_i_j</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">f_i_k</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="c1"># create figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">get_mesh_plot_figure</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<span class="c1"># OBJ-OPERATORS-----------------------------------------------------------------</span>
+<div class="viewcode-block" id="read_obj"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operators.read_obj">[docs]</a><span class="nd">@operator</span><span class="p">(</span>
+    <span class="n">fullpath</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">validators</span><span class="o">.</span><span class="n">has_obj_extension</span><span class="p">,</span>
+        <span class="n">validators</span><span class="o">.</span><span class="n">file_exists</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">read_obj</span><span class="p">(</span><span class="n">fullpath</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Reads given OBJ file.</span>
+<span class="sd">    Creates v_i_draw_order column which preserves draw order of face</span>
+<span class="sd">    vertices. Only vertices and faces are currently supported.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fullpath (str): Fullpath to OBJ file.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValidationError: If file is missing vertex id, x, y, or z data.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HiFive: HiFive instance with OBJ data.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># currently supported components</span>
+    <span class="n">supported_components</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vertex&#39;</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">]</span>
+
+    <span class="c1"># parse obj file</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">obt</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">fullpath</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># filter out none component lines</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">component_type</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">supported_components</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="c1"># rename all the columns</span>
+    <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="n">column</span><span class="p">):</span>
+        <span class="n">lut</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="s1">&#39;v_x&#39;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="s1">&#39;v_y&#39;</span><span class="p">,</span>
+            <span class="n">z</span><span class="o">=</span><span class="s1">&#39;v_z&#39;</span><span class="p">,</span>
+            <span class="n">vertex_id</span><span class="o">=</span><span class="s1">&#39;v_id&#39;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">lut</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">lut</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">column</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">rename</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_x&#39;</span><span class="p">,</span> <span class="s1">&#39;v_y&#39;</span><span class="p">,</span> <span class="s1">&#39;v_z&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;OBJ file: </span><span class="si">{</span><span class="n">fullpath</span><span class="si">}</span><span class="s1"> is missing </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1"> data.&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># create verts</span>
+    <span class="n">verts</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">component_type</span> <span class="o">==</span> <span class="s1">&#39;vertex&#39;</span><span class="p">]</span>
+    <span class="n">verts</span><span class="o">.</span><span class="n">v_id</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">v_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lbt</span><span class="o">.</span><span class="n">try_</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">x</span><span class="p">))</span>
+    <span class="n">verts</span><span class="o">.</span><span class="n">v_x</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">v_x</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lbt</span><span class="o">.</span><span class="n">try_</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">x</span><span class="p">))</span>
+    <span class="n">verts</span><span class="o">.</span><span class="n">v_y</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">v_y</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lbt</span><span class="o">.</span><span class="n">try_</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">x</span><span class="p">))</span>
+    <span class="n">verts</span><span class="o">.</span><span class="n">v_z</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">v_z</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lbt</span><span class="o">.</span><span class="n">try_</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">x</span><span class="p">))</span>
+
+    <span class="c1"># create faces</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">component_type</span> <span class="o">==</span> <span class="s1">&#39;face&#39;</span><span class="p">]</span>
+    <span class="n">faces</span><span class="o">.</span><span class="n">parts</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;vertex_id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">obt</span><span class="o">.</span><span class="n">obj_face_to_edges</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">f_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">f_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">f_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">f_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="n">e_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">e_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">e_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">e_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">e_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="c1"># merge expanded DataFrame and original vertices</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;v_id&#39;</span><span class="p">)</span>
+
+    <span class="c1"># assign single item id to all components</span>
+    <span class="c1"># TODO: add proper support for different OBJ items</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;i_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># cleanup</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;i_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;f_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;e_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;v_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;v_x&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;v_y&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;v_z&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;v_i_draw_order&#39;</span>
+    <span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># make vertex ids start at 0 instead of 1</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">v_id</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="n">hifive</span> <span class="o">=</span> <span class="n">HiFive</span><span class="p">()</span>
+    <span class="n">hifive</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="k">return</span> <span class="n">hifive</span></div>
+
+
+<div class="viewcode-block" id="write_obj"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operators.write_obj">[docs]</a><span class="nd">@operator</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">is_hifive_instance</span><span class="p">],</span>
+    <span class="n">fullpath</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">has_obj_extension</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">write_obj</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">,</span> <span class="n">fullpath</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Writes data to OBJ file.</span>
+
+<span class="sd">    Currently, only faces and vertices are supported. If v_i_draw_order</span>
+<span class="sd">    column is present in data, vertices of each face will be written in</span>
+<span class="sd">    specified order.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (HiFive): HiFive data instance.</span>
+<span class="sd">        fullpath (str): Full path to OBJ file to be written.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HiFive: HiFive instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">hifive</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;v_x&#39;</span><span class="p">,</span> <span class="s1">&#39;v_y&#39;</span><span class="p">,</span> <span class="s1">&#39;v_z&#39;</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">hifive</span><span class="o">.</span><span class="n">data</span> \
+        <span class="o">.</span><span class="n">copy</span><span class="p">()</span> \
+        <span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v_id&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">cols</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;v_id&#39;</span><span class="p">)</span>
+
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="s1">&#39;v_id&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">cols</span><span class="p">]</span> \
+        <span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span> \
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;v </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">cols</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">data</span> \
+        <span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;e_id&#39;</span><span class="p">])</span> \
+        <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;f_id&#39;</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">obt</span><span class="o">.</span><span class="n">row_to_obj_face</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;# Generated from HiFive data&#39;</span><span class="p">]</span>
+    <span class="n">vheader</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"># Vertices&#39;</span><span class="p">]</span>
+    <span class="n">fheader</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"># Faces&#39;</span><span class="p">]</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">vheader</span> <span class="o">+</span> <span class="n">vertices</span> <span class="o">+</span> <span class="n">fheader</span> <span class="o">+</span> <span class="n">faces</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;HiFive data written to </span><span class="si">{</span><span class="n">fullpath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hifive</span></div>
+
+
+<span class="c1"># FILE-SEQUENCE-OPERATORS-------------------------------------------------------</span>
+<div class="viewcode-block" id="from_file_sequence"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operators.from_file_sequence">[docs]</a><span class="nd">@operator</span><span class="p">(</span>
+    <span class="n">fullpath</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">is_file_sequence_directory</span><span class="p">],</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">is_valid_column_infix</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">from_file_sequence</span><span class="p">(</span><span class="n">fullpath</span><span class="o">=</span><span class="s1">&#39;required&#39;</span><span class="p">,</span> <span class="n">infix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates HiFive instance with 1 row per file in given directory.</span>
+
+<span class="sd">    Columns:</span>
+
+<span class="sd">        * v_s_[infix]_fullpath - Fullpath to file in given directory.</span>
+<span class="sd">        * v_z - Z value of end digits of file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fullpath (str): Absolute path to directory of files.</span>
+<span class="sd">        infix (str, optional): String to be inserted in column name. Default: &#39;&#39;</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HiFive: HiFive instance of filenames of given directory.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">filepaths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">fullpath</span><span class="p">)):</span>
+        <span class="n">filepaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+
+    <span class="n">hifive</span> <span class="o">=</span> <span class="n">HiFive</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">hifive</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">column</span> <span class="o">=</span> <span class="s1">&#39;v_s_fullpath&#39;</span>
+    <span class="k">if</span> <span class="n">infix</span><span class="p">:</span>
+        <span class="n">column</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;v_s_</span><span class="si">{</span><span class="n">infix</span><span class="si">}</span><span class="s1">_fullpath&#39;</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">filepaths</span>
+
+    <span class="c1"># assume each file name ends in a padded number indicating its z coordinate</span>
+    <span class="c1"># example: some_header_text_0001.png</span>
+    <span class="c1"># TODO: expand this logic into the proper viz asset system and write</span>
+    <span class="c1">#             asset read and write operators</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">v_z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hifive</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

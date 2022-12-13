@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shot_glass.obj.obj_tools &mdash; shot-glass  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> shot-glass
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#installation">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blender.html">blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hifive.html">hifive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../obj.html">obj</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotly.html">plotly</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">shot-glass</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>shot_glass.obj.obj_tools</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for shot_glass.obj.obj_tools</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
+
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+
+<span class="kn">from</span> <span class="nn">shot_glass.obj.obj_parser</span> <span class="kn">import</span> <span class="n">ObjParser</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="obj_face_to_edges"><a class="viewcode-back" href="../../../obj.html#shot_glass.obj.obj_tools.obj_face_to_edges">[docs]</a><span class="k">def</span> <span class="nf">obj_face_to_edges</span><span class="p">(</span><span class="n">vertex_ids</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a list of vertex ids into a HiFive compatible DataFrame.</span>
+<span class="sd">    Columns of DataFrame include:</span>
+
+<span class="sd">        * f_id (with uuids)</span>
+<span class="sd">        * e_id (with uuids)</span>
+<span class="sd">        * v_id (integer)</span>
+<span class="sd">        * v_i_draw_order (preserves draw order of vertices)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        vertex_ids (list): List of integers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: DataFrame.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">vertex_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="p">[</span><span class="n">vertex_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">vertex_ids</span><span class="p">,</span> <span class="n">edges</span><span class="p">))</span>
+    <span class="n">o_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vertex_ids</span><span class="p">)}</span>
+
+    <span class="n">f_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">e_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">v_id</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">f_id</span><span class="o">=</span><span class="n">f_id</span><span class="p">,</span>
+                <span class="n">e_id</span><span class="o">=</span><span class="n">e_id</span><span class="p">,</span>
+                <span class="n">v_id</span><span class="o">=</span><span class="n">v_id</span><span class="p">,</span>
+                <span class="n">v_i_draw_order</span><span class="o">=</span><span class="n">o_lut</span><span class="p">[</span><span class="n">v_id</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="row_to_obj_face"><a class="viewcode-back" href="../../../obj.html#shot_glass.obj.obj_tools.row_to_obj_face">[docs]</a><span class="k">def</span> <span class="nf">row_to_obj_face</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts row, grouped by face id, into a OBJ parsable string defining a</span>
+<span class="sd">    face.</span>
+
+<span class="sd">    If v_i_draw_order column is present, vertex ids within face will be</span>
+<span class="sd">    ordered accordingly. For example, a face with the v_ids:</span>
+<span class="sd">    [10, 20, 30, 40] and a vertex order of [3, 2, 1, 0] would return the</span>
+<span class="sd">    string &#39;f 40 30 20 10&#39;.</span>
+
+<span class="sd">    OBJ implies edges as existing between successive vertex id in a face</span>
+<span class="sd">    definition. So, edge [40, 30], [30, 20], and [20, 10] are all implied.</span>
+<span class="sd">    The face completing edge [10, 40], is also implied. The order they are</span>
+<span class="sd">    defined in (clockwise, our counterclockwise) determines the orientation</span>
+<span class="sd">    of the face. Thus, reordering the vertex ids may produce an invalid or</span>
+<span class="sd">    incorrect face. And reversing the order of all of them will flip the</span>
+<span class="sd">    face normal, causing it to be rendered incorrectly.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        row (Series): Row of DataFrame.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: OBJ parsable string.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">v_id</span>
+    <span class="k">if</span> <span class="s1">&#39;v_i_draw_order&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+        <span class="c1"># TODO: This portion is highly inefficient, make it better.</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;v_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">v_id</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">v_i_draw_order</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;order&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">v_id</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;f &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../obj.html#shot_glass.obj.obj_tools.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">fullpath</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Parses a given OBJ file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fullpath (str): Fullpath to OBJ file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list of dictionaries.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">ObjParser</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">fullpath</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>obj &mdash; shot-glass  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="plotly" href="plotly.html" />
+    <link rel="prev" title="hifive" href="hifive.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> shot-glass
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#installation">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cli.html">cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blender.html">blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hifive.html">hifive</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">obj</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-shot_glass.obj.obj_parser">obj_parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-shot_glass.obj.obj_tools">obj_tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plotly.html">plotly</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">shot-glass</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">&lt;no title&gt;</a> &raquo;</li>
+      <li>obj</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/obj.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="obj">
+<h1>obj<a class="headerlink" href="#obj" title="Permalink to this heading">¶</a></h1>
+<section id="module-shot_glass.obj.obj_parser">
+<span id="obj-parser"></span><h2>obj_parser<a class="headerlink" href="#module-shot_glass.obj.obj_parser" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_parser.ObjParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shot_glass.obj.obj_parser.</span></span><span class="sig-name descname"><span class="pre">ObjParser</span></span><a class="reference internal" href="_modules/shot_glass/obj/obj_parser.html#ObjParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.obj.obj_parser.ObjParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A simple parser for files in OBJ format.</p>
+<p>Currently supports:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>vertices</p></li>
+<li><p>vertex normals</p></li>
+<li><p>vertex points</p></li>
+<li><p>vertex textures</p></li>
+<li><p>faces</p></li>
+</ul>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_parser.ObjParser.__dict__">
+<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'shot_glass.obj.obj_parser',</span> <span class="pre">'__doc__':</span> <span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">A</span> <span class="pre">simple</span> <span class="pre">parser</span> <span class="pre">for</span> <span class="pre">files</span> <span class="pre">in</span> <span class="pre">OBJ</span> <span class="pre">format.\n\n</span>&#160;&#160;&#160; <span class="pre">Currently</span> <span class="pre">supports:\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">*</span> <span class="pre">vertices\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">*</span> <span class="pre">vertex</span> <span class="pre">normals\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">*</span> <span class="pre">vertex</span> <span class="pre">points\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">*</span> <span class="pre">vertex</span> <span class="pre">textures\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">*</span> <span class="pre">faces\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">ObjParser.__init__&gt;,</span> <span class="pre">'_ObjParser__vertex_to_dict':</span> <span class="pre">&lt;staticmethod(&lt;function</span> <span class="pre">ObjParser.__vertex_to_dict&gt;)&gt;,</span> <span class="pre">'_parse_line':</span> <span class="pre">&lt;function</span> <span class="pre">ObjParser._parse_line&gt;,</span> <span class="pre">'parse':</span> <span class="pre">&lt;function</span> <span class="pre">ObjParser.parse&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'ObjParser'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'ObjParser'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#shot_glass.obj.obj_parser.ObjParser.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_parser.ObjParser.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/obj/obj_parser.html#ObjParser.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.obj.obj_parser.ObjParser.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines Backus-Naur form for parsing OBJ files.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_parser.ObjParser.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'shot_glass.obj.obj_parser'</span></em><a class="headerlink" href="#shot_glass.obj.obj_parser.ObjParser.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_parser.ObjParser.__vertex_to_dict">
+<span class="sig-name descname"><span class="pre">__vertex_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">components</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shot_glass.obj.obj_parser.ObjParser.__vertex_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience method for converting parsed vertex data into a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> (<em>list</em>) – list of pyparsing tokens.</p></li>
+<li><p><strong>compoents</strong> (<em>list</em>) – list of components.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Vertex dictionary.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_parser.ObjParser.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#shot_glass.obj.obj_parser.ObjParser.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_parser.ObjParser._parse_line">
+<span class="sig-name descname"><span class="pre">_parse_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/obj/obj_parser.html#ObjParser._parse_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.obj.obj_parser.ObjParser._parse_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses given line of OBJ file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>line</strong> (<em>str</em>) – Line of OBJ file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pyparsing object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_parser.ObjParser.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fullpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/obj/obj_parser.html#ObjParser.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.obj.obj_parser.ObjParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a given OBJ file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fullpath</strong> (<em>str</em>) – Fullpath to OBJ file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-shot_glass.obj.obj_tools">
+<span id="obj-tools"></span><h2>obj_tools<a class="headerlink" href="#module-shot_glass.obj.obj_tools" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_tools.obj_face_to_edges">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.obj.obj_tools.</span></span><span class="sig-name descname"><span class="pre">obj_face_to_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex_ids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/obj/obj_tools.html#obj_face_to_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.obj.obj_tools.obj_face_to_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of vertex ids into a HiFive compatible DataFrame.
+Columns of DataFrame include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>f_id (with uuids)</p></li>
+<li><p>e_id (with uuids)</p></li>
+<li><p>v_id (integer)</p></li>
+<li><p>v_i_draw_order (preserves draw order of vertices)</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vertex_ids</strong> (<em>list</em>) – List of integers.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_tools.parse">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.obj.obj_tools.</span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fullpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/obj/obj_tools.html#parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.obj.obj_tools.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a given OBJ file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fullpath</strong> (<em>str</em>) – Fullpath to OBJ file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.obj.obj_tools.row_to_obj_face">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.obj.obj_tools.</span></span><span class="sig-name descname"><span class="pre">row_to_obj_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/obj/obj_tools.html#row_to_obj_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.obj.obj_tools.row_to_obj_face" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts row, grouped by face id, into a OBJ parsable string defining a
+face.</p>
+<p>If v_i_draw_order column is present, vertex ids within face will be
+ordered accordingly. For example, a face with the v_ids:
+[10, 20, 30, 40] and a vertex order of [3, 2, 1, 0] would return the
+string ‘f 40 30 20 10’.</p>
+<p>OBJ implies edges as existing between successive vertex id in a face
+definition. So, edge [40, 30], [30, 20], and [20, 10] are all implied.
+The face completing edge [10, 40], is also implied. The order they are
+defined in (clockwise, our counterclockwise) determines the orientation
+of the face. Thus, reordering the vertex ids may produce an invalid or
+incorrect face. And reversing the order of all of them will flip the
+face normal, causing it to be rendered incorrectly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>row</strong> (<em>Series</em>) – Row of DataFrame.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>OBJ parsable string.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hifive.html" class="btn btn-neutral float-left" title="hifive" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plotly.html" class="btn btn-neutral float-right" title="plotly" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

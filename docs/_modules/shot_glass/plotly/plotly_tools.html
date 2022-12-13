@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shot_glass.plotly.plotly_tools &mdash; shot-glass  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> shot-glass
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#installation">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blender.html">blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hifive.html">hifive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../obj.html">obj</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotly.html">plotly</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">shot-glass</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>shot_glass.plotly.plotly_tools</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for shot_glass.plotly.plotly_tools</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">plotly</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="get_mesh_plot_layout"><a class="viewcode-back" href="../../../plotly.html#shot_glass.plotly.plotly_tools.get_mesh_plot_layout">[docs]</a><span class="k">def</span> <span class="nf">get_mesh_plot_layout</span><span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">,</span> <span class="n">zoom</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates a dictionary representation of a Plotly Layout object optimized</span>
+<span class="sd">    for displaying 3D mesh data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        min_ (float): Minimum value for x, y, z of plot bounding box.</span>
+<span class="sd">        max_ (float): Maximum value for x, y, z of plot bounding box.</span>
+<span class="sd">        zoom (float): Multiplier for camera zoom toward object center.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: JSON dictionary representation of plotly.Layout instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">zoom_out</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">zoom</span>
+    <span class="n">range_</span> <span class="o">=</span> <span class="p">[</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+        <span class="n">margin</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">Margin</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>  <span class="c1"># noqa: E741</span>
+        <span class="n">paper_bgcolor</span><span class="o">=</span><span class="s1">&#39;rgb(8, 8, 8)&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">Title</span><span class="p">(</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;rgb(244, 244, 244)&quot;</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;rgb(8, 8, 8)&#39;</span><span class="p">),</span>
+        <span class="n">scene</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">Scene</span><span class="p">(</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">XAxis</span><span class="p">(</span>
+                <span class="nb">range</span><span class="o">=</span><span class="n">range_</span><span class="p">,</span>
+                <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">autorange</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showspikes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showbackground</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">),</span>
+            <span class="n">yaxis</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">YAxis</span><span class="p">(</span>
+                <span class="nb">range</span><span class="o">=</span><span class="n">range_</span><span class="p">,</span>
+                <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">autorange</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showspikes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showbackground</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">),</span>
+            <span class="n">zaxis</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ZAxis</span><span class="p">(</span>
+                <span class="nb">range</span><span class="o">=</span><span class="n">range_</span><span class="p">,</span>
+                <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">autorange</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showspikes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showbackground</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">showticklabels</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">),</span>
+            <span class="n">camera</span><span class="o">=</span><span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">Camera</span><span class="p">(</span>
+                <span class="n">up</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">eye</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="mi">1</span> <span class="o">*</span> <span class="n">zoom_out</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="mf">0.75</span> <span class="o">*</span> <span class="n">zoom_out</span><span class="p">,</span>
+                    <span class="n">z</span><span class="o">=-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">zoom_out</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_plotly_json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="get_mesh3d_trace"><a class="viewcode-back" href="../../../plotly.html#shot_glass.plotly.plotly_tools.get_mesh3d_trace">[docs]</a><span class="k">def</span> <span class="nf">get_mesh3d_trace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates a dictionary representation of a Plotly Mesh3d trace object</span>
+<span class="sd">    optimized for 3D mesh display.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (list): List of vertex x coordinate values.</span>
+<span class="sd">        y (list): List of vertex y coordinate values.</span>
+<span class="sd">        z (list): List of vertex z coordinate values.</span>
+<span class="sd">        i (list): List of 1st vertices of each triangular face.</span>
+<span class="sd">        j (list): List of 2nd vertices of each triangular face.</span>
+<span class="sd">        k (list): List of 3rd vertices of each triangular face.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: JSON dictionary representation of plotly.Mesh3d instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># swap y and z, beacuse plotly is z up and camera.up.y = 1 doesn&#39;t work</span>
+    <span class="k">return</span> <span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">Mesh3d</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;rgb(255, 255, 255)&quot;</span><span class="p">,</span>
+        <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">lighting</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">ambient</span><span class="o">=</span><span class="mf">0.09</span><span class="p">,</span>
+            <span class="n">diffuse</span><span class="o">=</span><span class="mf">0.72</span><span class="p">,</span>
+            <span class="n">specular</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span>
+            <span class="n">roughness</span><span class="o">=</span><span class="mf">0.28</span><span class="p">,</span>
+            <span class="n">fresnel</span><span class="o">=</span><span class="mf">0.04</span>
+        <span class="p">),</span>
+        <span class="n">lightposition</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="mf">0.87</span><span class="p">,</span>
+            <span class="n">z</span><span class="o">=</span><span class="mf">0.0</span>
+        <span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_plotly_json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="get_mesh_plot_figure"><a class="viewcode-back" href="../../../plotly.html#shot_glass.plotly.plotly_tools.get_mesh_plot_figure">[docs]</a><span class="k">def</span> <span class="nf">get_mesh_plot_figure</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">,</span> <span class="n">zoom</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates a dictionary representation of a Plotly Figure object optimized</span>
+<span class="sd">    and directly used for plottingg 3D mesh data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (list): List of vertex x coordinate values.</span>
+<span class="sd">        y (list): List of vertex y coordinate values.</span>
+<span class="sd">        z (list): List of vertex z coordinate values.</span>
+<span class="sd">        i (list): List of 1st vertices of each triangular face.</span>
+<span class="sd">        j (list): List of 2nd vertices of each triangular face.</span>
+<span class="sd">        k (list): List of 3rd vertices of each triangular face.</span>
+<span class="sd">        min_ (float): Minimum value for x, y, z of plot bounding box.</span>
+<span class="sd">        max_ (float): Maximum value for x, y, z of plot bounding box.</span>
+<span class="sd">        zoom (float): Multiplier for camera zoom toward object center.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: JSON dictionary representation of plotly.Figure instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">get_mesh_plot_layout</span><span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">,</span> <span class="n">zoom</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">get_mesh3d_trace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotly</span><span class="o">.</span><span class="n">graph_objs</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">data</span><span class="p">])</span><span class="o">.</span><span class="n">to_plotly_json</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shot_glass.blender.blender_tools &mdash; shot-glass  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> shot-glass
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#installation">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blender.html">blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hifive.html">hifive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../obj.html">obj</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotly.html">plotly</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">shot-glass</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>shot_glass.blender.blender_tools</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for shot_glass.blender.blender_tools</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">bmesh</span>
+<span class="kn">import</span> <span class="nn">lunchbox.tools</span> <span class="k">as</span> <span class="nn">lbt</span>
+<span class="kn">import</span> <span class="nn">mathutils</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+
+<span class="kn">import</span> <span class="nn">shot_glass.hifive.validators</span> <span class="k">as</span> <span class="nn">validators</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># SCENE-FUNCTIONS---------------------------------------------------------------</span>
+<div class="viewcode-block" id="set_scene"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.set_scene">[docs]</a><span class="k">def</span> <span class="nf">set_scene</span><span class="p">(</span><span class="n">scene</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Set&#39;s Blender&#39;s scene context ot given scene</span>
+
+<span class="sd">    scene - Blender scene object.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="n">scene</span></div>
+
+
+<div class="viewcode-block" id="delete_scene"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.delete_scene">[docs]</a><span class="k">def</span> <span class="nf">delete_scene</span><span class="p">(</span><span class="n">scene</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Deletes given scene from Blender.</span>
+
+<span class="sd">    scene - Blender scene.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">set_scene</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Scene deleted.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="delete_all_scenes"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.delete_all_scenes">[docs]</a><span class="k">def</span> <span class="nf">delete_all_scenes</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Destroys all Blender scenes and creates a new empty one.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">scene</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">scenes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">set_scene</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span>
+        <span class="n">delete_all_objects</span><span class="p">()</span>
+        <span class="n">delete_scene</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span>
+
+    <span class="n">old_scene</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">scenes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">set_scene</span><span class="p">(</span><span class="n">old_scene</span><span class="p">)</span>
+    <span class="n">delete_all_objects</span><span class="p">()</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;EMPTY&#39;</span><span class="p">)</span>
+    <span class="n">scene</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">scenes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">set_scene</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span>
+    <span class="n">delete_all_objects</span><span class="p">()</span>
+
+    <span class="n">set_scene</span><span class="p">(</span><span class="n">old_scene</span><span class="p">)</span>
+    <span class="n">delete_all_objects</span><span class="p">()</span>
+    <span class="n">delete_scene</span><span class="p">(</span><span class="n">old_scene</span><span class="p">)</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">scenes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Scene&#39;</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;All scenes deleted.&#39;</span><span class="p">)</span></div>
+
+
+<span class="c1"># MODE-FUNCTIONS----------------------------------------------------------------</span>
+<div class="viewcode-block" id="activate_edit_mode"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.activate_edit_mode">[docs]</a><span class="k">def</span> <span class="nf">activate_edit_mode</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Set Blender interaction mode to edit.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">mode_set</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;EDIT&#39;</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Edit mode active.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="activate_object_mode"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.activate_object_mode">[docs]</a><span class="k">def</span> <span class="nf">activate_object_mode</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Set Blender interaction mode to object.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">mode_set</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Object mode active.&#39;</span><span class="p">)</span></div>
+
+
+<span class="c1"># OBJECT-FUNCTIONS-----------------------------------------------------------</span>
+<div class="viewcode-block" id="select_object"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.select_object">[docs]</a><span class="k">def</span> <span class="nf">select_object</span><span class="p">(</span><span class="n">object_</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Selects given Blender object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_ (bpy object): Blender object to be selected.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">object_</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="n">object_</span></div>
+
+
+<div class="viewcode-block" id="deselect_object"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.deselect_object">[docs]</a><span class="k">def</span> <span class="nf">deselect_object</span><span class="p">(</span><span class="n">object_</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Deselect given Blender object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_ (bpy object): Blender object to be deselecoted.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">object_</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="select_all_objects"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.select_all_objects">[docs]</a><span class="k">def</span> <span class="nf">select_all_objects</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Selects all objects within current Blender scene.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
+        <span class="n">select_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="deselect_all_objects"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.deselect_all_objects">[docs]</a><span class="k">def</span> <span class="nf">deselect_all_objects</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Deselect all objects within current Blender scene.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
+        <span class="n">deselect_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="filter_select_objects"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.filter_select_objects">[docs]</a><span class="k">def</span> <span class="nf">filter_select_objects</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Clears selected objects and then selects Blender objects according to given</span>
+<span class="sd">    pattern.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pattern (str): Glob pattern of object name.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">deselect_all_objects</span><span class="p">()</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">select_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="n">pattern</span><span class="p">,</span> <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="delete_object"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.delete_object">[docs]</a><span class="k">def</span> <span class="nf">delete_object</span><span class="p">(</span><span class="n">object_</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Deletes given object_.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_ (bpy.types.Object): Blender object to be deleted.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">deselect_all_objects</span><span class="p">()</span>
+    <span class="n">select_object</span><span class="p">(</span><span class="n">object_</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="delete_all_objects"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.delete_all_objects">[docs]</a><span class="k">def</span> <span class="nf">delete_all_objects</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Deletes all objects within current scene.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">deselect_all_objects</span><span class="p">()</span>
+    <span class="n">select_all_objects</span><span class="p">()</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="filter_objects"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.filter_objects">[docs]</a><span class="k">def</span> <span class="nf">filter_objects</span><span class="p">(</span><span class="n">object_type</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Filters Blender objects by object type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_type (str): Type of Blender object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: List of all Blender objects of given type.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">object_type</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">objects</span>
+    <span class="p">))</span></div>
+
+
+<span class="c1"># FACE-FUNCTIONS---------------------------------------------------------------</span>
+<div class="viewcode-block" id="select_faces"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.select_faces">[docs]</a><span class="k">def</span> <span class="nf">select_faces</span><span class="p">(</span><span class="n">object_</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Select faces on given Blender mesh object according to according to given</span>
+<span class="sd">    face indices.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_ (bpy object): Blender object with faces to be selected.</span>
+<span class="sd">        indices (list): List of integers.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">deselect_all_objects</span><span class="p">()</span>
+    <span class="n">select_object</span><span class="p">(</span><span class="n">object_</span><span class="p">)</span>
+    <span class="n">activate_edit_mode</span><span class="p">()</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">select_mode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;FACE&#39;</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">bmesh</span><span class="o">.</span><span class="n">from_edit_mesh</span><span class="p">(</span><span class="n">object_</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">mesh</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">ensure_lookup_table</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">faces</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">object_</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="deselect_faces"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.deselect_faces">[docs]</a><span class="k">def</span> <span class="nf">deselect_faces</span><span class="p">(</span><span class="n">object_</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Deselect faces on given Blender mesh object according to according to given</span>
+<span class="sd">    face indices.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_ (bpy object): Blender object with faces to be deselected.</span>
+<span class="sd">        indices (list): List of integers.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">deselect_all_objects</span><span class="p">()</span>
+    <span class="n">select_object</span><span class="p">(</span><span class="n">object_</span><span class="p">)</span>
+    <span class="n">activate_edit_mode</span><span class="p">()</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">select_mode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;FACE&#39;</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">bmesh</span><span class="o">.</span><span class="n">from_edit_mesh</span><span class="p">(</span><span class="n">object_</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">mesh</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">ensure_lookup_table</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">faces</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">object_</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="select_all_faces"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.select_all_faces">[docs]</a><span class="k">def</span> <span class="nf">select_all_faces</span><span class="p">(</span><span class="n">object_</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Select all faces of the given Blender mesh object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_ (bpy object): Blender object with faces to be selected.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">deselect_all_objects</span><span class="p">()</span>
+    <span class="n">select_object</span><span class="p">(</span><span class="n">object_</span><span class="p">)</span>
+    <span class="n">activate_edit_mode</span><span class="p">()</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">select_mode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;FACE&#39;</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;SELECT&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="deselect_all_faces"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.deselect_all_faces">[docs]</a><span class="k">def</span> <span class="nf">deselect_all_faces</span><span class="p">(</span><span class="n">object_</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Deselect all faces of the given Blender mesh object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_ (bpy object): Blender object with faces to be selected.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">deselect_all_objects</span><span class="p">()</span>
+    <span class="n">select_object</span><span class="p">(</span><span class="n">object_</span><span class="p">)</span>
+    <span class="n">activate_edit_mode</span><span class="p">()</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">select_mode</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;FACE&#39;</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;DESELECT&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="triangulate_faces"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.triangulate_faces">[docs]</a><span class="k">def</span> <span class="nf">triangulate_faces</span><span class="p">(</span><span class="n">object_</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Triangulate currenly selected faces of given Blender mesh object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_ (bpy object): Blender object with faces preselected for</span>
+<span class="sd">            triangulation.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">activate_edit_mode</span><span class="p">()</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">quads_convert_to_tris</span><span class="p">()</span>
+    <span class="n">activate_object_mode</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="triangulate_all_objects"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.triangulate_all_objects">[docs]</a><span class="k">def</span> <span class="nf">triangulate_all_objects</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Triangulates all faces of all objects with current Blender scene.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">filter_objects</span><span class="p">(</span><span class="s1">&#39;mesh&#39;</span><span class="p">):</span>
+        <span class="n">select_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="n">triangulate_faces</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+
+<span class="c1"># DATAFRAME-FUNCTIONS-----------------------------------------------------------</span>
+<div class="viewcode-block" id="mesh_to_dataframe"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.mesh_to_dataframe">[docs]</a><span class="k">def</span> <span class="nf">mesh_to_dataframe</span><span class="p">(</span><span class="n">mesh</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a given Blender mesh object into a DataFrame.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mesh (bpy mesh): Blender object of type MESH.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValidationError: If given mesh is not of object type MESH.</span>
+<span class="sd">        ValidationError: If given mesh.name is not coercible to int.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: DataFrame of mesh data.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">validators</span><span class="o">.</span><span class="n">is_blender_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+    <span class="n">validators</span><span class="o">.</span><span class="n">has_valid_mesh_name</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+
+    <span class="c1"># vertices</span>
+    <span class="n">verts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">vert</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
+        <span class="c1"># convert vertex coordinates to worldspace</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">@</span> <span class="n">vert</span><span class="o">.</span><span class="n">co</span><span class="p">)</span><span class="o">.</span><span class="n">xyz</span>
+        <span class="n">verts</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vert</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">val</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+    <span class="n">verts</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_x&#39;</span><span class="p">,</span> <span class="s1">&#39;v_y&#39;</span><span class="p">,</span> <span class="s1">&#39;v_z&#39;</span><span class="p">])</span>
+
+    <span class="c1"># edges</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">vert</span> <span class="ow">in</span> <span class="n">edge</span><span class="o">.</span><span class="n">vertices</span><span class="p">:</span>
+            <span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">edge</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">vert</span><span class="p">])</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_id&#39;</span><span class="p">])</span>
+
+    <span class="c1"># faces</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">order</span><span class="p">,</span> <span class="n">vert</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">vertices</span><span class="p">):</span>
+            <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">face</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">vert</span><span class="p">,</span> <span class="n">order</span><span class="p">])</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_i_draw_order&#39;</span><span class="p">])</span>
+
+    <span class="c1"># data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;v_id&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;v_id&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;i_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># enforce row order</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+        <span class="p">[</span><span class="s1">&#39;i_id&#39;</span><span class="p">,</span> <span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_i_draw_order&#39;</span><span class="p">],</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="scene_to_dataframe"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.scene_to_dataframe">[docs]</a><span class="k">def</span> <span class="nf">scene_to_dataframe</span><span class="p">(</span><span class="n">scene</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts given Blender scene into a DataFrame.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        scene (bpy.types.Scene): Blender scene object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataFrame: DataFrame of all mesh data of scene.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">set_scene</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="n">filter_objects</span><span class="p">(</span><span class="s1">&#39;MESH&#39;</span><span class="p">):</span>
+        <span class="n">datum</span> <span class="o">=</span> <span class="n">mesh_to_dataframe</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datum</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># faces, edges and vertices are indexed relative to objects (objects) in</span>
+    <span class="c1"># blender the following makes them unique to all objects</span>
+    <span class="c1"># assumes unique ids of objects</span>
+    <span class="n">i_lut</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">i_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">i_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">i_lut</span><span class="p">)}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">i_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">i_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">i_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">f_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">i_id</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">f_id</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">f_lut</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">f_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">f_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f_lut</span><span class="p">)}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">f_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">f_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">e_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">i_id</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">e_id</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">e_lut</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">e_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">e_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">e_lut</span><span class="p">)}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">e_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">e_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">e_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">v_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">i_id</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">v_id</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">v_lut</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">v_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">v_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v_lut</span><span class="p">)}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">v_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">v_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">v_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="c1"># enforce row order</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+        <span class="p">[</span><span class="s1">&#39;i_id&#39;</span><span class="p">,</span> <span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_i_draw_order&#39;</span><span class="p">],</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="mesh_to_pydata"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.mesh_to_pydata">[docs]</a><span class="k">def</span> <span class="nf">mesh_to_pydata</span><span class="p">(</span><span class="n">mesh</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a given Blender mesh in to a tuple of vertices, edges and faces.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mesh (bpy mesh): Blender mesh object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (vertices, edges, faces).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">verts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">co</span><span class="p">),</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">edge_keys</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">])</span>
+
+    <span class="n">faces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">vertices</span><span class="p">),</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="dataframe_to_pydata"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.dataframe_to_pydata">[docs]</a><span class="k">def</span> <span class="nf">dataframe_to_pydata</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a DataFrame into a tuple of vertices, edges and faces consumed by the</span>
+<span class="sd">    Blender mesh from_pydata method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (DataFrame): DataFrame of single mesh data.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValidationError: If required columns are do not exist or are invalid.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (vertices, edges, faces).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">validators</span><span class="o">.</span><span class="n">mesh_dataframe_columns_exist</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">validators</span><span class="o">.</span><span class="n">mesh_dataframe_columns_are_valid</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># index face, edge and vertex ids relative to mesh</span>
+    <span class="n">f_lut</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">f_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">f_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f_lut</span><span class="p">)}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">f_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">f_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="n">e_lut</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">e_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">e_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">e_lut</span><span class="p">)}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">e_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">e_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">e_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="n">v_lut</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">v_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">v_lut</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v_lut</span><span class="p">)}</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">v_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">v_id</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">v_lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="n">verts</span> <span class="o">=</span> <span class="n">data</span> \
+        <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;v_id&#39;</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v_id&#39;</span><span class="p">])</span> \
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">v_x</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">v_y</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">v_z</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">data</span> \
+        <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;e_id&#39;</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;e_id&#39;</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">v_id</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span> \
+        <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">data</span> \
+        <span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_i_draw_order&#39;</span><span class="p">])</span> \
+        <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;f_id&#39;</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">v_id</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lbt</span><span class="o">.</span><span class="n">get_ordered_unique</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span> \
+        <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="dataframe_to_mesh"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.dataframe_to_mesh">[docs]</a><span class="k">def</span> <span class="nf">dataframe_to_mesh</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a DataFrame for a single mesh into a Blender mesh object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (DataFrame): DataFrame of single mesh data.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValidationError: If required columns are do not exist or are invalid.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bpy mesh: Blender mesh object.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># create object</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">i_id</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meshes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">show_name</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># link object to collection</span>
+    <span class="c1"># without this the object cannot be deleted</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+    <span class="c1"># add mesh data to object</span>
+    <span class="n">pydata</span> <span class="o">=</span> <span class="n">dataframe_to_pydata</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># TODO: fix this degenerate edge problem.</span>
+    <span class="c1"># Seemingly correct pydata produces degenerate geometry missing one edge</span>
+    <span class="c1"># faces. Faces seems to compete with edges in some way. So, leaving out</span>
+    <span class="c1"># edges for now.</span>
+    <span class="n">verts</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">pydata</span>
+
+    <span class="n">mesh</span><span class="o">.</span><span class="n">from_pydata</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="p">[],</span> <span class="n">faces</span><span class="p">)</span>
+    <span class="n">mesh</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+
+<div class="viewcode-block" id="dataframe_to_scene"><a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.dataframe_to_scene">[docs]</a><span class="k">def</span> <span class="nf">dataframe_to_scene</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a DataFrame of mesh data of a Blender scene into a Blender scene.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (DataFrame): DataFrame of mesh data.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bpy.types.Scene: Blender scene.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">delete_all_scenes</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i_id</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">i_id</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">i_id</span> <span class="o">==</span> <span class="n">i_id</span><span class="p">]</span>
+        <span class="n">dataframe_to_mesh</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

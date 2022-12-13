@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shot_glass.hifive.hifive &mdash; shot-glass  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> shot-glass
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#installation">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blender.html">blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hifive.html">hifive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../obj.html">obj</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotly.html">plotly</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">shot-glass</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>shot_glass.hifive.hifive</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for shot_glass.hifive.hifive</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+
+<span class="kn">from</span> <span class="nn">shot_glass.hifive.type_base</span> <span class="kn">import</span> <span class="n">HiFiveTypeBase</span>
+<span class="kn">from</span> <span class="nn">shot_glass.utils</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">import</span> <span class="nn">shot_glass.hifive.hifive_tools</span> <span class="k">as</span> <span class="nn">hft</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+<span class="n">HIFIVE_FILE_EXTENSION</span> <span class="o">=</span> <span class="s1">&#39;hi5&#39;</span>
+
+
+<div class="viewcode-block" id="HiFiveDataType"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFiveDataType">[docs]</a><span class="k">class</span> <span class="nc">HiFiveDataType</span><span class="p">(</span><span class="n">HiFiveTypeBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Legal data types for HiFive columns.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">FLOAT</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">hft</span><span class="o">.</span><span class="n">is_float</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">INTEGER</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;integer&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hft</span><span class="o">.</span><span class="n">is_integer</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">JSON</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hft</span><span class="o">.</span><span class="n">is_json</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">OPTIONAL</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;optional&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">STRING</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hft</span><span class="o">.</span><span class="n">is_string</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HiFiveComponentType"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFiveComponentType">[docs]</a><span class="k">class</span> <span class="nc">HiFiveComponentType</span><span class="p">(</span><span class="n">HiFiveTypeBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Legal component types for HiFive columns.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">ITEMS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">FACES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;face&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">EDGES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;edge&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">VERTICES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vertex&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HiFive"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive">[docs]</a><span class="k">class</span> <span class="nc">HiFive</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    HIFIVE stands for Homomorphically Indexed Faces Items Vertices and Edges</span>
+
+<span class="sd">    It is a class for definining 3D polygonal geometry in a manner that is most</span>
+<span class="sd">    conducive to computer vision, machine learning and procedural modeling</span>
+<span class="sd">    algorithm development. It does this by defining relationships between</span>
+<span class="sd">    the components of 3D geometry (items, faces, edges and vertices) within a</span>
+<span class="sd">    singular table, such that structure preserving maps between the components</span>
+<span class="sd">    (homomorphisms) are easily observed, maintained and modified.</span>
+
+<span class="sd">    The internal table of this class, being just a Pandas DataFrame of</span>
+<span class="sd">    optionally typed columns, fits seamnlessy into the workflow of a data</span>
+<span class="sd">    scientist which is often the application of mathematical models and linear</span>
+<span class="sd">    algebra to large matrices of numbers/consistently typed data.</span>
+
+<span class="sd">    Columns consist of 3 parts: a component type, a datatype and a descriptor.</span>
+
+<span class="sd">    **Components**</span>
+
+<span class="sd">        Polygonal geometry consist of 4 main component types:</span>
+
+<span class="sd">            * *Items (i)*    - A set of faces, edges and/or vertices.</span>
+<span class="sd">            * *Faces (f)*    - A set of edges connected to form a closed 2D \</span>
+<span class="sd">                shape.</span>
+<span class="sd">            * *Edges (e)*    - A set of exactly two vertices.</span>
+<span class="sd">            * *Vertices (v)* - A set of x,y,z floating point coordinates.</span>
+
+<span class="sd">        A ctype (component type) indicates one of these. Ctypes are used for</span>
+<span class="sd">        homomorphically mapping data from a source component to a target</span>
+<span class="sd">        component. This is to say, in a way that preserves the relationship</span>
+<span class="sd">        between the two.</span>
+
+<span class="sd">    **Data**</span>
+
+<span class="sd">        HiFive DataFrames may contain 5 types of elements:</span>
+
+<span class="sd">            * *float (f)*    - Floating point number (such as for coordinates).</span>
+<span class="sd">            * *integer (i)*  - Integer number (such as for ids).</span>
+<span class="sd">            * *string (s)*   - String of text (such as notes).</span>
+<span class="sd">            * *json (j)*     - String which can be converted into JSON \</span>
+<span class="sd">                (for advanced use).</span>
+<span class="sd">            * *optional (x)* - Any data type, to be used temporarily for \</span>
+<span class="sd">                algorithm development. Hopefully, this is purged later on in \</span>
+<span class="sd">                said algorithm.</span>
+
+<span class="sd">        A dtype (data type) indicates the type all values with in a column must</span>
+<span class="sd">        conform to. Null values (np.nan) are ignored within these columns.</span>
+<span class="sd">        Optional typing, particulary with non scalar elements is strongly</span>
+<span class="sd">        discouraged.</span>
+
+<span class="sd">    **Naming**</span>
+
+<span class="sd">        With the exception of the default columns, which are immutable, all</span>
+<span class="sd">        columns must follow the following naming convention:</span>
+<span class="sd">        **[ctype]_[dtype]_[descriptor]**. The dtypes of the default columns are</span>
+<span class="sd">        ommitted for the sake of brevity.</span>
+
+<span class="sd">        The default columns are as follows:</span>
+
+<span class="sd">            * *i_id* - Item id (integer)</span>
+<span class="sd">            * *f_id* - Face id (integer)</span>
+<span class="sd">            * *e_id* - Edge id (integer)</span>
+<span class="sd">            * *v_id* - Vertex id (integer)</span>
+<span class="sd">            * *v_x*  - Vertex x coordinate (float)</span>
+<span class="sd">            * *v_y*  - Vertex y coordinate (float)</span>
+<span class="sd">            * *v_z*  - Vertex z coordinate (float)</span>
+
+<span class="sd">    All these columns may contain nans and likely will contain duplicates. The</span>
+<span class="sd">    HiFive DataFrame is granular to the level of a single relationship of a</span>
+<span class="sd">    vertex and another component, not simply just the level of the vertex.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">__DEFAULT_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;i_id&#39;</span><span class="p">,</span> <span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_x&#39;</span><span class="p">,</span> <span class="s1">&#39;v_y&#39;</span><span class="p">,</span> <span class="s1">&#39;v_z&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="HiFive.__init__"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates an empty HiFive instance with the default columns.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__DEFAULT_COLUMNS</span><span class="p">)</span></div>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="HiFive.read_hi5"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.read_hi5">[docs]</a>    <span class="k">def</span> <span class="nf">read_hi5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reads a given hi5 file from disk.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fuillpath (str): Full path to hi5 file.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValidationError: If file does not end in &#39;hi5&#39; extension.</span>
+<span class="sd">            TypeError: If column names or values of data are invalid.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: self.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">hft</span><span class="o">.</span><span class="n">validate_file_extension</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="n">HIFIVE_FILE_EXTENSION</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="HiFive.write_hi5"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.write_hi5">[docs]</a>    <span class="k">def</span> <span class="nf">write_hi5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Writes data to given hi5 filepath.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fullpath (str): Full path to hi5 file.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValidationError: If file does not end in &#39;hi5&#39; extension.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: self.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">hft</span><span class="o">.</span><span class="n">validate_file_extension</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="n">HIFIVE_FILE_EXTENSION</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;HiFive data written to </span><span class="si">{</span><span class="n">fullpath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="HiFive.validate_column"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.validate_column">[docs]</a>    <span class="k">def</span> <span class="nf">validate_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Validate a given column&#39;s name, and validate its values according to its</span>
+<span class="sd">        type indicator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            column (str): Column name.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValidationError: If column name or values are invalid.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: self.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s1"> not found in columns.&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_column_name</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_column_values</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="HiFive.validate"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Validate all column names and values.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValidationError: If any column name or set of values are invalid.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: self.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_column</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="HiFive._get_column_attributes"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive._get_column_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">_get_column_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generates a dict of attributes describing a given column.</span>
+
+<span class="sd">        Attributes include:</span>
+
+<span class="sd">            * name - Full name of column</span>
+<span class="sd">            * descriptor - Descriptor of column (comes after ctype and dtype)</span>
+<span class="sd">            * ctype_indicator - Component type indicator (one of i, f, e, v)</span>
+<span class="sd">            * dtype_indicator - Data type indicator (on of f, i, s, j, x)</span>
+<span class="sd">            * has_nans - Whether column contains nan values</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            column (str): Column name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: dict of attributes.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">ctype_i</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">dtype_i</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__DEFAULT_COLUMNS</span><span class="p">:</span>
+            <span class="n">ctype_i</span><span class="p">,</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">desc</span> <span class="o">==</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span>
+                <span class="n">dtype_i</span> <span class="o">=</span> <span class="s1">&#39;i&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dtype_i</span> <span class="o">=</span> <span class="s1">&#39;f&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ctype_i</span><span class="p">,</span> <span class="n">dtype_i</span><span class="p">,</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">hasnans</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="n">hasnans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">hasnans</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">column</span><span class="p">,</span>
+            <span class="n">descriptor</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
+            <span class="n">ctype_indicator</span><span class="o">=</span><span class="n">ctype_i</span><span class="p">,</span>
+            <span class="n">dtype_indicator</span><span class="o">=</span><span class="n">dtype_i</span><span class="p">,</span>
+            <span class="n">has_nans</span><span class="o">=</span><span class="n">hasnans</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HiFive._validate_column_name"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive._validate_column_name">[docs]</a>    <span class="k">def</span> <span class="nf">_validate_column_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Validates a given column name. Ensures that indicated component type</span>
+<span class="sd">        (ctype) and data type (dtype) are legal.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            column (str): Column name to be validated.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValidationError: If column name does not have 3 parts separated by</span>
+<span class="sd">                &#39;_&#39;.</span>
+<span class="sd">            ValidationError: If indicated ctype is illegal.</span>
+<span class="sd">            ValidationError: If indicated dtype is illegal.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: self.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__DEFAULT_COLUMNS</span><span class="p">:</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s1"> is not a valid column name.&#39;</span>
+                <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">attrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_attributes</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+
+        <span class="n">ctype</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;ctype_indicator&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">HiFiveComponentType</span><span class="o">.</span><span class="n">is_valid_indicator</span><span class="p">(</span><span class="n">ctype</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">ctype</span><span class="si">}</span><span class="s1"> is not a valid ctype indicator.&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;dtype_indicator&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">HiFiveDataType</span><span class="o">.</span><span class="n">is_valid_indicator</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s1"> is not a valid dtype indicator.&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HiFive._validate_column_values"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive._validate_column_values">[docs]</a>    <span class="k">def</span> <span class="nf">_validate_column_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Validates that values of a given column are of the type indicated by its</span>
+<span class="sd">        dtype indicator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            column (str): Name of column to be validated.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If element of column values if not if indicated data</span>
+<span class="sd">                type.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: self.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">dtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_attributes</span><span class="p">(</span><span class="n">column</span><span class="p">)[</span><span class="s1">&#39;dtype_indicator&#39;</span><span class="p">]</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">HiFiveDataType</span><span class="o">.</span><span class="n">from_indicator</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dtype</span><span class="o">.</span><span class="n">is_valid_value</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Non-</span><span class="si">{}</span><span class="s1"> value found in column </span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="HiFive.map"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.map">[docs]</a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">aggregator</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Maps data within and across component types homomorphically.</span>
+
+<span class="sd">        The given aggregator functions is part of how it does this.</span>
+<span class="sd">        For example:</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            hi = HiFive().read_hi5(&#39;foo.hi5&#39;)</span>
+<span class="sd">            hi.map(&#39;v_id&#39;, &#39;f_i_bar&#39;, lambda x: int(x.mean()))</span>
+
+<span class="sd">        The call to map here maps a column of vertex data, indicated by the</span>
+<span class="sd">        &#39;v&#39; in &#39;v_id&#39;, into a new column of face data, indicated by the &#39;f&#39; in</span>
+<span class="sd">        &#39;f_i_bar&#39;. The relationship between a vertex and a face components is</span>
+<span class="sd">        many to one. So, the aggregator must convert the many items of x</span>
+<span class="sd">        (a pandas Series object) into one value (their mean). Additionally,</span>
+<span class="sd">        because the target column is dtyped with an &#39;i&#39;, its values must be</span>
+<span class="sd">        integers. Thus, said mean value is coerced into an integer inside the</span>
+<span class="sd">        aggregator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source (str): Source column from which data should be mapped.</span>
+<span class="sd">            target (str): Name of new column to be created.</span>
+<span class="sd">            aggregator (function): Function responsible for mapping/modifying \</span>
+<span class="sd">                values of the source column into the target column. Expects a \</span>
+<span class="sd">                pandas Series object as input.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValidationError: If target column ctype is illegal.</span>
+<span class="sd">            ValidationError: If target column dtype is illegal.</span>
+<span class="sd">            ValidationError: If source column contains null values.</span>
+<span class="sd">            TypeError: If target column values are illegal.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: self with new target column.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_column_name</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_column_name</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+        <span class="c1"># Mappings must always be 1 to many or 1 to 1, because aggregators take</span>
+        <span class="c1"># one or many components and return one. So, establishing the</span>
+        <span class="c1"># relationship between source and target component is necessary here.</span>
+
+        <span class="c1"># component hierarchy</span>
+        <span class="c1"># items contain faces contain edges contain vertices</span>
+        <span class="n">source_attrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_attributes</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="n">target_attrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_attributes</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">HiFiveComponentType</span><span class="o">.</span><span class="n">from_indicator</span><span class="p">(</span><span class="n">source_attrs</span><span class="p">[</span><span class="s1">&#39;ctype_indicator&#39;</span><span class="p">])</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">HiFiveComponentType</span><span class="o">.</span><span class="n">from_indicator</span><span class="p">(</span><span class="n">target_attrs</span><span class="p">[</span><span class="s1">&#39;ctype_indicator&#39;</span><span class="p">])</span>
+
+        <span class="c1"># assume target component contains source component</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="n">target_attrs</span>
+
+        <span class="c1"># if source component contains target component</span>
+        <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">order</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">.</span><span class="n">order</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">source_attrs</span>
+
+        <span class="n">ctype_i</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;ctype_indicator&#39;</span><span class="p">]</span>
+        <span class="n">id_col</span> <span class="o">=</span> <span class="n">ctype_i</span> <span class="o">+</span> <span class="s1">&#39;_id&#39;</span>
+
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">HiFiveDataType</span><span class="o">.</span><span class="n">from_indicator</span><span class="p">(</span><span class="n">target_attrs</span><span class="p">[</span><span class="s1">&#39;dtype_indicator&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span><span class="o">.</span><span class="n">hasnans</span><span class="p">:</span>
+            <span class="n">ctype</span> <span class="o">=</span> <span class="n">HiFiveComponentType</span><span class="o">.</span><span class="n">from_indicator</span><span class="p">(</span><span class="n">ctype_i</span><span class="p">)</span><span class="o">.</span><span class="n">fullname</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Cannot map to column of </span><span class="si">{</span><span class="n">ctype</span><span class="si">}</span><span class="s1"> component type because&#39;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">id_col</span><span class="si">}</span><span class="s1"> column contains null values.&#39;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">temp_column</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">id_col</span> <span class="o">==</span> <span class="n">source</span><span class="p">:</span>
+            <span class="n">temp_column</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;__temp&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">source</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span>
+
+        <span class="c1"># Build a lookup table with the id of largest component in the mapping</span>
+        <span class="c1"># as the keys and the aggregation of the source column values per key as</span>
+        <span class="c1"># the values.</span>
+
+        <span class="c1"># So, if the data looks like this:</span>
+        <span class="c1"># f_id | v_id | v_s_foo</span>
+        <span class="c1"># -----|------|--------</span>
+        <span class="c1">#   0  |   0  |    a</span>
+        <span class="c1">#   0  |   1  |    b</span>
+        <span class="c1">#   1  |   2  |    c</span>
+        <span class="c1">#   1  |   3  |    d</span>
+
+        <span class="c1"># hi.map(&#39;v_s_foo&#39;, &#39;f_s_bar&#39;, lambda x: &#39;-&#39;.join(x.tolist()))</span>
+        <span class="c1"># will produce this lut:</span>
+        <span class="c1"># {</span>
+        <span class="c1">#   0: [a, b]</span>
+        <span class="c1">#   1: [b, c]</span>
+        <span class="c1"># }</span>
+
+        <span class="c1"># and this new column to the table:</span>
+        <span class="c1"># f_id | v_id | v_s_foo | f_s_bar</span>
+        <span class="c1"># -----|------|---------|--------</span>
+        <span class="c1">#   0  |   0  |    a    |   a-b</span>
+        <span class="c1">#   0  |   1  |    b    |   a-b</span>
+        <span class="c1">#   1  |   2  |    c    |   c-d</span>
+        <span class="c1">#   1  |   3  |    d    |   c-d</span>
+
+        <span class="c1"># The homomorphic aspect of HiFive is to do with the homogenous mapping</span>
+        <span class="c1"># of information across rows per component id.</span>
+
+        <span class="c1"># For example, the face with face id of 0 must have the same properties</span>
+        <span class="c1"># for its f_s_bar columns across all its rows. Thus &#39;a-b&#39;, and only</span>
+        <span class="c1"># &#39;a-b&#39;, must be mapped to this column of each of them.</span>
+
+        <span class="n">lut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="n">id_col</span><span class="p">,</span> <span class="n">source</span><span class="p">]]</span> \
+            <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">id_col</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="n">source</span><span class="p">]</span> \
+            <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">aggregator</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">dtype</span> <span class="o">!=</span> <span class="s1">&#39;optional&#39;</span><span class="p">:</span>
+            <span class="n">lut</span><span class="p">[</span><span class="n">source</span><span class="p">]</span> <span class="o">=</span> <span class="n">lut</span><span class="p">[</span><span class="n">source</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">type_</span><span class="p">)</span>
+
+        <span class="n">ids</span> <span class="o">=</span> <span class="n">lut</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">lut</span><span class="p">[</span><span class="n">source</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">lut</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">temp_column</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">source</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lut</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_column</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__expand_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">expander</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Transform the contents of a given row into many rows via a given</span>
+<span class="sd">        expander.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            row (Series): Series to be expanded.</span>
+<span class="sd">            source (str): Index element of row to be expanded.</span>
+<span class="sd">            target (str): Name of new row index to be created.</span>
+<span class="sd">            expander (function): Function that receives an element and \</span>
+<span class="sd">                produces a list of new elements.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame: DataFrame of new rows.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="n">expander</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">source</span><span class="p">])</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">source</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+            <span class="n">output</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+<div class="viewcode-block" id="HiFive.expand"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.expand">[docs]</a>    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">id_</span><span class="p">,</span> <span class="n">expander</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Expands elements within each row of a source column into multiple rows.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source (str): Source column to be expanded.</span>
+<span class="sd">            target (str): Name of new column to be created.</span>
+<span class="sd">            id_ (str): Name of id column to be created, which groups rows based \</span>
+<span class="sd">                on source. Must be of integer dtype.</span>
+<span class="sd">            expander (function): Function which converts a row element in to a \</span>
+<span class="sd">                list of elements.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If id is not of integer dtype.</span>
+<span class="sd">            ValidationError: If source, target or id names are invalid.</span>
+<span class="sd">            TypeError: If source, target or id values are invalid.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: self with expanded rows.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_column_name</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_column_name</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_column_name</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+
+        <span class="n">id_attrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_attributes</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">HiFiveDataType</span><span class="o">.</span><span class="n">from_indicator</span><span class="p">(</span><span class="n">id_attrs</span><span class="p">[</span><span class="s1">&#39;dtype_indicator&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">dtype</span> <span class="o">!=</span> <span class="n">HiFiveDataType</span><span class="o">.</span><span class="n">INTEGER</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Id column must be of dtype INTEGER. &#39;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;Provided dtype: </span><span class="si">{</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">.&#39;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">id_</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">index</span>
+
+        <span class="c1"># create a list of expanded DataFrames</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__expand_row</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">expander</span><span class="p">),</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="c1"># concatenate that list into a single DataFrame</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">source</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="HiFive.copy"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Copy HiFive instance to new HiFive instance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            HiFive: new HiFive instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">HiFive</span><span class="p">()</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame: A DataFrame describing the universal attributes of all</span>
+<span class="sd">            the columns of the internal DataFrame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_attributes</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HiFiveDataType</span>\
+                <span class="o">.</span><span class="n">from_indicator</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;dtype_indicator&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fullname</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;ctype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HiFiveComponentType</span>\
+                <span class="o">.</span><span class="n">from_indicator</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;ctype_indicator&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fullname</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;descriptor&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;ctype&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dtype&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;ctype_indicator&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dtype_indicator&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;has_nans&#39;</span>
+        <span class="p">]</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">return</span> <span class="n">info</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">item_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame: A DataFrame in which all columns are of item component</span>
+<span class="sd">            type and each row contains a unique item id.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="s1">&#39;^i_&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;i_id&#39;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">face_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame: A DataFrame in which all columns are of face component</span>
+<span class="sd">            type and each row contains a unique face id.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="s1">&#39;^f_&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edge_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame:  DataFrame in which all columns are of edge component</span>
+<span class="sd">            type and each row contains a unique edge id.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="s1">&#39;^e_&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vertex_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame: A DataFrame in which all columns are of vertex component</span>
+<span class="sd">            type and each row contains a unique vertex id.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="s1">&#39;^v_&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">geometry_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame: A DataFrame that describes basic geometric and</span>
+<span class="sd">            topological properties of the internal data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">,</span> <span class="s1">&#39;edge&#39;</span><span class="p">,</span> <span class="s1">&#39;vertex&#39;</span><span class="p">]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="s1">&#39;s_per&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]</span>
+        <span class="n">index</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;count_of&#39;</span><span class="p">)</span>
+        <span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;vertices_per&#39;</span>
+        <span class="n">index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;topology_of&#39;</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;count_of&#39;</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_nunique</span><span class="p">(</span><span class="s1">&#39;i_id&#39;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;count_of&#39;</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_nunique</span><span class="p">(</span><span class="s1">&#39;f_id&#39;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;count_of&#39;</span><span class="p">,</span> <span class="s1">&#39;edge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_nunique</span><span class="p">(</span><span class="s1">&#39;e_id&#39;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;count_of&#39;</span><span class="p">,</span> <span class="s1">&#39;vertex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_nunique</span><span class="p">(</span><span class="s1">&#39;v_id&#39;</span><span class="p">)</span>
+
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;items_per&#39;</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;faces_per&#39;</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;edges_per&#39;</span><span class="p">,</span> <span class="s1">&#39;edge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;vertices_per&#39;</span><span class="p">,</span> <span class="s1">&#39;vertex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;faces_per&#39;</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>\
+            <span class="o">.</span><span class="n">__get_unique_counts</span><span class="p">(</span><span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;i_id&#39;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;edges_per&#39;</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>\
+            <span class="o">.</span><span class="n">__get_unique_counts</span><span class="p">(</span><span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;i_id&#39;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;vertices_per&#39;</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>\
+            <span class="o">.</span><span class="n">__get_unique_counts</span><span class="p">(</span><span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;i_id&#39;</span><span class="p">)</span>
+
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;edges_per&#39;</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>\
+            <span class="o">.</span><span class="n">__get_unique_counts</span><span class="p">(</span><span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;f_id&#39;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;vertices_per&#39;</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>\
+            <span class="o">.</span><span class="n">__get_unique_counts</span><span class="p">(</span><span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;f_id&#39;</span><span class="p">)</span>
+
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;vertices_per&#39;</span><span class="p">,</span> <span class="s1">&#39;edge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>\
+            <span class="o">.</span><span class="n">__get_unique_counts</span><span class="p">(</span><span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;e_id&#39;</span><span class="p">)</span>
+
+        <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_unique_counts</span><span class="p">(</span><span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">temp</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">return</span> <span class="n">output</span>
+
+        <span class="n">polygon_types</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">temp</span> <span class="ow">or</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+            <span class="n">polygon_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;invalid&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+            <span class="n">polygon_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;triangle&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mi">4</span> <span class="ow">in</span> <span class="n">temp</span><span class="p">:</span>
+            <span class="n">polygon_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;quadrilateral&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">polygon_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;ngon&#39;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;topology_of&#39;</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">polygon_types</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">display_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Drops _x_ columns from internal data which cause Jupyter Notebook to</span>
+<span class="sd">        chug.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            DataFrame: DataFrame with _x_ columns replaced with &#39;...&#39;.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">x_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;^._x_&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">cols</span><span class="p">))</span>
+        <span class="n">nonx_cols</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">x_cols</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">nonx_cols</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">x_cols</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;...&#39;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">__get_unique_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count_column</span><span class="p">,</span> <span class="n">group_column</span><span class="p">,</span> <span class="n">summarize</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convenience method for calculating the unique counts of a count column,</span>
+<span class="sd">        per a group column.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            count_column (str): Column to get unique counts of.</span>
+<span class="sd">            group_column (str): Column to group x by.</span>
+<span class="sd">            summarize (bool, optional): Converts results into list of \</span>
+<span class="sd">                [1,2,3,4,n]. Default: True</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of unique counts.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">hft</span><span class="o">.</span><span class="n">get_nunique_a_per_b</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">count_column</span><span class="p">,</span> <span class="n">group_column</span>
+        <span class="p">)</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">items</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">summarize</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">items</span>
+
+        <span class="c1"># replace everything &gt;= 5 with &#39;n&#39;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="k">def</span> <span class="nf">__get_nunique</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convenience method for calculating the unique, non-null values for a</span>
+<span class="sd">        given column.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            column (str): Column to be processed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of unique values.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+
+<div class="viewcode-block" id="HiFive.is_equivalent"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.is_equivalent">[docs]</a>    <span class="k">def</span> <span class="nf">is_equivalent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hifive</span><span class="p">,</span> <span class="n">ignore_columns</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Determines if this HiFive instance equivalent to a given HiFive</span>
+<span class="sd">        instance.</span>
+
+<span class="sd">        Ignore columns is currently needed for &quot;e_id&quot; because Blender screws up</span>
+<span class="sd">        the edge ordering.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hifive - HiFive instance to be compared.</span>
+<span class="sd">            ignore_columns (list, optional): columns to exempt from comparison.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: Equivalence of instances.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">a_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">b_data</span> <span class="o">=</span> <span class="n">hifive</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="n">a_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">a_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="n">b_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">b_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+        <span class="c1"># TODO: Remove this once Blender edge ordering is figured out.</span>
+        <span class="n">a_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore_columns</span><span class="p">,</span> <span class="n">a_cols</span><span class="p">))</span>
+        <span class="n">b_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore_columns</span><span class="p">,</span> <span class="n">b_cols</span><span class="p">))</span>
+        <span class="n">a_data</span> <span class="o">=</span> <span class="n">a_data</span><span class="p">[</span><span class="n">a_cols</span><span class="p">]</span>
+        <span class="n">b_data</span> <span class="o">=</span> <span class="n">b_data</span><span class="p">[</span><span class="n">b_cols</span><span class="p">]</span>
+
+        <span class="c1"># both have the same shape</span>
+        <span class="k">if</span> <span class="n">a_data</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">b_data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># both have the same columns</span>
+        <span class="k">if</span> <span class="n">a_cols</span> <span class="o">!=</span> <span class="n">b_cols</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">a_data</span> <span class="o">=</span> <span class="n">a_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">a_cols</span><span class="p">)</span>
+        <span class="n">b_data</span> <span class="o">=</span> <span class="n">b_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">a_cols</span><span class="p">)</span>
+
+        <span class="c1"># all element of the same column from a and b are the same and in the</span>
+        <span class="c1"># same order</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">a_cols</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">a_data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">b_data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="n">b</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

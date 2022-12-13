@@ -1,9 +1,10 @@
 Introduction
 ============
 
-A cloud native service for working with Blender geometry.
+Data Science for Procedural Geometry using Blender and Category Theory.
 
-See `documentation <https://theNewFlesh.github.io/shot-glass/>` for details.
+See `documentation <https://theNewFlesh.github.io/shot-glass/>`__ for
+details.
 
 Installation
 ============
@@ -17,19 +18,20 @@ Docker
 ~~~~~~
 
 1. Install
-   `docker <https://docs.docker.com/v17.09/engine/installation>`
+   `docker <https://docs.docker.com/v17.09/engine/installation>`__
 2. Install
-   `docker-machine <https://docs.docker.com/machine/install-machine>`
+   `docker-machine <https://docs.docker.com/machine/install-machine>`__
    (if running on macOS or Windows)
-3. ``docker pull theNewFlesh/shot-glass:latest``
+3. ``docker pull theNewFlesh/shot-glass:[version]``
+4. ``docker run --rm --name shot-glass-prod --publish 2180:80 theNewFlesh/shot-glass:[version]``
 
 Docker For Developers
 ~~~~~~~~~~~~~~~~~~~~~
 
 1. Install
-   `docker <https://docs.docker.com/v17.09/engine/installation>`
+   `docker <https://docs.docker.com/v17.09/engine/installation>`__
 2. Install
-   `docker-machine <https://docs.docker.com/machine/install-machine>`
+   `docker-machine <https://docs.docker.com/machine/install-machine>`__
    (if running on macOS or Windows)
 3. Ensure docker-machine has at least 4 GB of memory allocated to it.
 4. ``git clone git@github.com:theNewFlesh/shot-glass.git``
