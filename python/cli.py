@@ -409,14 +409,14 @@ def sphinx():
             /home/ubuntu/{repo}/README.md
             -o /home/ubuntu/{repo}/sphinx/intro.rst;
         /home/ubuntu/blender/blender
-        
+
             --python-use-system-env
             --background
             --python
             /home/ubuntu/{repo}/docker/run_sphinx.py
             /home/ubuntu/{repo}/sphinx
             /home/ubuntu/{repo}/docs;
-        cp 
+        cp
             /home/ubuntu/{repo}/sphinx/style.css
             /home/ubuntu/{repo}/docs/_static/style.css;
         touch /home/ubuntu/{repo}/docs/.nojekyll;
@@ -600,13 +600,13 @@ def full_docs_command():
     Returns:
         str: Command.
     '''
-    cmd = [
+    cmd_ = [
         sphinx(),
         coverage(),
         python() + ' docker/run_architecture.py',
         python() + ' docker/run_metrics.py',
     ]
-    cmd = ' && '.join(cmd)
+    cmd = ' && '.join(cmd_)
     cmds = [
         enter_repo(),
         start(),
