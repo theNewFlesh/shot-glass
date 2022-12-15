@@ -322,12 +322,21 @@ x_build_test () {
 # DOCS-FUNCTIONS----------------------------------------------------------------
 x_docs () {
     # Generate sphinx documentation
-    x_env_activate_dev;
     cd $REPO_DIR;
     echo "${CYAN2}GENERATING DOCS${CLEAR}\n";
     mkdir -p docs;
     pandoc README.md -o sphinx/intro.rst;
-    sphinx-build sphinx docs;
+    export PYTHONPATH=$PYTHONPATH:`_x_env_get_python dev 3.10`/lib/python3.10/site-packages;
+    eval "$BLENDER_EXPR \
+        'import sys; \
+        sys.argv = [ \
+            \"-M\", \
+            \"sphinx\", \
+            \"docs\", \
+        ]; \
+        from sphinx.cmd.build import main; \
+        sys.exit(main()); \
+        '";
     cp -f sphinx/style.css docs/_static/style.css;
     touch docs/.nojekyll;
     mkdir -p docs/resources;
