@@ -18,7 +18,7 @@ export TEST_PROCS="auto"
 export JUPYTER_PLATFORM_DIRS=0
 export JUPYTER_CONFIG_PATH=/home/ubuntu/.jupyter
 export BLENDER="/home/ubuntu/blender/blender"
-export BLENDER_CMD="$BLENDER --python-use-system-env --background"
+export BLENDER_CMD="$BLENDER --background"
 export BLENDER_CONSOLE="$BLENDER_CMD --python-console"
 export BLENDER_EXPR="$BLENDER_CMD --python-expr"
 export BLENDER_PYTHON="$BLENDER_CMD --python"
@@ -560,15 +560,20 @@ x_test_coverage () {
 
 x_test_dev () {
     # Run all tests
-    x_env_activate_dev;
     echo "${CYAN2}TESTING DEV${CLEAR}\n";
     cd $REPO_DIR;
-    pytest \
-        -c $CONFIG_DIR/pyproject.toml \
-        --numprocesses $TEST_PROCS \
-        --verbosity $TEST_VERBOSITY \
-        --durations 20 \
-        $REPO_SUBPACKAGE;
+    export PYTHONPATH=$PYTHONPATH:`_x_env_get_python dev 3.10`/lib/python3.10/site-packages;
+    eval "$BLENDER_EXPR \
+        'import sys; \
+        import pytest; \
+        sys.argv = [ \
+            \"-c=$CONFIG_DIR/pyproject.toml\", \
+            \"--verbosity=$TEST_VERBOSITY\", \
+            \"--durations=20\", \
+            \"$REPO_SUBPACKAGE\", \
+        ]; \
+        sys.exit(pytest.console_main()); \
+        '";
 }
 
 x_test_fast () {
