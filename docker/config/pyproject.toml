@@ -30,6 +30,7 @@ dependencies = [
     "pyparsing",
     "pytest",
     "wrapt",
+    "tables>=3.7.0",
 ]
 
 [project.urls]
