@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 AS base
+FROM ubuntu:22.04 AS base
 
 USER root
 
@@ -24,40 +24,34 @@ RUN echo "\n${CYAN}INSTALL GENERIC DEPENDENCIES${CLEAR}"; \
     apt update && \
     apt install -y \
         software-properties-common \
-        wget
+        wget && \
+    rm -rf /var/lib/apt/lists/*
 
-# install python3.7 and pip
-RUN echo "\n${CYAN}SETUP PYTHON3.7${CLEAR}"; \
-    add-apt-repository -y ppa:deadsnakes/ppa && \
-    apt update && \
-    apt install --fix-missing -y \
-        python3.7 && \
-    wget https://bootstrap.pypa.io/get-pip.py && \
-    python3.7 get-pip.py && \
-    rm -rf /home/ubuntu/get-pip.py
-# install OpenEXR
-ENV CC=gcc
-ENV CXX=g++
-ENV LD_LIBRARY_PATH='/usr/include/python3.7m/dist-packages'
-RUN echo "\n${CYAN}INSTALL OPENEXR${CLEAR}"; \
-    apt update && \
-    apt install -y \
-        build-essential \
-        g++ \
-        gcc \
-        libopenexr-dev \
-        openexr \
-        python3.7-dev \
-        zlib1g-dev
+# install blender
+ARG VER=3.4.0
+ENV BLENDER_VERSION=3.4
+RUN echo "\n${CYAN}INSTALL BLENDER${NO_COLOR}"; \
+    wget \
+        https://mirror.clarkson.edu/blender/release/Blender$BLENDER_VERSION/blender-$VER-linux-x64.tar.xz \
+        -O blender.tar.xz && \
+    tar xf blender.tar.xz && \
+    rm blender.tar.xz && \
+    mv blender-$VER-linux-x64 blender && \
+    chown -R ubuntu:ubuntu blender
+
+# setup python
+ARG BLENDER_PYTHON=/home/ubuntu/blender/$BLENDER_VERSION/python/bin/python3.10
+RUN echo "\n${CYAN}SETUP PYTHON${NO_COLOR}"; \
+    wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py && \
+    chown -R ubuntu:ubuntu get-pip.py && \
+    $BLENDER_PYTHON get-pip.py
+ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10
+ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10/site-packages
+ENV PYTHONPATH $PYTHONPATH:/home/ubuntu/blender/$BLENDER_VERSION/scripts/modules
+ENV PATH /home/ubuntu/blender/$BLENDER_VERSION/python/bin:$PATH
 
 # install shot-glass
 USER ubuntu
 ENV REPO='shot-glass'
-ENV PYTHONPATH "${PYTHONPATH}:/home/ubuntu/$REPO/python"
 RUN echo "\n${CYAN}INSTALL SHOT-GLASS{CLEAR}"; \
-    pip3.7 install shot-glass
-
-ENTRYPOINT [\
-    "python3.7", \
-    "/home/ubuntu/.local/lib/python3.7/site-packages/shot-glass/server/app.py" \
-]
+    $BLENDER_PYTHON install shot-glass

@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS base
+FROM ubuntu:22.04 AS base
 
 USER root
 
@@ -6,11 +6,6 @@ USER root
 ENV CYAN='\033[0;36m'
 ENV CLEAR='\033[0m'
 ENV DEBIAN_FRONTEND='noninteractive'
-ENV CC=gcc
-ENV CXX=g++
-ENV LANG "C"
-ENV LANGUAGE "C"
-ENV LC_ALL "C"
 
 # setup ubuntu user
 ARG UID_='1000'
@@ -23,27 +18,56 @@ RUN echo "\n${CYAN}SETUP UBUNTU USER${CLEAR}"; \
         --uid $UID_ \
         --gid $GID_ ubuntu && \
     usermod -aG root ubuntu
+
+# setup sudo
+RUN echo "\n${CYAN}SETUP SUDO${CLEAR}"; \
+    apt update && \
+    apt install -y sudo && \
+    usermod -aG sudo ubuntu && \
+    echo '%ubuntu    ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /home/ubuntu
 
 # update ubuntu and install basic dependencies
 RUN echo "\n${CYAN}INSTALL GENERIC DEPENDENCIES${CLEAR}"; \
     apt update && \
     apt install -y \
+        bat \
         curl \
+        exa \
         git \
         graphviz \
         npm \
         pandoc \
         parallel \
-        python3-pydot \
+        ripgrep \
         software-properties-common \
-        tree \
         vim \
-        wget
+        wget && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN echo "\n${CYAN}INSTALL PYTHON${CLEAR}"; \
+    add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt update && \
+    apt install -y \
+        python3-pydot \
+        python3.10-dev \
+        python3.10-venv \
+        python3.10-distutils && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN echo "\n${CYAN}INSTALL PIP${CLEAR}"; \
+    wget https://bootstrap.pypa.io/get-pip.py && \
+    python3.10 get-pip.py && \
+    pip3.10 install --upgrade pip && \
+    rm -rf get-pip.py
 
 # install zsh
 RUN echo "\n${CYAN}SETUP ZSH${CLEAR}"; \
+    apt update && \
     apt install -y zsh && \
+    rm -rf /var/lib/apt/lists/* && \
     curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
         -o install-oh-my-zsh.sh && \
     echo y | sh install-oh-my-zsh.sh && \
@@ -54,21 +78,27 @@ RUN echo "\n${CYAN}SETUP ZSH${CLEAR}"; \
     npm i -g zsh-history-enquirer --unsafe-perm && \
     cd /home/ubuntu && \
     cp -r /root/.oh-my-zsh /home/ubuntu/ && \
-    chown -R ubuntu:ubuntu \
-        .oh-my-zsh \
-        install-oh-my-zsh.sh && \
+    chown -R ubuntu:ubuntu .oh-my-zsh && \
+    rm -rf install-oh-my-zsh.sh && \
     echo 'UTC' > /etc/timezone
 
-# install node.js, needed by jupyterlab
-RUN echo "\n${CYAN}INSTALL NODE.JS${CLEAR}"; \
-    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt upgrade -y && \
-    apt install -y nodejs && \
-    rm -rf /var/lib/apt/lists/*
+USER ubuntu
+ENV PATH="/home/ubuntu/.local/bin:$PATH"
+COPY ./config/henanigans.zsh-theme .oh-my-zsh/custom/themes/henanigans.zsh-theme
+
+ENV LANG "C.UTF-8"
+ENV LANGUAGE "C.UTF-8"
+ENV LC_ALL "C.UTF-8"
+# ------------------------------------------------------------------------------
+
+FROM base AS dev
+
+USER ubuntu
+WORKDIR /home/ubuntu
 
 # install blender
-ARG VER=3.2.1
-ENV BLENDER_VERSION=3.2
+ARG VER=3.4.0
+ENV BLENDER_VERSION=3.4
 RUN echo "\n${CYAN}INSTALL BLENDER${NO_COLOR}"; \
     wget \
         https://mirror.clarkson.edu/blender/release/Blender$BLENDER_VERSION/blender-$VER-linux-x64.tar.xz \
@@ -88,32 +118,42 @@ ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10
 ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10/site-packages
 ENV PYTHONPATH $PYTHONPATH:/home/ubuntu/blender/$BLENDER_VERSION/scripts/modules
 ENV PATH /home/ubuntu/blender/$BLENDER_VERSION/python/bin:$PATH
-# ------------------------------------------------------------------------------
 
-FROM base AS dev
+RUN echo "\n${CYAN}INSTALL DEV DEPENDENCIES${CLEAR}"; \
+    curl -sSL \
+        https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py \
+    | python3 - && \
+    pip3.10 install --upgrade --user \
+        pdm \
+        'rolling-pin>=0.9.2' && \
+    mkdir -p /home/ubuntu/.oh-my-zsh/custom/completions && \
+    pdm completion zsh > /home/ubuntu/.oh-my-zsh/custom/completions/_pdm
 
-USER ubuntu
+COPY --chown=ubuntu:ubuntu config/* /home/ubuntu/config/
+COPY --chown=ubuntu:ubuntu scripts/* /home/ubuntu/scripts/
+RUN echo "\n${CYAN}SETUP DIRECTORIES${CLEAR}"; \
+    mkdir pdm
+
+WORKDIR /home/ubuntu/pdm
+RUN echo "\n${CYAN}INSTALL DEV ENVIRONMENT${CLEAR}"; \
+    . /home/ubuntu/scripts/x_tools.sh && \
+    export CONFIG_DIR=/home/ubuntu/config && \
+    export SCRIPT_DIR=/home/ubuntu/scripts && \
+    x_env_init dev 3.10 && \
+    cd /home/ubuntu && \
+    ln -s `_x_env_get_path dev 3.10` .dev-env && \
+    ln -s `_x_env_get_path dev 3.10`/lib/python3.10/site-packages .dev-packages
+
+RUN echo "\n${CYAN}INSTALL PROD ENVIRONMENTS${CLEAR}"; \
+    . /home/ubuntu/scripts/x_tools.sh && \
+    export CONFIG_DIR=/home/ubuntu/config && \
+    export SCRIPT_DIR=/home/ubuntu/scripts && \
+    x_env_init prod 3.10
+
 WORKDIR /home/ubuntu
+RUN echo "\n${CYAN}REMOVE DIRECTORIES${CLEAR}"; \
+    rm -rf config scripts
 
 ENV REPO='shot-glass'
-ENV REPO_ENV=True
-ENV PYTHONPATH "$PYTHONPATH:/home/ubuntu/$REPO/python"
-
-# install python dependencies
-COPY ./dev_requirements.txt dev_requirements.txt
-COPY ./prod_requirements.txt prod_requirements.txt
-RUN echo "\n${CYAN}INSTALL PYTHON DEPENDENCIES${CLEAR}"; \
-    $BLENDER_PYTHON -m pip install -r dev_requirements.txt && \
-    $BLENDER_PYTHON -m pip install -r prod_requirements.txt && \
-    jupyter server extension enable --py --user jupyterlab_git
-
-COPY ./henanigans.zsh-theme .oh-my-zsh/custom/themes/henanigans.zsh-theme
-COPY ./zshrc .zshrc
-
-USER root
-RUN echo "\n${CYAN}FIX PERMISSIONS${CLEAR}"; \
-    chown ubuntu:ubuntu \
-        .zshrc \
-        dev_requirements.txt \
-        prod_requirements.txt
-USER ubuntu
+ENV PYTHONPATH ":/home/ubuntu/$REPO/python:/home/ubuntu/.local/lib"
+ENV PYTHONPYCACHEPREFIX "/home/ubuntu/.python_cache"
