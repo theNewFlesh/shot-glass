@@ -329,11 +329,7 @@ x_docs () {
     export PYTHONPATH=$PYTHONPATH:`_x_env_get_python dev 3.10`/lib/python3.10/site-packages;
     eval "$BLENDER_EXPR \
         'import sys; \
-        sys.argv = [ \
-            \"-M\", \
-            \"sphinx\", \
-            \"docs\", \
-        ]; \
+        sys.argv = [\"-M\", \"sphinx\", \"docs\"]; \
         from sphinx.cmd.build import main; \
         sys.exit(main()); \
         '";
