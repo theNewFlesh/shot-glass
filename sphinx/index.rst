@@ -3,16 +3,22 @@
 Welcome to shot-glass' documentation!
 =====================================
 .. toctree::
-   :maxdepth: 2
-   :caption: Documentation
+   :maxdepth: 1
+   :caption: Getting Started
 
    intro
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Python API
 
-   modules
+   shot-glass
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Development CLI
+
+   cli
 
 Indices and tables
 ==================

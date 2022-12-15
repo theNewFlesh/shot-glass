@@ -13,16 +13,15 @@
 import os
 import sys
 import sphinx_rtd_theme
-sys.path.insert(0, os.path.abspath('../python'))
-with open('../pip/version.txt') as f:
-    VERSION = f.read().strip('\n')
+import toml
 
+sys.path.insert(0, os.path.abspath('../python'))
 # -- Project information -----------------------------------------------------
 
 project = 'shot-glass'
-copyright = '2021, Alex Braun <alexander.g.braun@gmail.com>'
+copyright = '2022, Alex Braun <alexander.g.braun@gmail.com>'
 author = 'Alex Braun <alexander.g.braun@gmail.com>'
-version = VERSION
+version = toml.load('../docker/config/pyproject.toml')['project']['version']
 # release = ''
 
 # -- General configuration ---------------------------------------------------
