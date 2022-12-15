@@ -61,16 +61,3 @@ if [[ `which rolling-pin` != "* not found" ]]; then
         echo 'rolling-pin zsh-completions installed';
     fi;
 fi;
-
-# BLENDER-----------------------------------------------------------------------
-alias blender='/home/ubuntu/blender/blender'
-alias b-python='/home/ubuntu/blender/blender \
-    --python-use-system-env \
-    --background \
-    --python
-'
-alias b-python-console='/home/ubuntu/blender/blender \
-    --python-use-system-env \
-    --background \
-    --python-console
-'
