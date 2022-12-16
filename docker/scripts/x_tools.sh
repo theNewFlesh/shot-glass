@@ -6,7 +6,6 @@ export REPO_SNAKE_CASE=`echo $REPO | sed 's/-/_/g'`
 export REPO_SUBPACKAGE="$REPO_DIR/python/$REPO_SNAKE_CASE"
 export REPO_COMMAND_FILE="$REPO_SUBPACKAGE/command.py"
 export PATH=":$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$HOME/.local/lib"
-export PYTHONPATH="$REPO_DIR/python:$HOME/.local/lib"
 export BUILD_DIR="$HOME/build"
 export CONFIG_DIR="$REPO_DIR/docker/config"
 export PDM_DIR="$HOME/pdm"
@@ -326,7 +325,6 @@ x_docs () {
     echo "${CYAN2}GENERATING DOCS${CLEAR}\n";
     mkdir -p docs;
     pandoc README.md -o sphinx/intro.rst;
-    export PYTHONPATH=$PYTHONPATH:`_x_env_get_python dev 3.10`/lib/python3.10/site-packages;
     eval "$BLENDER_EXPR \
         'import sys; \
         sys.argv = [\"-M\", \"sphinx\", \"docs\"]; \
@@ -542,7 +540,7 @@ x_session_lab () {
 x_session_python () {
     # Run python session with dev dependencies
     x_env_activate_dev;
-    python3;
+    eval $BLENDER_CONSOLE;
 }
 
 # TEST-FUNCTIONS----------------------------------------------------------------
@@ -567,7 +565,6 @@ x_test_dev () {
     # Run all tests
     echo "${CYAN2}TESTING DEV${CLEAR}\n";
     cd $REPO_DIR;
-    export PYTHONPATH=$PYTHONPATH:`_x_env_get_python dev 3.10`/lib/python3.10/site-packages;
     eval "$BLENDER_EXPR \
         'import sys; \
         import pytest; \
@@ -673,3 +670,5 @@ x_version_bump_patch () {
     pdm bump patch;
     _x_library_pdm_to_repo_dev;
 }
+
+export PYTHONPATH=$REPO_DIR/python:$HOME/.local/lib:`_x_env_get_python dev 3.10`/lib/python3.10/site-packages;
