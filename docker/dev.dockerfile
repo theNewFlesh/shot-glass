@@ -57,13 +57,14 @@ RUN echo "\n${CYAN}INSTALL PYTHON${CLEAR}"; \
         python3.10-distutils && \
     rm -rf /var/lib/apt/lists/*
 
+# install pip
 RUN echo "\n${CYAN}INSTALL PIP${CLEAR}"; \
     wget https://bootstrap.pypa.io/get-pip.py && \
     python3.10 get-pip.py && \
     pip3.10 install --upgrade pip && \
     rm -rf get-pip.py
 
-# install zsh
+# install and setup zsh
 RUN echo "\n${CYAN}SETUP ZSH${CLEAR}"; \
     apt update && \
     apt install -y zsh && \
@@ -125,15 +126,19 @@ RUN echo "\n${CYAN}INSTALL DEV DEPENDENCIES${CLEAR}"; \
     | python3 - && \
     pip3.10 install --upgrade --user \
         pdm \
+        pdm-bump \
         'rolling-pin>=0.9.2' && \
     mkdir -p /home/ubuntu/.oh-my-zsh/custom/completions && \
+    pdm self update && \
     pdm completion zsh > /home/ubuntu/.oh-my-zsh/custom/completions/_pdm
 
+# setup pdm
 COPY --chown=ubuntu:ubuntu config/* /home/ubuntu/config/
 COPY --chown=ubuntu:ubuntu scripts/* /home/ubuntu/scripts/
 RUN echo "\n${CYAN}SETUP DIRECTORIES${CLEAR}"; \
     mkdir pdm
 
+# create dev env
 WORKDIR /home/ubuntu/pdm
 RUN echo "\n${CYAN}INSTALL DEV ENVIRONMENT${CLEAR}"; \
     . /home/ubuntu/scripts/x_tools.sh && \
@@ -144,12 +149,14 @@ RUN echo "\n${CYAN}INSTALL DEV ENVIRONMENT${CLEAR}"; \
     ln -s `_x_env_get_path dev 3.10` .dev-env && \
     ln -s `_x_env_get_path dev 3.10`/lib/python3.10/site-packages .dev-packages
 
+# create prod envs
 RUN echo "\n${CYAN}INSTALL PROD ENVIRONMENTS${CLEAR}"; \
     . /home/ubuntu/scripts/x_tools.sh && \
     export CONFIG_DIR=/home/ubuntu/config && \
     export SCRIPT_DIR=/home/ubuntu/scripts && \
     x_env_init prod 3.10
 
+# cleanup dirs
 WORKDIR /home/ubuntu
 RUN echo "\n${CYAN}REMOVE DIRECTORIES${CLEAR}"; \
     rm -rf config scripts
