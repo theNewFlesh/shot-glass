@@ -119,4 +119,4 @@ Its usage pattern is: `bin/shot-glass COMMAND [-a --args]=ARGS [-h --help] [--dr
 | ----- | --------- | ---------------------------------------------------- |
 | -a    | --args    | Additional arguments, this can generally be ignored  |
 | -h    | --help    | Prints command help message to stdout                |
-|       | --dryrun  | Prints command that would otherwise be run to stdout |
+| -     | --dryrun  | Prints command that would otherwise be run to stdout |

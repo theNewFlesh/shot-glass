@@ -324,7 +324,6 @@ x_docs () {
     cd $REPO_DIR;
     echo "${CYAN2}GENERATING DOCS${CLEAR}\n";
     mkdir -p docs;
-    pandoc README.md -o sphinx/intro.rst;
     eval "$BLENDER_EXPR \
         'import sys; \
         sys.argv = [\"-M\", \"sphinx\", \"docs\"]; \
