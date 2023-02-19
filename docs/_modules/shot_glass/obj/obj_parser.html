@@ -1,36 +1,78 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>shot_glass.obj.obj_parser &mdash; shot-glass  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../../index.html" class="icon icon-home"> shot-glass
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.1.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -38,11 +80,23 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#development-cli">Development CLI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
@@ -52,31 +106,74 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../obj.html">obj</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../plotly.html">plotly</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Development CLI</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+</ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">shot-glass</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
       <li>shot_glass.obj.obj_parser</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <h1>Source code for shot_glass.obj.obj_parser</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">lunchbox.stopwatch</span> <span class="k">as</span> <span class="nn">lbsw</span>
 <span class="kn">import</span> <span class="nn">pyparsing</span>
@@ -106,37 +203,37 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="c1"># numbers</span>
         <span class="n">flt</span> <span class="o">=</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">pyparsing_common</span><span class="o">.</span><span class="n">number</span>\
-            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="n">int_</span> <span class="o">=</span> <span class="n">pyparsing</span><span class="o">.</span><span class="n">pyparsing_common</span><span class="o">.</span><span class="n">integer</span>
 
         <span class="c1"># vertex</span>
-        <span class="n">v_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;vertex&#39;</span><span class="p">)</span>
+        <span class="n">v_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;vertex&#39;</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">v_key</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">flt</span><span class="p">))</span>\
             <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;component&#39;</span><span class="p">)</span>\
-            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vertex_to_dict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;xyzw&#39;</span><span class="p">)))</span>
+            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vertex_to_dict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;xyzw&#39;</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__v</span> <span class="o">=</span> <span class="n">v</span>
 
         <span class="c1"># vertex normal</span>
-        <span class="n">vn_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;vn&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;vertex_normal&#39;</span><span class="p">)</span>
+        <span class="n">vn_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;vn&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;vertex_normal&#39;</span><span class="p">)</span>
         <span class="n">vn</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">vn_key</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">flt</span><span class="p">)</span>\
             <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;component&#39;</span><span class="p">)</span>\
-            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vertex_to_dict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ijk&#39;</span><span class="p">)))</span>
+            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vertex_to_dict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ijk&#39;</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__vn</span> <span class="o">=</span> <span class="n">vn</span>
 
         <span class="c1"># vertex parametric point</span>
-        <span class="n">vp_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;vp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;vertex_point&#39;</span><span class="p">)</span>
+        <span class="n">vp_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;vp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;vertex_point&#39;</span><span class="p">)</span>
         <span class="n">vp_w</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">(</span><span class="n">flt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
         <span class="n">vp</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">vp_key</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">vp_w</span><span class="p">)</span>\
             <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;component&#39;</span><span class="p">)</span>\
-            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vertex_to_dict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;uvw&#39;</span><span class="p">)))</span>
+            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vertex_to_dict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;uvw&#39;</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__vp</span> <span class="o">=</span> <span class="n">vp</span>
 
         <span class="c1"># vertex texture</span>
-        <span class="n">vt_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;vt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;vertex_texture&#39;</span><span class="p">)</span>
+        <span class="n">vt_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;vt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;vertex_texture&#39;</span><span class="p">)</span>
         <span class="n">vt_w</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">(</span><span class="n">flt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="n">vt</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">vt_key</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">flt</span> <span class="o">+</span> <span class="n">vt_w</span><span class="p">)</span>\
             <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;component&#39;</span><span class="p">)</span>\
-            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vertex_to_dict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;uvw&#39;</span><span class="p">)))</span>
+            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__vertex_to_dict</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;uvw&#39;</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__vt</span> <span class="o">=</span> <span class="n">vt</span>
 
         <span class="c1"># generic vertex</span>
@@ -146,19 +243,19 @@
         <span class="c1"># face</span>
         <span class="n">f_key</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>\
             <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;component_type&#39;</span><span class="p">)</span>\
-            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;face&#39;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="s1">&#39;face&#39;</span><span class="p">)</span>
 
         <span class="n">f_v</span> <span class="o">=</span> <span class="n">int_</span><span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;vertex_id&#39;</span><span class="p">)</span>
 
         <span class="n">f_vt</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">(</span><span class="n">int_</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;vertex_texture_id&#39;</span><span class="p">)</span>
         <span class="n">f_vt_empty</span> <span class="o">=</span> <span class="n">empty</span>\
             <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;vertex_texture_id&#39;</span><span class="p">)</span>\
-            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span>
 
         <span class="n">f_vn</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">(</span><span class="n">int_</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;vertex_normal_id&#39;</span><span class="p">)</span>
         <span class="n">f_vn_empty</span> <span class="o">=</span> <span class="n">empty</span>\
             <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s1">&#39;vertex_normal_id&#39;</span><span class="p">)</span>\
-            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span>
 
         <span class="c1"># face item are delimited with &#39;/&#39; but can omit elements which makes</span>
         <span class="c1"># parsing them difficult</span>
@@ -260,30 +357,46 @@
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.</p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
