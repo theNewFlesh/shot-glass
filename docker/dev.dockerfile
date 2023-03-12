@@ -96,29 +96,6 @@ FROM base AS dev
 USER ubuntu
 WORKDIR /home/ubuntu
 
-# install blender
-ARG VER=3.4.0
-ENV BLENDER_VERSION=3.4
-RUN echo "\n${CYAN}INSTALL BLENDER${NO_COLOR}"; \
-    wget \
-        https://mirror.clarkson.edu/blender/release/Blender$BLENDER_VERSION/blender-$VER-linux-x64.tar.xz \
-        -O blender.tar.xz && \
-    tar xf blender.tar.xz && \
-    rm blender.tar.xz && \
-    mv blender-$VER-linux-x64 blender && \
-    chown -R ubuntu:ubuntu blender
-
-# setup python
-ENV BLENDER_PYTHON=/home/ubuntu/blender/$BLENDER_VERSION/python/bin/python3.10
-RUN echo "\n${CYAN}SETUP PYTHON${NO_COLOR}"; \
-    wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py && \
-    chown -R ubuntu:ubuntu get-pip.py && \
-    $BLENDER_PYTHON get-pip.py
-ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10
-ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10/site-packages
-ENV PYTHONPATH $PYTHONPATH:/home/ubuntu/blender/$BLENDER_VERSION/scripts/modules
-ENV PATH /home/ubuntu/blender/$BLENDER_VERSION/python/bin:$PATH
-
 RUN echo "\n${CYAN}INSTALL DEV DEPENDENCIES${CLEAR}"; \
     curl -sSL \
         https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py \
@@ -159,6 +136,29 @@ RUN echo "\n${CYAN}INSTALL PROD ENVIRONMENTS${CLEAR}"; \
 WORKDIR /home/ubuntu
 RUN echo "\n${CYAN}REMOVE DIRECTORIES${CLEAR}"; \
     rm -rf config scripts
+
+# install blender
+# ARG VER=3.4.0
+# ENV BLENDER_VERSION=3.4
+# RUN echo "\n${CYAN}INSTALL BLENDER${NO_COLOR}"; \
+#     wget \
+#         https://mirror.clarkson.edu/blender/release/Blender$BLENDER_VERSION/blender-$VER-linux-x64.tar.xz \
+#         -O blender.tar.xz && \
+#     tar xf blender.tar.xz && \
+#     rm blender.tar.xz && \
+#     mv blender-$VER-linux-x64 blender && \
+#     chown -R ubuntu:ubuntu blender
+
+# setup python
+# ENV BLENDER_PYTHON=/home/ubuntu/blender/$BLENDER_VERSION/python/bin/python3.10
+# RUN echo "\n${CYAN}SETUP PYTHON${NO_COLOR}"; \
+#     wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py && \
+#     chown -R ubuntu:ubuntu get-pip.py && \
+#     $BLENDER_PYTHON get-pip.py
+# ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10
+# ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10/site-packages
+# ENV PYTHONPATH $PYTHONPATH:/home/ubuntu/blender/$BLENDER_VERSION/scripts/modules
+# ENV PATH /home/ubuntu/blender/$BLENDER_VERSION/python/bin:$PATH
 
 ENV REPO='shot-glass'
 ENV PYTHONPATH ":/home/ubuntu/$REPO/python:/home/ubuntu/.local/lib"

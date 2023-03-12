@@ -12,15 +12,11 @@ export PDM_DIR="$HOME/pdm"
 export SCRIPT_DIR="$REPO_DIR/docker/scripts"
 export MIN_PYTHON_VERSION="3.10"
 export MAX_PYTHON_VERSION="3.10"
+export MIN_BPY_VERSION="3.4.0"
 export TEST_VERBOSITY=0
 export TEST_PROCS="auto"
 export JUPYTER_PLATFORM_DIRS=0
 export JUPYTER_CONFIG_PATH=/home/ubuntu/.jupyter
-export BLENDER="/home/ubuntu/blender/blender"
-export BLENDER_CMD="$BLENDER --background"
-export BLENDER_CONSOLE="$BLENDER_CMD --python-console"
-export BLENDER_EXPR="$BLENDER_CMD --python-expr"
-export BLENDER_PYTHON="$BLENDER_CMD --python"
 
 alias cp=cp  # "cp -i" default alias asks you if you want to clobber files
 
@@ -143,6 +139,46 @@ _x_gen_pdm_files () {
         --target $PDM_DIR/.pdm.toml;
 }
 
+# BPY---------------------------------------------------------------------------
+x_env_activate () {
+    # Activate a virtual env given a mode and python version
+    # args: mode, python_version
+    local CWD=`pwd`;
+    cd $PDM_DIR;
+    _x_gen_pdm_files $1 $2;
+    . `pdm venv activate $1-$2 | awk '{print $2}'`;
+    cd $CWD;
+}
+
+# TODO: remove this once PDM will install bpy
+_x_env_pip_install () {
+    # Pip install packages pdm refuses to
+    # args: mode, python_version, packages
+    cd $PDM_DIR;
+    x_env_activate $1 $2 && \
+    python3 -m pip install "$3";
+    deactivate;
+}
+
+# TODO: remove this once PDM will install bpy
+_x_env_install_bpy () {
+    # install bpy in given environment
+    # args: mode, python_version
+    echo "\n${CYAN2}INSTALL BPY${CLEAR}\n";
+    _x_env_pip_install $1 $2 "bpy>=$MIN_BPY_VERSION";
+}
+
+# TODO: remove this once PDM will install bpy
+_x_build_add_bpy () {
+    # add bpy to pyproject file
+    # args: pyproject.toml file
+    DEPS=`rolling-pin toml $1 --search project.dependencies \
+        | grep dependencies \
+        | sed 's/.* = \[/[/' \
+        | sed "s/\]/ \"bpy>=$MIN_BPY_VERSION\"]/"`;
+    rolling-pin toml $1 --edit "project.dependencies=$DEPS" --target $1;
+}
+
 # ENV-FUNCTIONS-----------------------------------------------------------------
 _x_env_exists () {
     # determines if given env exists
@@ -179,17 +215,7 @@ _x_env_create () {
     # args: mode, python_version
     cd $PDM_DIR;
     _x_gen_pdm_files $1 $2;
-    pdm venv create -n $1-$2;
-}
-
-x_env_activate () {
-    # Activate a virtual env given a mode and python version
-    # args: mode, python_version
-    local CWD=`pwd`;
-    cd $PDM_DIR;
-    _x_gen_pdm_files $1 $2;
-    . `pdm venv activate $1-$2 | awk '{print $2}'`;
-    cd $CWD;
+    pdm venv create -n $1-$2 --with-pip;
 }
 
 _x_env_lock () {
@@ -212,7 +238,8 @@ _x_env_sync () {
         pdm lock -v
     fi && \
     pdm sync --no-self --dev --clean -v && \
-    deactivate;
+    deactivate && \
+    _x_env_install_bpy $1 $2;
 }
 
 x_env_activate_dev () {
@@ -280,6 +307,7 @@ x_build_prod () {
     echo "${CYAN2}BUILDING PROD REPO${CLEAR}\n";
     _x_build prod;
     _x_gen_pyproject package > $BUILD_DIR/repo/pyproject.toml;
+    _x_build_add_bpy $BUILD_DIR/repo/pyproject.toml;
     _x_build_show_dir;
 }
 
@@ -321,15 +349,11 @@ x_build_test () {
 # DOCS-FUNCTIONS----------------------------------------------------------------
 x_docs () {
     # Generate sphinx documentation
+    x_env_activate_dev;
     cd $REPO_DIR;
     echo "${CYAN2}GENERATING DOCS${CLEAR}\n";
     mkdir -p docs;
-    eval "$BLENDER_EXPR \
-        'import sys; \
-        sys.argv = [\"-M\", \"sphinx\", \"docs\"]; \
-        from sphinx.cmd.build import main; \
-        sys.exit(main()); \
-        '";
+    sphinx-build sphinx docs;
     cp -f sphinx/style.css docs/_static/style.css;
     touch docs/.nojekyll;
     mkdir -p docs/resources;
@@ -385,6 +409,7 @@ _x_library_sync () {
     cd $PDM_DIR;
     pdm sync --no-self --dev --clean -v;
     deactivate;
+    _x_env_install_bpy $1 $2;
     x_env_activate_dev;
 }
 
@@ -546,7 +571,7 @@ x_session_lab () {
 x_session_python () {
     # Run python session with dev dependencies
     x_env_activate_dev;
-    eval $BLENDER_CONSOLE;
+    python3;
 }
 
 # TEST-FUNCTIONS----------------------------------------------------------------
@@ -569,19 +594,15 @@ x_test_coverage () {
 
 x_test_dev () {
     # Run all tests
+    x_env_activate_dev;
     echo "${CYAN2}TESTING DEV${CLEAR}\n";
     cd $REPO_DIR;
-    eval "$BLENDER_EXPR \
-        'import sys; \
-        import pytest; \
-        sys.argv = [ \
-            \"-c=$CONFIG_DIR/pyproject.toml\", \
-            \"--verbosity=$TEST_VERBOSITY\", \
-            \"--durations=20\", \
-            \"$REPO_SUBPACKAGE\", \
-        ]; \
-        sys.exit(pytest.console_main()); \
-        '";
+    pytest \
+        -c $CONFIG_DIR/pyproject.toml \
+        --numprocesses $TEST_PROCS \
+        --verbosity $TEST_VERBOSITY \
+        --durations 20 \
+        $REPO_SUBPACKAGE;
 }
 
 x_test_fast () {
