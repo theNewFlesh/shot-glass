@@ -26,37 +26,37 @@ class ObjParser():
         '''
         # numbers
         flt = pyparsing.pyparsing_common.number\
-            .setParseAction(lambda s, l, t: float(t[0]))
+            .setParseAction(lambda s, _, t: float(t[0]))
         int_ = pyparsing.pyparsing_common.integer
 
         # vertex
-        v_key = Keyword('v').setParseAction(lambda s, l, t: 'vertex')
+        v_key = Keyword('v').setParseAction(lambda s, _, t: 'vertex')
         v = Group(v_key + flt + flt + flt + Optional(flt))\
             .setResultsName('component')\
-            .setParseAction(lambda s, l, t: self.__vertex_to_dict(t, list('xyzw')))
+            .setParseAction(lambda s, _, t: self.__vertex_to_dict(t, list('xyzw')))
         self.__v = v
 
         # vertex normal
-        vn_key = Keyword('vn').setParseAction(lambda s, l, t: 'vertex_normal')
+        vn_key = Keyword('vn').setParseAction(lambda s, _, t: 'vertex_normal')
         vn = Group(vn_key + flt + flt + flt)\
             .setResultsName('component')\
-            .setParseAction(lambda s, l, t: self.__vertex_to_dict(t, list('ijk')))
+            .setParseAction(lambda s, _, t: self.__vertex_to_dict(t, list('ijk')))
         self.__vn = vn
 
         # vertex parametric point
-        vp_key = Keyword('vp').setParseAction(lambda s, l, t: 'vertex_point')
+        vp_key = Keyword('vp').setParseAction(lambda s, _, t: 'vertex_point')
         vp_w = Optional(flt, default=1.0)
         vp = Group(vp_key + flt + flt + vp_w)\
             .setResultsName('component')\
-            .setParseAction(lambda s, l, t: self.__vertex_to_dict(t, list('uvw')))
+            .setParseAction(lambda s, _, t: self.__vertex_to_dict(t, list('uvw')))
         self.__vp = vp
 
         # vertex texture
-        vt_key = Keyword('vt').setParseAction(lambda s, l, t: 'vertex_texture')
+        vt_key = Keyword('vt').setParseAction(lambda s, _, t: 'vertex_texture')
         vt_w = Optional(flt, default=0.0)
         vt = Group(vt_key + flt + flt + vt_w)\
             .setResultsName('component')\
-            .setParseAction(lambda s, l, t: self.__vertex_to_dict(t, list('uvw')))
+            .setParseAction(lambda s, _, t: self.__vertex_to_dict(t, list('uvw')))
         self.__vt = vt
 
         # generic vertex
@@ -66,19 +66,19 @@ class ObjParser():
         # face
         f_key = Keyword('f')\
             .setResultsName('component_type')\
-            .setParseAction(lambda s, l, t: 'face')
+            .setParseAction(lambda s, _, t: 'face')
 
         f_v = int_.setResultsName('vertex_id')
 
         f_vt = Optional(int_, default=None).setResultsName('vertex_texture_id')
         f_vt_empty = empty\
             .setResultsName('vertex_texture_id')\
-            .setParseAction(lambda s, l, t: [None])
+            .setParseAction(lambda s, _, t: [None])
 
         f_vn = Optional(int_, default=None).setResultsName('vertex_normal_id')
         f_vn_empty = empty\
             .setResultsName('vertex_normal_id')\
-            .setParseAction(lambda s, l, t: [None])
+            .setParseAction(lambda s, _, t: [None])
 
         # face item are delimited with '/' but can omit elements which makes
         # parsing them difficult

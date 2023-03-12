@@ -1,10 +1,8 @@
-version: "3.4"
-volumes:
-  cache:
+version: "3.8"
 services:
   shot-glass:
     container_name: shot-glass
-    image: shot-glass
+    image: shot-glass:dev
     build:
       context: .
       dockerfile: dev.dockerfile
@@ -13,12 +11,12 @@ services:
       - "2180:8080"
     userns_mode: "host"
     user: ubuntu
+    env_file:
+      - config/dev-env
     volumes:
       - ../:/home/ubuntu/shot-glass
-      - ./jupyter:/home/ubuntu/.jupyter
-      - ./ipython:/home/ubuntu/.ipython
-      - ../artifacts:/tmp/dash_artifacts
-      - ~/.ssh:/home/ubuntu/.ssh
-      # - /mnt/storage:/mnt/storage
+      - ~/.ssh:/home/ubuntu/.ssh:ro
+      - ./config/jupyter:/home/ubuntu/.jupyter
+      - ./config/zshrc:/home/ubuntu/.zshrc
     working_dir: "/home/ubuntu"
     command: "tail -f /dev/null"

@@ -1,0 +1,104 @@
+[project]
+name = "shot-glass"
+version = "0.1.0"
+description = "3D Data Science via Blender and Category Theory"
+authors = [
+    {name = "Alex Braun", email = "alexander.g.braun@gmail.com"},
+]
+readme = "README.md"
+license = "MIT"
+keywords = [
+    'blender', 'add-on', '3D', 'computer vision', 'geometry', 'category theory'
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Typing :: Typed",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "click",
+    "lunchbox",
+    "numpy",
+    "pandas",
+    "plotly",
+    "pyparsing",
+    "pytest",
+    "wrapt",
+    "tables>=3.7.0",
+]
+
+[project.urls]
+repository = "https://github.com/theNewFlesh/shot-glass"
+documentation = "https://thenewflesh.github.io/shot-glass"
+
+[project.scripts]
+shot-glass = "shot-glass.command:main"
+
+[project.optional-dependencies]
+
+[tool.pdm.dev-dependencies]
+lab = [
+    "cufflinks",
+    "jupyterlab-git>=0.39.3",
+    "jupyterlab-henanigans>=0.2.2",
+    "jupyterlab-sublime",
+    "jupyterlab",
+]
+dev = [
+    "m2r2>=0.3.3.post2",
+    "sphinx-autodoc-typehints>=1.22",
+    "sphinx-rtd-theme",
+    "sphinx>=5.3.0",
+    "toml>=0.10.2",
+]
+test = [
+    "flake8",
+    "mypy",
+    "pytest-cov",
+    "pytest-forked",
+    "pytest-xdist",
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+cache_dir = "/home/ubuntu/.pytest_cache"
+filterwarnings = [
+    # "ignore::UserWarning",
+    # "ignore::DeprecationWarning",
+    # "ignore::PendingDeprecationWarning",
+    "ignore:The --rsyncdir command line argument"
+]
+markers = [
+    "flaky:Flaky test",
+]
+
+[tool.coverage.report]
+show_missing = true
+omit = [
+    "*/__init__.py",
+    "*/*_test_base.py",
+    "*/*_test.py",
+    "*/*_tests.py",
+    "*/cli.py",
+    "*/command.py",
+    "*/mock_*.py",
+    "*/conftest.py",
+]
+
+[tool.mypy]
+cache_dir = "/home/ubuntu/.mypy_cache"
+python_version = "3.10"
+ignore_missing_imports = true
+warn_no_return = false
+pretty = true
+warn_unused_ignores = true
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
