@@ -26,7 +26,7 @@
     </a>
 </p>
 
-<!-- <img id="logo" src="resources/icon.png" style="max-width: 717px"> -->
+<!-- <img id="logo" src="resources/logo.png" style="max-width: 717px"> -->
 
 [![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/theNewFlesh/shot-glass/blob/master/LICENSE)
 [![](https://img.shields.io/badge/3.10-F77E70?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/theNewFlesh/shot-glass/blob/master/docker/config/pyproject.toml)
