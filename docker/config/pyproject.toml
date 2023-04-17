@@ -38,7 +38,7 @@ repository = "https://github.com/theNewFlesh/shot-glass"
 documentation = "https://thenewflesh.github.io/shot-glass"
 
 [project.scripts]
-shot-glass = "shot-glass.command:main"
+shot-glass = "shot_glass.command:main"
 
 [project.optional-dependencies]
 
