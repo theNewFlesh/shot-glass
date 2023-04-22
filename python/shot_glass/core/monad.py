@@ -1,4 +1,4 @@
-from typing import Callable, Generic, TypeVar  # noqa: F401
+from typing import Any, Callable, Generic, TypeVar  # noqa: F401
 A = TypeVar('A')
 B = TypeVar('B')
 # ------------------------------------------------------------------------------
@@ -6,21 +6,63 @@ B = TypeVar('B')
 
 def wrap(monad, data):
     # type: (Monad, A) -> Monad[A]
+    '''
+    Given a Monad class or instance, create a new Monad with given data.
+
+    Args:
+        monad (Monad): Monad class or instance.
+        data (Any): Data to be wrapped as Monad.
+
+    Returns:
+        Monad[A]: Monad of data.
+    '''
     return monad.wrap(data)
 
 
 def unwrap(monad):
     # type: (Monad[A]) -> A
+    '''
+    Return the data of a given Monad instance.
+
+    Args:
+        monad (Monad): Monad instance.
+
+    Returns:
+        A: Monad data.
+    '''
     return monad._data
 
 
 def fmap(monad, func):
     # type: (Monad[A], Callable[[A], B]) -> Monad[B]
+    '''
+    Functor map: MA -> (A -> B) -> MB
+    Given a Monad of A (MA) and a function A to B, return a Monad of B (MB).
+
+    Args:
+        monad (Monad): Monad of A.
+        func (function): Function (A -> B).
+
+    Returns:
+        Monad[B]: Monad of B.
+    '''
     return wrap(monad, func(unwrap(monad)))
 
 
 def applicative(monad, monad_func):
-    # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad
+    # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
+    '''
+    Applicative: MA -> M(A -> B) -> MB
+    Given a Monad of A (MA) and a Monad of a function A to B, return a Monad
+    of B (MB).
+
+    Args:
+        monad (Monad): Monad of A.
+        func (Monad): Monad of function (A -> B).
+
+    Returns:
+        Monad[B]: Monad of B.
+    '''
     func = unwrap(monad_func)
     value = unwrap(monad)
     return wrap(monad, func(value))
@@ -28,16 +70,47 @@ def applicative(monad, monad_func):
 
 def bind(monad, func):
     # type: (Monad[A], Callable[[A], Monad[B]]) -> Monad[B]
+    '''
+    Applicative: MA -> (A -> MB) -> MB
+    Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).
+
+    Args:
+        monad (Monad): Monad of A.
+        func (function): Function (A -> MB).
+
+    Returns:
+        Monad[B]: Monad of B.
+    '''
     return func(unwrap(monad))
 
 
 def right(monad_a, monad_b):
     # type: (Monad[A], Monad[B]) -> Monad[B]
+    '''
+    Given two Monads, left and right, return the right Monad.
+
+    Args:
+        monad_a (Monad): Left monad.
+        monad_b (Monad): Right monad.
+
+    Returns:
+        Monad: Right Monad.
+    '''
     return monad_b
 
 
 def fail(monad, error):
-    # type (Monad, str) -> Monad[str]
+    # type (Monad, Exception) -> Monad[Exception]
+    '''
+    Given a Monad and error message, return a Monad of that error message.
+
+    Args:
+        monad (Monad): Monad to wrap error with.
+        error (Exception): Error.
+
+    Returns:
+        Monad: Error Monad.
+    '''
     return wrap(monad, error)
 # ------------------------------------------------------------------------------
 
