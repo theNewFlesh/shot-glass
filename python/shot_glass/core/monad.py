@@ -51,7 +51,7 @@ def fmap(monad, func):
     return wrap(monad, func(unwrap(monad)))
 
 
-def applicative(monad, monad_func):
+def app(monad, monad_func):
     # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
     '''
     Applicative: MA -> M(A -> B) -> MB
@@ -137,9 +137,9 @@ class Monad(Generic[A]):
         # type: (Callable[[A], B]) -> Monad[B]
         return fmap(self, func)
 
-    def applicative(self, monad_func):
+    def app(self, monad_func):
         # type: (Monad[Callable[[A], B]]) -> Monad
-        return applicative(self, monad_func)
+        return app(self, monad_func)
 
     def bind(self, func):
         # type: (Callable[[A], Monad[B]]) -> Monad[B]
