@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generic, TypeVar  # noqa: F401
+from typing import Callable, Generic, Type, TypeVar, Union  # noqa: F401
 
 A = TypeVar('A')
 B = TypeVar('B')
@@ -6,7 +6,7 @@ B = TypeVar('B')
 
 
 def wrap(monad, data):
-    # type: (Monad, A) -> Monad[A]
+    # type: (Monadlike, A) -> Monad[A]
     '''
     Wrap: M -> A -> MA
     Given a Monad class or instance, create a new Monad with given data.
@@ -153,3 +153,6 @@ class Monad(Generic[A]):
     def fail(self, error):
         # type (str) -> Monad[str]
         return fail(error)
+
+
+Monadlike = Union[Monad, Type[Monad]]
