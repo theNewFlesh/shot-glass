@@ -1,17 +1,17 @@
 from pathlib import Path
 import os
 from tempfile import TemporaryDirectory
+import unittest
 
 import bpy
 import lunchbox.tools as lbt
 
 from shot_glass.utils import ValidationError
-from shot_glass.hifive.test_base import HiFiveTestBase
 import shot_glass.hifive.operators as operators
 # ------------------------------------------------------------------------------
 
 
-class HiFiveOperatorsTests(HiFiveTestBase):
+class HiFiveOperatorsTests(unittest.TestCase):
     def test_read_json(self):
         source = lbt.relative_path(__file__, '../../../resources/face.json')
         result = operators.read_json(fullpath=source, validate='all')
