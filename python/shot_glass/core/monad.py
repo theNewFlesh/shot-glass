@@ -90,7 +90,7 @@ def right(monad_a, monad_b):
     # type: (Monad[A], Monad[B]) -> Monad[B]
     '''
     Right: MA -> MB -> MB
-    Given two Monads, left and right, return the right Monad.
+    Given two Monads, a and b, return the right Monad b.
 
     Args:
         monad_a (Monad): Left monad.
