@@ -1,6 +1,6 @@
 from enum import Enum
 
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 

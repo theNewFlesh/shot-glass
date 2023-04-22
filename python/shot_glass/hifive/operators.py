@@ -7,7 +7,7 @@ from pandas import DataFrame
 
 from shot_glass.hifive.hifive import HiFive
 from shot_glass.hifive.operator_tools import operator
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 import shot_glass.blender.blender_tools as blt
 import shot_glass.hifive.validators as validators
 import shot_glass.obj.obj_tools as obt

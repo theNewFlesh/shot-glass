@@ -5,7 +5,7 @@ from pandas import DataFrame
 import numpy as np
 import pytest
 
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 import shot_glass.hifive.hifive_tools as hft
 # ------------------------------------------------------------------------------
 

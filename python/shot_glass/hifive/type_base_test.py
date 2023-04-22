@@ -1,7 +1,7 @@
 import unittest
 
 from shot_glass.hifive.type_base import HiFiveTypeBase
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 

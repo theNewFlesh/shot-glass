@@ -9,7 +9,7 @@ import pytest
 
 from shot_glass.hifive.hifive import HiFive, HiFiveDataType
 from shot_glass.hifive.test_base import HiFiveTestBase
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 

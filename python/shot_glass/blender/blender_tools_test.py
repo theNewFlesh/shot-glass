@@ -6,7 +6,7 @@ from pandas import DataFrame
 import pytest
 
 import shot_glass.blender.blender_tools as blt
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 

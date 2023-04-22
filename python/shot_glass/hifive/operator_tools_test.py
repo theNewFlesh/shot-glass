@@ -3,7 +3,7 @@ import unittest
 import pytest
 
 import shot_glass.hifive.operator_tools as hfops
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 
