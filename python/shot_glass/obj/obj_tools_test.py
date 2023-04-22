@@ -5,7 +5,7 @@ from shot_glass.hifive.test_base import HiFiveTestBase
 # ------------------------------------------------------------------------------
 
 
-class HiFiveValidatorsTests(HiFiveTestBase):
+class ValidatorsTests(HiFiveTestBase):
     def test_obj_face_to_edges(self):
         expected = DataFrame()
         expected['v_id'] = [0, 1, 1, 2, 2, 3, 3, 0]
@@ -29,7 +29,7 @@ class HiFiveValidatorsTests(HiFiveTestBase):
             self.assertEqual(result[col].tolist(), expected[col].tolist())
 
     def test_row_to_obj_face(self):
-        data = HiFiveTestBase().get_quadrilateral_data()
+        data = self.fake_data
         result = data.groupby('f_id') \
             .apply(obt.row_to_obj_face) \
             .tolist()
