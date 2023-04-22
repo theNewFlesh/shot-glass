@@ -1,4 +1,5 @@
 from typing import Any, Callable, Generic, TypeVar  # noqa: F401
+
 A = TypeVar('A')
 B = TypeVar('B')
 # ------------------------------------------------------------------------------
