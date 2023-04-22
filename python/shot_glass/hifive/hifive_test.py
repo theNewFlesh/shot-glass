@@ -244,7 +244,7 @@ class HiFiveTest(HiFiveTestBase):
     def test_map_has_nans(self):
         hi = HiFive()
         hi.data = self.get_quadrilateral_data()
-        hi.data.loc['v_id', 2:5] = np.nan
+        hi.data.loc[2:5, 'v_id'] = np.nan
 
         with pytest.raises(TypeError) as e:
             hi.map('v_id', 'v_i_foo', lambda x: 27)
@@ -253,7 +253,7 @@ class HiFiveTest(HiFiveTestBase):
         self.assertEqual(str(e.value), expected)
 
         hi.data = self.get_quadrilateral_data()
-        hi.data.loc['f_id', 2:5] = np.nan
+        hi.data.loc[2:5, 'f_id'] = np.nan
 
         with pytest.raises(TypeError) as e:
             hi.map('f_id', 'v_i_foo', lambda x: 27)
@@ -360,7 +360,7 @@ class HiFiveTest(HiFiveTestBase):
         row = hi.data.tail(1).copy()
         row.i_id = 2
         row.i_i_foo = 99
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
 
         result = hi.item_info.columns.tolist()
         self.assertEqual(result, ['i_id', 'i_i_foo'])
@@ -381,7 +381,7 @@ class HiFiveTest(HiFiveTestBase):
         row = hi.data.tail(1).copy()
         row.f_id = 2
         row.f_s_foo = 'bar'
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
 
         result = hi.face_info.columns.tolist()
         self.assertEqual(result, ['f_id', 'f_s_foo'])
@@ -404,8 +404,8 @@ class HiFiveTest(HiFiveTestBase):
         row.e_id = 4
         val1 = json.dumps({'cream': 'cheese'})
         row.e_j_foo = val1
-        hi.data = hi.data.append(row)
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
 
         result = hi.edge_info.columns.tolist()
         self.assertEqual(result, ['e_id', 'e_j_foo'])
@@ -426,7 +426,7 @@ class HiFiveTest(HiFiveTestBase):
         row = hi.data.tail(1).copy()
         row.v_id = 4
         row.v_f_foo = 101.1
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
 
         result = hi.vertex_info.columns.tolist()
         self.assertEqual(result, ['v_id', 'v_x', 'v_y', 'v_z', 'v_f_foo'])
@@ -560,22 +560,22 @@ class HiFiveTest(HiFiveTestBase):
         row.v_id = 9
         row.e_id = 4
         row.f_id = 1
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
 
         result = hi._HiFive__get_unique_counts('e_id', 'f_id')
         self.assertEqual(result, [1, 4])
 
         row.e_id = 5
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
         row.e_id = 6
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
         row.e_id = 7
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
         result = hi._HiFive__get_unique_counts('e_id', 'f_id')
         self.assertEqual(result, [4])
 
         row.e_id = 8
-        hi.data = hi.data.append(row)
+        hi.data = pd.concat([hi.data, row], ignore_index=True)
         result = hi._HiFive__get_unique_counts('e_id', 'f_id', summarize=False)
         self.assertEqual(result, [4, 5])
 
