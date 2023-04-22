@@ -7,6 +7,7 @@ B = TypeVar('B')
 def wrap(monad, data):
     # type: (Monad, A) -> Monad[A]
     '''
+    Wrap: M -> A -> MA
     Given a Monad class or instance, create a new Monad with given data.
 
     Args:
@@ -22,6 +23,7 @@ def wrap(monad, data):
 def unwrap(monad):
     # type: (Monad[A]) -> A
     '''
+    Unwrap: MA -> A
     Return the data of a given Monad instance.
 
     Args:
@@ -71,7 +73,7 @@ def applicative(monad, monad_func):
 def bind(monad, func):
     # type: (Monad[A], Callable[[A], Monad[B]]) -> Monad[B]
     '''
-    Applicative: MA -> (A -> MB) -> MB
+    Bind: MA -> (A -> MB) -> MB
     Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).
 
     Args:
@@ -87,6 +89,7 @@ def bind(monad, func):
 def right(monad_a, monad_b):
     # type: (Monad[A], Monad[B]) -> Monad[B]
     '''
+    Right: MA -> MB -> MB
     Given two Monads, left and right, return the right Monad.
 
     Args:
@@ -102,6 +105,7 @@ def right(monad_a, monad_b):
 def fail(monad, error):
     # type (Monad, Exception) -> Monad[Exception]
     '''
+    Fail: M -> E -> ME
     Given a Monad and error message, return a Monad of that error message.
 
     Args:
