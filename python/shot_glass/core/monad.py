@@ -4,9 +4,9 @@ B = TypeVar('B')
 # ------------------------------------------------------------------------------
 
 
-def wrap(data):
-    # type: (A) -> Monad[A]
-    return Monad(data)
+def wrap(monad, data):
+    # type: (Monad, A) -> Monad[A]
+    return monad.wrap(data)
 
 
 def unwrap(monad):
@@ -16,14 +16,14 @@ def unwrap(monad):
 
 def fmap(monad, func):
     # type: (Monad[A], Callable[[A], B]) -> Monad[B]
-    return wrap(func(unwrap(monad)))
+    return wrap(monad, func(unwrap(monad)))
 
 
 def applicative(monad, monad_func):
     # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad
     func = unwrap(monad_func)
     value = unwrap(monad)
-    return wrap(func(value))
+    return wrap(monad, func(value))
 
 
 def bind(monad, func):
@@ -36,9 +36,9 @@ def right(monad_a, monad_b):
     return monad_b
 
 
-def fail(error):
-    # type (str) -> Monad[str]
-    return wrap(error)
+def fail(monad, error):
+    # type (Monad, str) -> Monad[str]
+    return wrap(monad, error)
 # ------------------------------------------------------------------------------
 
 
@@ -47,10 +47,10 @@ class Monad(Generic[A]):
         # type: (A) -> None
         self._data = data
 
-    @staticmethod
-    def wrap(data):
+    @classmethod
+    def wrap(cls, data):
         # type: (A) -> Monad[A]
-        return wrap(data)
+        return cls(data)
 
     def unwrap(self):
         # type: () -> A
