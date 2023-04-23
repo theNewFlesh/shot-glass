@@ -153,9 +153,8 @@ def to_plotly_figure(data='required'):
 
 # OBJ-OPERATORS-----------------------------------------------------------------
 @operator(
-    fullpath=[
-        validators.has_obj_extension,
-        validators.file_exists])
+    fullpath=[validators.has_obj_extension, validators.file_exists]
+)
 def read_obj(fullpath='required'):
     '''
     Reads given OBJ file.
@@ -203,14 +202,14 @@ def read_obj(fullpath='required'):
             raise ValidationError(msg)
 
     # create verts
-    verts = data[data.component_type == 'vertex']
+    verts = data[data.component_type == 'vertex'].copy()
     verts.v_id = verts.v_id.apply(lambda x: lbt.try_(lambda y: int(y), x))
     verts.v_x = verts.v_x.apply(lambda x: lbt.try_(lambda y: float(y), x))
     verts.v_y = verts.v_y.apply(lambda x: lbt.try_(lambda y: float(y), x))
     verts.v_z = verts.v_z.apply(lambda x: lbt.try_(lambda y: float(y), x))
 
     # create faces
-    faces = data[data.component_type == 'face']
+    faces = data[data.component_type == 'face'].copy()
     faces.parts = faces.parts.apply(lambda x: [x['vertex_id'] for x in x])
     data = faces.parts.apply(obt.obj_face_to_edges).tolist()
     data = pd.concat(data, ignore_index=True)
