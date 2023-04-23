@@ -33,9 +33,6 @@
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
     
@@ -67,7 +64,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -186,7 +183,7 @@
 
 
 <div class="viewcode-block" id="ObjParser"><a class="viewcode-back" href="../../../obj.html#shot_glass.obj.obj_parser.ObjParser">[docs]</a><span class="k">class</span> <span class="nc">ObjParser</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    A simple parser for files in OBJ format.</span>
 
 <span class="sd">    Currently supports:</span>
@@ -198,7 +195,7 @@
 <span class="sd">        * faces</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 <div class="viewcode-block" id="ObjParser.__init__"><a class="viewcode-back" href="../../../obj.html#shot_glass.obj.obj_parser.ObjParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Defines Backus-Naur form for parsing OBJ files.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="c1"># numbers</span>
@@ -280,7 +277,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__vertex_to_dict</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">components</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Convenience method for converting parsed vertex data into a dictionary.</span>
 
 <span class="sd">        Args:</span>
@@ -293,7 +290,7 @@
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;component_type&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">components</span><span class="p">,</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
 <div class="viewcode-block" id="ObjParser._parse_line"><a class="viewcode-back" href="../../../obj.html#shot_glass.obj.obj_parser.ObjParser._parse_line">[docs]</a>    <span class="k">def</span> <span class="nf">_parse_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Parses given line of OBJ file.</span>
 
 <span class="sd">        Args:</span>
@@ -305,7 +302,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="ObjParser.parse"><a class="viewcode-back" href="../../../obj.html#shot_glass.obj.obj_parser.ObjParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Parses a given OBJ file.</span>
 
 <span class="sd">        Args:</span>
