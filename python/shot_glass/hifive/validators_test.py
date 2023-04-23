@@ -10,7 +10,7 @@ from tempfile import TemporaryDirectory
 from shot_glass.hifive.hifive import HiFive
 from shot_glass.hifive.test_base import HiFiveTestBase
 import shot_glass.hifive.validators as validators
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 

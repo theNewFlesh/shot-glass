@@ -1,9 +1,10 @@
+import unittest
+
 import shot_glass.plotly.plotly_tools as plot
-from shot_glass.hifive.test_base import HiFiveTestBase
 # ------------------------------------------------------------------------------
 
 
-class HiFiveValidatorsTests(HiFiveTestBase):
+class HiFiveValidatorsTests(unittest.TestCase):
     def test_get_mesh_plot_layout(self):
         result = plot.get_mesh_plot_layout(-2, 9, 1.3)
         x = result['scene']['camera']['eye']['x']

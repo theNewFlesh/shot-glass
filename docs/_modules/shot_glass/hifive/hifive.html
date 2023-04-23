@@ -1,36 +1,75 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>shot_glass.hifive.hifive &mdash; shot-glass  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../../index.html" class="icon icon-home"> shot-glass
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -38,11 +77,23 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#development-cli">Development CLI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
@@ -52,31 +103,74 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../obj.html">obj</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../plotly.html">plotly</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Development CLI</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+</ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">shot-glass</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
       <li>shot_glass.hifive.hifive</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <h1>Source code for shot_glass.hifive.hifive</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 
@@ -84,7 +178,7 @@
 <span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
 
 <span class="kn">from</span> <span class="nn">shot_glass.hifive.type_base</span> <span class="kn">import</span> <span class="n">HiFiveTypeBase</span>
-<span class="kn">from</span> <span class="nn">shot_glass.utils</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">shot_glass.core.tools</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 <span class="kn">import</span> <span class="nn">shot_glass.hifive.hifive_tools</span> <span class="k">as</span> <span class="nn">hft</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -95,7 +189,7 @@
 
 
 <div class="viewcode-block" id="HiFiveDataType"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFiveDataType">[docs]</a><span class="k">class</span> <span class="nc">HiFiveDataType</span><span class="p">(</span><span class="n">HiFiveTypeBase</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Legal data types for HiFive columns.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">FLOAT</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">hft</span><span class="o">.</span><span class="n">is_float</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -106,7 +200,7 @@
 
 
 <div class="viewcode-block" id="HiFiveComponentType"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFiveComponentType">[docs]</a><span class="k">class</span> <span class="nc">HiFiveComponentType</span><span class="p">(</span><span class="n">HiFiveTypeBase</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Legal component types for HiFive columns.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">ITEMS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -116,7 +210,7 @@
 
 
 <div class="viewcode-block" id="HiFive"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive">[docs]</a><span class="k">class</span> <span class="nc">HiFive</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    HIFIVE stands for Homomorphically Indexed Faces Items Vertices and Edges</span>
 
 <span class="sd">    It is a class for definining 3D polygonal geometry in a manner that is most</span>
@@ -190,14 +284,14 @@
     <span class="n">__DEFAULT_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;i_id&#39;</span><span class="p">,</span> <span class="s1">&#39;f_id&#39;</span><span class="p">,</span> <span class="s1">&#39;e_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_id&#39;</span><span class="p">,</span> <span class="s1">&#39;v_x&#39;</span><span class="p">,</span> <span class="s1">&#39;v_y&#39;</span><span class="p">,</span> <span class="s1">&#39;v_z&#39;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="HiFive.__init__"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates an empty HiFive instance with the default columns.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__DEFAULT_COLUMNS</span><span class="p">)</span></div>
     <span class="c1"># --------------------------------------------------------------------------</span>
 
 <div class="viewcode-block" id="HiFive.read_hi5"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.read_hi5">[docs]</a>    <span class="k">def</span> <span class="nf">read_hi5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Reads a given hi5 file from disk.</span>
 
 <span class="sd">        Args:</span>
@@ -216,7 +310,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="HiFive.write_hi5"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.write_hi5">[docs]</a>    <span class="k">def</span> <span class="nf">write_hi5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullpath</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Writes data to given hi5 filepath.</span>
 
 <span class="sd">        Args:</span>
@@ -235,7 +329,7 @@
     <span class="c1"># --------------------------------------------------------------------------</span>
 
 <div class="viewcode-block" id="HiFive.validate_column"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.validate_column">[docs]</a>    <span class="k">def</span> <span class="nf">validate_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Validate a given column&#39;s name, and validate its values according to its</span>
 <span class="sd">        type indicator.</span>
 
@@ -257,7 +351,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="HiFive.validate"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Validate all column names and values.</span>
 
 <span class="sd">        Raises:</span>
@@ -271,7 +365,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="HiFive._get_column_attributes"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive._get_column_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">_get_column_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Generates a dict of attributes describing a given column.</span>
 
 <span class="sd">        Attributes include:</span>
@@ -313,7 +407,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="HiFive._validate_column_name"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive._validate_column_name">[docs]</a>    <span class="k">def</span> <span class="nf">_validate_column_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Validates a given column name. Ensures that indicated component type</span>
 <span class="sd">        (ctype) and data type (dtype) are legal.</span>
 
@@ -348,7 +442,7 @@
             <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HiFive._validate_column_values"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive._validate_column_values">[docs]</a>    <span class="k">def</span> <span class="nf">_validate_column_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Validates that values of a given column are of the type indicated by its</span>
 <span class="sd">        dtype indicator.</span>
 
@@ -375,7 +469,7 @@
     <span class="c1"># --------------------------------------------------------------------------</span>
 
 <div class="viewcode-block" id="HiFive.map"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.map">[docs]</a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">aggregator</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Maps data within and across component types homomorphically.</span>
 
 <span class="sd">        The given aggregator functions is part of how it does this.</span>
@@ -503,7 +597,7 @@
     <span class="c1"># --------------------------------------------------------------------------</span>
 
     <span class="k">def</span> <span class="nf">__expand_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">expander</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Transform the contents of a given row into many rows via a given</span>
 <span class="sd">        expander.</span>
 
@@ -526,7 +620,7 @@
         <span class="k">return</span> <span class="n">output</span>
 
 <div class="viewcode-block" id="HiFive.expand"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.expand">[docs]</a>    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">id_</span><span class="p">,</span> <span class="n">expander</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Expands elements within each row of a source column into multiple rows.</span>
 
 <span class="sd">        Args:</span>
@@ -577,7 +671,7 @@
     <span class="c1"># --------------------------------------------------------------------------</span>
 
 <div class="viewcode-block" id="HiFive.copy"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Copy HiFive instance to new HiFive instance.</span>
 
 <span class="sd">        Returns:</span>
@@ -589,7 +683,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            DataFrame: A DataFrame describing the universal attributes of all</span>
 <span class="sd">            the columns of the internal DataFrame.</span>
@@ -619,7 +713,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">item_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            DataFrame: A DataFrame in which all columns are of item component</span>
 <span class="sd">            type and each row contains a unique item id.</span>
@@ -629,7 +723,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">face_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            DataFrame: A DataFrame in which all columns are of face component</span>
 <span class="sd">            type and each row contains a unique face id.</span>
@@ -639,7 +733,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">edge_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            DataFrame:  DataFrame in which all columns are of edge component</span>
 <span class="sd">            type and each row contains a unique edge id.</span>
@@ -649,7 +743,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">vertex_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            DataFrame: A DataFrame in which all columns are of vertex component</span>
 <span class="sd">            type and each row contains a unique vertex id.</span>
@@ -659,7 +753,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">geometry_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Returns:</span>
 <span class="sd">            DataFrame: A DataFrame that describes basic geometric and</span>
 <span class="sd">            topological properties of the internal data.</span>
@@ -715,7 +809,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">display_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Drops _x_ columns from internal data which cause Jupyter Notebook to</span>
 <span class="sd">        chug.</span>
 
@@ -736,7 +830,7 @@
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="k">def</span> <span class="nf">__get_unique_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count_column</span><span class="p">,</span> <span class="n">group_column</span><span class="p">,</span> <span class="n">summarize</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Convenience method for calculating the unique counts of a count column,</span>
 <span class="sd">        per a group column.</span>
 
@@ -766,7 +860,7 @@
         <span class="k">return</span> <span class="n">output</span>
 
     <span class="k">def</span> <span class="nf">__get_nunique</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Convenience method for calculating the unique, non-null values for a</span>
 <span class="sd">        given column.</span>
 
@@ -779,7 +873,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 
 <div class="viewcode-block" id="HiFive.is_equivalent"><a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.hifive.HiFive.is_equivalent">[docs]</a>    <span class="k">def</span> <span class="nf">is_equivalent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hifive</span><span class="p">,</span> <span class="n">ignore_columns</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Determines if this HiFive instance equivalent to a given HiFive</span>
 <span class="sd">        instance.</span>
 
@@ -828,30 +922,46 @@
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.</p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

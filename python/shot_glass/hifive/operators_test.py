@@ -6,7 +6,7 @@ import unittest
 import bpy
 import lunchbox.tools as lbt
 
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 import shot_glass.hifive.operators as operators
 # ------------------------------------------------------------------------------
 

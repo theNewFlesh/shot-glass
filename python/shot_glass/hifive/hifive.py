@@ -4,7 +4,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from shot_glass.hifive.type_base import HiFiveTypeBase
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 import shot_glass.hifive.hifive_tools as hft
 
 import logging

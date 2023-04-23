@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 from shot_glass.hifive.hifive import HiFive
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 

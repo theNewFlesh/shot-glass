@@ -1,14 +1,19 @@
 [project]
 name = "shot-glass"
-version = "0.1.0"
+version = "0.2.0"
 description = "3D Data Science via Blender and Category Theory"
 authors = [
-    {name = "Alex Braun", email = "alexander.g.braun@gmail.com"},
+    { name = "Alex Braun", email = "alexander.g.braun@gmail.com" },
 ]
 readme = "README.md"
 license = "MIT"
 keywords = [
-    'blender', 'add-on', '3D', 'computer vision', 'geometry', 'category theory'
+    "blender",
+    "add-on",
+    "3D",
+    "computer vision",
+    "geometry",
+    "category theory",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -69,10 +74,7 @@ test = [
 [tool.pytest.ini_options]
 cache_dir = "/home/ubuntu/.pytest_cache"
 filterwarnings = [
-    # "ignore::UserWarning",
-    # "ignore::DeprecationWarning",
-    # "ignore::PendingDeprecationWarning",
-    "ignore:The --rsyncdir command line argument"
+    "ignore:The --rsyncdir command line argument",
 ]
 markers = [
     "flaky:Flaky test",
@@ -100,5 +102,7 @@ pretty = true
 warn_unused_ignores = true
 
 [build-system]
-requires = ["pdm-pep517>=1.0.0"]
+requires = [
+    "pdm-pep517>=1.0.0",
+]
 build-backend = "pdm.pep517.api"

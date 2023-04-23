@@ -1,6 +1,6 @@
 .. shot-glass documentation master file
 
-Welcome to shot-glass' documentation!
+Welcome to shot-glass's documentation!
 =====================================
 .. toctree::
    :maxdepth: 1

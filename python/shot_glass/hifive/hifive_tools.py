@@ -4,7 +4,7 @@ import re
 
 import pandas as pd
 
-from shot_glass.utils import ValidationError
+from shot_glass.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 '''

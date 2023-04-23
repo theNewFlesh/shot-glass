@@ -33,9 +33,6 @@
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     
@@ -67,7 +64,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -203,7 +200,7 @@
 
 <div class="viewcode-block" id="get_info"><a class="viewcode-back" href="../cli.html#cli.get_info">[docs]</a><span class="k">def</span> <span class="nf">get_info</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; Tuple[str, list]</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Parses command line call.</span>
 
 <span class="sd">    Returns:</span>
@@ -229,13 +226,13 @@
 <span class="s1">    build-prod           - Publish pip package of repo to PyPi</span>
 <span class="s1">    build-publish        - Run production tests first then publish pip package of repo to PyPi</span>
 <span class="s1">    build-test           - Build test version of repo for prod testing</span>
-<span class="s1">    docker-build         - Build image of </span><span class="si">{repo}</span><span class="s1"></span>
-<span class="s1">    docker-build-prod    - Build production image of </span><span class="si">{repo}</span><span class="s1"></span>
-<span class="s1">    docker-container     - Display the Docker container id of </span><span class="si">{repo}</span><span class="s1"></span>
-<span class="s1">    docker-coverage      - Generate coverage report for </span><span class="si">{repo}</span><span class="s1"></span>
+<span class="s1">    docker-build         - Build image of </span><span class="si">{repo}</span>
+<span class="s1">    docker-build-prod    - Build production image of </span><span class="si">{repo}</span>
+<span class="s1">    docker-container     - Display the Docker container id of </span><span class="si">{repo}</span>
+<span class="s1">    docker-coverage      - Generate coverage report for </span><span class="si">{repo}</span>
 <span class="s1">    docker-destroy       - Shutdown </span><span class="si">{repo}</span><span class="s1"> container and destroy its image</span>
 <span class="s1">    docker-destroy-prod  - Shutdown </span><span class="si">{repo}</span><span class="s1"> production container and destroy its image</span>
-<span class="s1">    docker-image         - Display the Docker image id of </span><span class="si">{repo}</span><span class="s1"></span>
+<span class="s1">    docker-image         - Display the Docker image id of </span><span class="si">{repo}</span>
 <span class="s1">    docker-prod          - Start </span><span class="si">{repo}</span><span class="s1"> production container</span>
 <span class="s1">    docker-push          - Push </span><span class="si">{repo}</span><span class="s1"> production image to Dockerhub</span>
 <span class="s1">    docker-remove        - Remove </span><span class="si">{repo}</span><span class="s1"> Docker image</span>
@@ -261,10 +258,9 @@
 <span class="s1">    library-sync-prod    - Sync prod environment with packages listed in prod.lock</span>
 <span class="s1">    library-update       - Update dev dependencies</span>
 <span class="s1">    library-update-pdm   - Update PDM</span>
-<span class="s1">    session-app          - Run app</span>
 <span class="s1">    session-lab          - Run jupyter lab server</span>
 <span class="s1">    session-python       - Run python session with dev dependencies</span>
-<span class="s1">    state                - State of </span><span class="si">{repo}</span><span class="s1"></span>
+<span class="s1">    state                - State of </span><span class="si">{repo}</span>
 <span class="s1">    test-coverage        - Generate test coverage report</span>
 <span class="s1">    test-dev             - Run all tests</span>
 <span class="s1">    test-fast            - Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator</span>
@@ -300,7 +296,7 @@
 
 <div class="viewcode-block" id="resolve"><a class="viewcode-back" href="../cli.html#cli.resolve">[docs]</a><span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="n">commands</span><span class="p">):</span>
     <span class="c1"># type: (List[str]) -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Convenience function for creating single commmand from given commands and</span>
 <span class="sd">    resolving &#39;{...}&#39; substrings.</span>
 
@@ -341,7 +337,7 @@
 
 <div class="viewcode-block" id="line"><a class="viewcode-back" href="../cli.html#cli.line">[docs]</a><span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">):</span>
     <span class="c1"># type: (str, str) -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Convenience function for formatting a given block of text as series of</span>
 <span class="sd">    commands.</span>
 
@@ -362,7 +358,7 @@
 <span class="c1"># SUBCOMMANDS-------------------------------------------------------------------</span>
 <div class="viewcode-block" id="enter_repo"><a class="viewcode-back" href="../cli.html#cli.enter_repo">[docs]</a><span class="k">def</span> <span class="nf">enter_repo</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to enter repo.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -371,7 +367,7 @@
 
 <div class="viewcode-block" id="exit_repo"><a class="viewcode-back" href="../cli.html#cli.exit_repo">[docs]</a><span class="k">def</span> <span class="nf">exit_repo</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to return to original directory.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -380,7 +376,7 @@
 
 <div class="viewcode-block" id="start"><a class="viewcode-back" href="../cli.html#cli.start">[docs]</a><span class="k">def</span> <span class="nf">start</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to start container if it is not yet running.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -396,7 +392,7 @@
 <span class="s1">            if [ -z &quot;$STATE&quot; ];</span>
 <span class="s1">                then cd docker;</span>
 <span class="s1">                docker compose</span>
-<span class="s1">                    -p </span><span class="si">{repo}</span><span class="s1"></span>
+<span class="s1">                    -p </span><span class="si">{repo}</span>
 <span class="s1">                    -f </span><span class="si">{repo_path}</span><span class="s1">/docker/docker-compose.yml up</span>
 <span class="s1">                    --detach;</span>
 <span class="s1">                cd ..;</span>
@@ -408,14 +404,14 @@
 
 <div class="viewcode-block" id="stop"><a class="viewcode-back" href="../cli.html#cli.stop">[docs]</a><span class="k">def</span> <span class="nf">stop</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to shutdown container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">cmd</span> <span class="o">=</span> <span class="n">line</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">        cd docker;</span>
 <span class="s1">        docker compose</span>
-<span class="s1">            -p </span><span class="si">{repo}</span><span class="s1"></span>
+<span class="s1">            -p </span><span class="si">{repo}</span>
 <span class="s1">            -f </span><span class="si">{repo_path}</span><span class="s1">/docker/docker-compose.yml</span>
 <span class="s1">            down;</span>
 <span class="s1">        cd ..</span>
@@ -425,7 +421,7 @@
 
 <div class="viewcode-block" id="remove_container"><a class="viewcode-back" href="../cli.html#cli.remove_container">[docs]</a><span class="k">def</span> <span class="nf">remove_container</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to remove container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -434,7 +430,7 @@
 
 <div class="viewcode-block" id="docker_exec"><a class="viewcode-back" href="../cli.html#cli.docker_exec">[docs]</a><span class="k">def</span> <span class="nf">docker_exec</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Partial command to call &#39;docker exec&#39;.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -442,14 +438,14 @@
 <span class="s1">        docker exec</span>
 <span class="s1">            --interactive</span>
 <span class="s1">            --tty</span>
-<span class="s1">            --user </span><span class="si">{user}</span><span class="s1"></span>
+<span class="s1">            --user </span><span class="si">{user}</span>
 <span class="s1">    &#39;&#39;&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cmd</span></div>
 
 
 <div class="viewcode-block" id="version_variable"><a class="viewcode-back" href="../cli.html#cli.version_variable">[docs]</a><span class="k">def</span> <span class="nf">version_variable</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to set version variable from pyproject.toml.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -463,7 +459,7 @@
 
 <div class="viewcode-block" id="x_tools"><a class="viewcode-back" href="../cli.html#cli.x_tools">[docs]</a><span class="k">def</span> <span class="nf">x_tools</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[]):</span>
     <span class="c1"># type: (str, list[str]) -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Creates a x_tools command string.</span>
 
 <span class="sd">    Args:</span>
@@ -485,7 +481,7 @@
 <span class="c1"># COMMANDS----------------------------------------------------------------------</span>
 <div class="viewcode-block" id="build_dev_command"><a class="viewcode-back" href="../cli.html#cli.build_dev_command">[docs]</a><span class="k">def</span> <span class="nf">build_dev_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to build dev image.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -505,7 +501,7 @@
 
 <div class="viewcode-block" id="build_prod_command"><a class="viewcode-back" href="../cli.html#cli.build_prod_command">[docs]</a><span class="k">def</span> <span class="nf">build_prod_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to build prod image.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -528,7 +524,7 @@
 
 <div class="viewcode-block" id="container_id_command"><a class="viewcode-back" href="../cli.html#cli.container_id_command">[docs]</a><span class="k">def</span> <span class="nf">container_id_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to get docker container id.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -540,7 +536,7 @@
 
 <div class="viewcode-block" id="destroy_dev_command"><a class="viewcode-back" href="../cli.html#cli.destroy_dev_command">[docs]</a><span class="k">def</span> <span class="nf">destroy_dev_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to destroy dev container and image.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -556,7 +552,7 @@
 
 <div class="viewcode-block" id="destroy_prod_command"><a class="viewcode-back" href="../cli.html#cli.destroy_prod_command">[docs]</a><span class="k">def</span> <span class="nf">destroy_prod_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to destroy prod image.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -571,7 +567,7 @@
 
 <div class="viewcode-block" id="image_id_command"><a class="viewcode-back" href="../cli.html#cli.image_id_command">[docs]</a><span class="k">def</span> <span class="nf">image_id_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to get docker image id.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -586,7 +582,7 @@
 
 <div class="viewcode-block" id="prod_command"><a class="viewcode-back" href="../cli.html#cli.prod_command">[docs]</a><span class="k">def</span> <span class="nf">prod_command</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="c1"># type: (list) -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to start prod container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -605,7 +601,7 @@
         <span class="n">version_variable</span><span class="p">(),</span>
         <span class="n">line</span><span class="p">(</span><span class="n">run</span> <span class="o">+</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">            --rm</span>
-<span class="s1">            --publish </span><span class="si">{port}</span><span class="s1">:</span><span class="si">{port}</span><span class="s1"></span>
+<span class="s1">            --publish </span><span class="si">{port}</span><span class="s1">:</span><span class="si">{port}</span>
 <span class="s1">            --name </span><span class="si">{repo}</span><span class="s1">-prod</span>
 <span class="s1">            </span><span class="si">{github_user}</span><span class="s1">/</span><span class="si">{repo}</span><span class="s1">:$VERSION</span>
 <span class="s1">        &#39;&#39;&#39;</span><span class="p">),</span>
@@ -616,7 +612,7 @@
 
 <div class="viewcode-block" id="push_command"><a class="viewcode-back" href="../cli.html#cli.push_command">[docs]</a><span class="k">def</span> <span class="nf">push_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to push prod docker image to dockerhub.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -632,7 +628,7 @@
 
 <div class="viewcode-block" id="remove_command"><a class="viewcode-back" href="../cli.html#cli.remove_command">[docs]</a><span class="k">def</span> <span class="nf">remove_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to remove container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -646,7 +642,7 @@
 
 <div class="viewcode-block" id="restart_command"><a class="viewcode-back" href="../cli.html#cli.restart_command">[docs]</a><span class="k">def</span> <span class="nf">restart_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to restart container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -655,7 +651,7 @@
         <span class="n">line</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">            cd docker;</span>
 <span class="s1">            docker compose</span>
-<span class="s1">                -p </span><span class="si">{repo}</span><span class="s1"></span>
+<span class="s1">                -p </span><span class="si">{repo}</span>
 <span class="s1">                -f </span><span class="si">{repo_path}</span><span class="s1">/docker/docker-compose.yml</span>
 <span class="s1">                restart;</span>
 <span class="s1">            cd ..</span>
@@ -667,7 +663,7 @@
 
 <div class="viewcode-block" id="start_command"><a class="viewcode-back" href="../cli.html#cli.start_command">[docs]</a><span class="k">def</span> <span class="nf">start_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to start container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -680,7 +676,7 @@
 
 <div class="viewcode-block" id="state_command"><a class="viewcode-back" href="../cli.html#cli.state_command">[docs]</a><span class="k">def</span> <span class="nf">state_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to get state of app.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -729,7 +725,7 @@
 
 <div class="viewcode-block" id="stop_command"><a class="viewcode-back" href="../cli.html#cli.stop_command">[docs]</a><span class="k">def</span> <span class="nf">stop_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to stop container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -743,7 +739,7 @@
 
 <div class="viewcode-block" id="x_tools_command"><a class="viewcode-back" href="../cli.html#cli.x_tools_command">[docs]</a><span class="k">def</span> <span class="nf">x_tools_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[]):</span>
     <span class="c1"># type: (str, list[str]) -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Runs a x_tools command.</span>
 
 <span class="sd">    Args:</span>
@@ -765,7 +761,7 @@
 
 <div class="viewcode-block" id="zsh_command"><a class="viewcode-back" href="../cli.html#cli.zsh_command">[docs]</a><span class="k">def</span> <span class="nf">zsh_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to run a zsh session inside container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -780,7 +776,7 @@
 
 <div class="viewcode-block" id="zsh_complete_command"><a class="viewcode-back" href="../cli.html#cli.zsh_complete_command">[docs]</a><span class="k">def</span> <span class="nf">zsh_complete_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to generate and install zsh completions.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -820,7 +816,7 @@
 
 <div class="viewcode-block" id="zsh_root_command"><a class="viewcode-back" href="../cli.html#cli.zsh_root_command">[docs]</a><span class="k">def</span> <span class="nf">zsh_root_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to run a zsh session as root inside container.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -829,7 +825,7 @@
 
 <div class="viewcode-block" id="get_illegal_mode_command"><a class="viewcode-back" href="../cli.html#cli.get_illegal_mode_command">[docs]</a><span class="k">def</span> <span class="nf">get_illegal_mode_command</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; str</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        str: Command to report that the mode given is illegal.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -846,7 +842,7 @@
 <span class="c1"># MAIN--------------------------------------------------------------------------</span>
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../cli.html#cli.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="c1"># type: () -&gt; None</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Print different commands to stdout depending on mode provided to command.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">mode</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">get_info</span><span class="p">()</span>
