@@ -1,8 +1,28 @@
-from typing import Callable, Generic, Type, TypeVar, Union  # noqa: F401
+from typing import Any, Callable, Generic, Type, TypeVar, Union  # noqa: F401
+
+from lunchbox.enforce import Enforce, EnforceError
 
 A = TypeVar('A')
 B = TypeVar('B')
 # ------------------------------------------------------------------------------
+
+
+def enforce_monad(item):
+    # type: (Any) -> None
+    '''
+    Enforces item being a Monad subclass or instance.
+
+    Args:
+        item (object): Item to be tested.
+
+    Raises:
+        EnforceError: If item is not Monad subclass or instance.
+    '''
+    pred = isinstance  # type: Any
+    if item.__class__ is type:
+        pred = issubclass
+    if not pred(item, Monad):
+        raise EnforceError(f'{item} is not a subclass or instance of Monad.')
 
 
 def wrap(monad, data):

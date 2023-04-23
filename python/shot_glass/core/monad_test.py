@@ -1,10 +1,26 @@
 import unittest
 
+from lunchbox.enforce import EnforceError
+
 import shot_glass.core.monad as sgm
 # ------------------------------------------------------------------------------
 
 
 class MonadFunctionTests(unittest.TestCase):
+    def test_enforce_monad(self):
+        sgm.enforce_monad(sgm.Monad)
+        sgm.enforce_monad(sgm.Monad(42))
+
+        class TestMonad(sgm.Monad):
+            pass
+
+        sgm.enforce_monad(TestMonad)
+        sgm.enforce_monad(TestMonad(42))
+
+        expected = 'foo is not a subclass or instance of Monad.'
+        with self.assertRaisesRegex(EnforceError, expected):
+            sgm.enforce_monad('foo')
+
     def test_wrap(self):
         result = sgm.wrap(sgm.Monad, 9)
         self.assertIsInstance(result, sgm.Monad)
