@@ -35,9 +35,13 @@ def wrap(monad, data):
         monad (Monad): Monad class or instance.
         data (Any): Data to be wrapped as Monad.
 
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+
     Returns:
         Monad[A]: Monad of data.
     '''
+    enforce_monad(monad)
     return monad.wrap(data)
 
 
@@ -50,9 +54,13 @@ def unwrap(monad):
     Args:
         monad (Monad): Monad instance.
 
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+
     Returns:
         A: Monad data.
     '''
+    enforce_monad(monad)
     return monad._data
 
 
@@ -66,9 +74,13 @@ def fmap(monad, func):
         monad (Monad): Monad of A.
         func (function): Function (A -> B).
 
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+
     Returns:
         Monad[B]: Monad of B.
     '''
+    enforce_monad(monad)
     return wrap(monad, func(unwrap(monad)))
 
 
@@ -83,9 +95,13 @@ def app(monad, monad_func):
         monad (Monad): Monad of A.
         func (Monad): Monad of function (A -> B).
 
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+
     Returns:
         Monad[B]: Monad of B.
     '''
+    enforce_monad(monad)
     func = unwrap(monad_func)
     value = unwrap(monad)
     return wrap(monad, func(value))
@@ -101,9 +117,13 @@ def bind(monad, func):
         monad (Monad): Monad of A.
         func (function): Function (A -> MB).
 
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+
     Returns:
         Monad[B]: Monad of B.
     '''
+    enforce_monad(monad)
     return func(unwrap(monad))
 
 
@@ -117,9 +137,14 @@ def right(monad_a, monad_b):
         monad_a (Monad): Left monad.
         monad_b (Monad): Right monad.
 
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+
     Returns:
         Monad: Right Monad.
     '''
+    enforce_monad(monad_a)
+    enforce_monad(monad_b)
     return monad_b
 
 
@@ -133,9 +158,16 @@ def fail(monad, error):
         monad (Monad): Monad to wrap error with.
         error (Exception): Error.
 
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+        EnforceError: If error is not an instance of Exception.
+
     Returns:
         Monad: Error Monad.
     '''
+    enforce_monad(monad)
+    msg = 'Error must be an instance of Exception. Given value: {a}'
+    Enforce(error, 'instance of', Exception, message=msg)
     return wrap(monad, error)
 # ------------------------------------------------------------------------------
 
