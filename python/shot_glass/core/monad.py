@@ -152,7 +152,7 @@ def fail(monad, error):
     # type (Monad, Exception) -> Monad[Exception]
     '''
     Fail: M -> E -> ME
-    Given a Monad and error message, return a Monad of that error message.
+    Given a Monad and Exception, return a Monad of that Exception.
 
     Args:
         monad (Monad): Monad to wrap error with.
@@ -173,38 +173,116 @@ def fail(monad, error):
 
 
 class Monad(Generic[A]):
+    '''
+    Monad is a generic base class for monads. It implements all the monad
+    functions as methods which take itself as the first argument.
+    '''
+
     def __init__(self, data):
         # type: (A) -> None
+        '''
+        Constructs monad instance.
+
+        Args:
+            data (object): Data to be wrapped with Monad.
+        '''
         self._data = data
 
     @classmethod
     def wrap(cls, data):
         # type: (A) -> Monad[A]
+        '''
+        Wrap: A -> MA
+        Create a new Monad with given data.
+
+        Args:
+            data (Any): Data to be wrapped as Monad.
+
+        Returns:
+            Monad[A]: Monad of data.
+        '''
         return cls(data)
 
     def unwrap(self):
         # type: () -> A
+        '''
+        Unwrap: () -> A
+        Return self._data.
+
+        Returns:
+            A: Monad data.
+        '''
         return unwrap(self)
 
     def fmap(self, func):
         # type: (Callable[[A], B]) -> Monad[B]
+        '''
+        Functor map: (A -> B) -> MB
+        Given a function A to B, return a Monad of B (MB).
+
+        Args:
+            func (function): Function (A -> B).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
         return fmap(self, func)
 
     def app(self, monad_func):
         # type: (Monad[Callable[[A], B]]) -> Monad
+        '''
+        Applicative: M(A -> B) -> MB
+        Given a Monad of a function A to B, return a Monad of B (MB).
+
+        Args:
+            func (Monad): Monad of function (A -> B).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
         return app(self, monad_func)
 
     def bind(self, func):
         # type: (Callable[[A], Monad[B]]) -> Monad[B]
+        '''
+        Bind: (A -> MB) -> MB
+        Given a function A to MB, return a Monad of B (MB).
+
+        Args:
+            func (function): Function (A -> MB).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
         return bind(self, func)
 
-    def right(self, monad_b):
+    def right(self, monad):
         # type: (Monad[B]) -> Monad[B]
-        return right(self, monad_b)
+        '''
+        Right: MB -> MB
+        Return given monad (self is left, given monad is right).
+
+        Args:
+            monad (Monad): Right monad.
+
+        Returns:
+            Monad: Right Monad.
+        '''
+        return right(self, monad)
 
     def fail(self, error):
-        # type (str) -> Monad[str]
-        return fail(error)
+        # type (Exception) -> Monad[Exception]
+        '''
+        Fail: E -> ME
+        Return a Monad of given Exception.
+
+        Args:
+            error (Exception): Error.
+
+        Returns:
+            Monad: Error Monad.
+        '''
+        return fail(self, error)
 
 
 Monadlike = Union[Monad, Type[Monad]]

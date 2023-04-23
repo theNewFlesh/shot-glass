@@ -107,3 +107,46 @@ class MonadFunctionTests(unittest.TestCase):
         expected = 'Error must be an instance of Exception. Given value: bar'
         with self.assertRaisesRegex(EnforceError, expected):
             sgm.fail(sgm.Monad('foo'), 'bar')
+
+
+class MonadTests(unittest.TestCase):
+    def test_init(self):
+        result = sgm.Monad(42)
+        self.assertEqual(result._data, 42)
+
+    def test_wrap(self):
+        result = sgm.Monad.wrap(42)
+        self.assertIsInstance(result, sgm.Monad)
+
+    def test_unwrap(self):
+        result = sgm.Monad.wrap(42).unwrap()
+        self.assertEqual(result, 42)
+
+    def test_fmap(self):
+        result = sgm.Monad.wrap(42).fmap(lambda x: x + 10)
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertEqual(result.unwrap(), 52)
+
+    def test_app(self):
+        result = sgm.Monad.wrap(42).app(sgm.Monad.wrap(lambda x: x + 10))
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertEqual(result.unwrap(), 52)
+
+    def test_bind(self):
+        result = sgm.Monad.wrap(42).bind(lambda x: sgm.Monad.wrap(x + 10))
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertEqual(result.unwrap(), 52)
+
+    def test_right(self):
+        expected = sgm.Monad.wrap(99)
+        result = sgm.Monad \
+            .wrap(42) \
+            .right(expected)
+        self.assertIs(result, expected)
+        self.assertIs(result.unwrap(), expected.unwrap())
+
+    def test_fail(self):
+        error = SyntaxError('foo')
+        result = sgm.Monad.wrap(42).fail(error)
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertIs(result.unwrap(), error)
