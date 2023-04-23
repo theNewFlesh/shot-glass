@@ -29,6 +29,7 @@ def wrap(monad, data):
     # type: (Monadlike, A) -> Monad[A]
     '''
     Wrap: M -> A -> MA
+
     Given a Monad class or instance, create a new Monad with given data.
 
     Args:
@@ -49,6 +50,7 @@ def unwrap(monad):
     # type: (Monad[A]) -> A
     '''
     Unwrap: MA -> A
+
     Return the data of a given Monad instance.
 
     Args:
@@ -68,6 +70,7 @@ def fmap(monad, func):
     # type: (Monad[A], Callable[[A], B]) -> Monad[B]
     '''
     Functor map: MA -> (A -> B) -> MB
+
     Given a Monad of A (MA) and a function A to B, return a Monad of B (MB).
 
     Args:
@@ -88,6 +91,7 @@ def app(monad, monad_func):
     # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
     '''
     Applicative: MA -> M(A -> B) -> MB
+
     Given a Monad of A (MA) and a Monad of a function A to B, return a Monad
     of B (MB).
 
@@ -111,6 +115,7 @@ def bind(monad, func):
     # type: (Monad[A], Callable[[A], Monad[B]]) -> Monad[B]
     '''
     Bind: MA -> (A -> MB) -> MB
+
     Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).
 
     Args:
@@ -131,6 +136,7 @@ def right(monad_a, monad_b):
     # type: (Monad[A], Monad[B]) -> Monad[B]
     '''
     Right: MA -> MB -> MB
+
     Given two Monads, a and b, return the right Monad b.
 
     Args:
@@ -152,6 +158,7 @@ def fail(monad, error):
     # type (Monad, Exception) -> Monad[Exception]
     '''
     Fail: M -> E -> ME
+
     Given a Monad and Exception, return a Monad of that Exception.
 
     Args:
@@ -193,6 +200,7 @@ class Monad(Generic[A]):
         # type: (A) -> Monad[A]
         '''
         Wrap: A -> MA
+    
         Create a new Monad with given data.
 
         Args:
@@ -207,6 +215,7 @@ class Monad(Generic[A]):
         # type: () -> A
         '''
         Unwrap: () -> A
+
         Return self._data.
 
         Returns:
@@ -218,6 +227,7 @@ class Monad(Generic[A]):
         # type: (Callable[[A], B]) -> Monad[B]
         '''
         Functor map: (A -> B) -> MB
+
         Given a function A to B, return a Monad of B (MB).
 
         Args:
@@ -232,6 +242,7 @@ class Monad(Generic[A]):
         # type: (Monad[Callable[[A], B]]) -> Monad
         '''
         Applicative: M(A -> B) -> MB
+
         Given a Monad of a function A to B, return a Monad of B (MB).
 
         Args:
@@ -246,6 +257,7 @@ class Monad(Generic[A]):
         # type: (Callable[[A], Monad[B]]) -> Monad[B]
         '''
         Bind: (A -> MB) -> MB
+
         Given a function A to MB, return a Monad of B (MB).
 
         Args:
@@ -260,6 +272,7 @@ class Monad(Generic[A]):
         # type: (Monad[B]) -> Monad[B]
         '''
         Right: MB -> MB
+
         Return given monad (self is left, given monad is right).
 
         Args:
@@ -274,6 +287,7 @@ class Monad(Generic[A]):
         # type (Exception) -> Monad[Exception]
         '''
         Fail: E -> ME
+
         Return a Monad of given Exception.
 
         Args:
