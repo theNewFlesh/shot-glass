@@ -214,7 +214,7 @@ class Monad(Generic[A]):
         # type: (A) -> Monad[A]
         '''
         Wrap: A -> MA
-    
+
         Create a new Monad with given data.
 
         Args:
