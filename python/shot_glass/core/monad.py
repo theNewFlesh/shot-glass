@@ -30,6 +30,8 @@ def wrap(monad, data):
     '''
     Wrap: M -> A -> MA
 
+    .. image:: resources/wrap.png
+
     Given a Monad class or instance, create a new Monad with given data.
 
     Args:
@@ -51,6 +53,8 @@ def unwrap(monad):
     '''
     Unwrap: MA -> A
 
+    .. image:: resources/unwrap.png
+
     Return the data of a given Monad instance.
 
     Args:
@@ -70,6 +74,8 @@ def fmap(monad, func):
     # type: (Monad[A], Callable[[A], B]) -> Monad[B]
     '''
     Functor map: MA -> (A -> B) -> MB
+
+    .. image:: resources/fmap.png
 
     Given a Monad of A (MA) and a function A to B, return a Monad of B (MB).
 
@@ -91,6 +97,8 @@ def app(monad, monad_func):
     # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
     '''
     Applicative: MA -> M(A -> B) -> MB
+
+    .. image:: resources/app.png
 
     Given a Monad of A (MA) and a Monad of a function A to B, return a Monad
     of B (MB).
@@ -116,6 +124,8 @@ def bind(monad, func):
     '''
     Bind: MA -> (A -> MB) -> MB
 
+    .. image:: resources/bind.png
+
     Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).
 
     Args:
@@ -136,6 +146,8 @@ def right(monad_a, monad_b):
     # type: (Monad[A], Monad[B]) -> Monad[B]
     '''
     Right: MA -> MB -> MB
+
+    .. image:: resources/right.png
 
     Given two Monads, a and b, return the right Monad b.
 
@@ -158,6 +170,8 @@ def fail(monad, error):
     # type (Monad, Exception) -> Monad[Exception]
     '''
     Fail: M -> E -> ME
+
+    .. image:: resources/fail.png
 
     Given a Monad and Exception, return a Monad of that Exception.
 
