@@ -54,7 +54,7 @@ See [documentation](https://theNewFlesh.github.io/shot-glass/) for details.
 4. `git clone git@github.com:theNewFlesh/shot-glass.git`
 5. `cd shot-glass`
 6. `chmod +x bin/shot-glass`
-7. `bin/shot-glass start`
+7. `bin/shot-glass docker-start`
 
 The service should take a few minutes to start up.
 
