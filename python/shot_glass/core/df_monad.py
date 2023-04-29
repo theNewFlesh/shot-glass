@@ -26,16 +26,6 @@ class DFMonad(sgm.Monad):
         # type: (pd.DataFrame) -> DFMonad
         return cls(data)
 
-    def wrap_rows(self, monad=sgm.Monad):
-        # type: (Type[sgm.Monad]) -> DFMonad
-        data = self._data.apply(monad.wrap)
-        return self.wrap(data)
-
-    def unwrap_rows(self):
-        # type: () -> DFMonad
-        data = self._data.apply(sgm.unwrap)
-        return self.wrap(data)
-
     def wrap_elements(self, monad=sgm.Monad):
         # type: (Type[sgm.Monad]) -> DFMonad
         data = self._data.applymap(monad.wrap)
@@ -44,6 +34,16 @@ class DFMonad(sgm.Monad):
     def unwrap_elements(self):
         # type: () -> DFMonad
         data = self._data.applymap(sgm.unwrap)
+        return self.wrap(data)
+
+    def wrap_rows(self, monad=sgm.Monad):
+        # type: (Type[sgm.Monad]) -> DFMonad
+        data = self._data.apply(monad.wrap)
+        return self.wrap(data)
+
+    def unwrap_rows(self):
+        # type: () -> DFMonad
+        data = self._data.apply(sgm.unwrap)
         return self.wrap(data)
 
     def fmap_rows(self, func):
