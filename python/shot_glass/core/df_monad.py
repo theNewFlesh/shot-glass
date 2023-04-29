@@ -27,6 +27,11 @@ class DFMonad(sgm.Monad):
         return cls(data)
 
     # ELEMENTS------------------------------------------------------------------
+    def applymap(self, func, monad=sgm.Monad):
+        # type: (Callable[[A], B], Type[sgm.Monad]) -> DFMonad
+        data = self._data.applymap(lambda x: monad.wrap(x).fmap(func).unwrap())
+        return self.wrap(data)
+
     def wrap_elements(self, monad=sgm.Monad):
         # type: (Type[sgm.Monad]) -> DFMonad
         data = self._data.applymap(monad.wrap)
