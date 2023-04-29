@@ -26,14 +26,10 @@ class DFMonad(sgm.Monad):
         # type: (pd.DataFrame) -> DFMonad
         return cls(data)
 
+    # ELEMENTS------------------------------------------------------------------
     def wrap_elements(self, monad=sgm.Monad):
         # type: (Type[sgm.Monad]) -> DFMonad
         data = self._data.applymap(monad.wrap)
-        return self.wrap(data)
-
-    def wrap_rows(self, monad=sgm.Monad):
-        # type: (Type[sgm.Monad]) -> DFMonad
-        data = self._data.apply(monad.wrap)
         return self.wrap(data)
 
     def unwrap_elements(self):
@@ -41,24 +37,9 @@ class DFMonad(sgm.Monad):
         data = self._data.applymap(lambda x: x.unwrap())
         return self.wrap(data)
 
-    def unwrap_rows(self):
-        # type: () -> DFMonad
-        data = self._data.apply(lambda x: x.unwrap())
-        return self.wrap(data)
-
-    def fmap_rows(self, func):
-        # type: (Callable[[A], B]) -> DFMonad
-        data = self._data.apply(lambda x: x.fmap(func))
-        return self.wrap(data)
-
     def fmap_elements(self, func):
         # type: (Callable[[A], B]) -> DFMonad
         data = self._data.applymap(lambda x: x.fmap(func))
-        return self.wrap(data)
-
-    def app_rows(self, func):
-        # type: (sgm.Monad[Callable[[A], B]]) -> DFMonad
-        data = self._data.apply(lambda x: x.app(func))
         return self.wrap(data)
 
     def app_elements(self, func):
@@ -66,12 +47,33 @@ class DFMonad(sgm.Monad):
         data = self._data.applymap(lambda x: x.app(func))
         return self.wrap(data)
 
-    def bind_rows(self, func):
-        # type: (Callable[[A], sgm.Monad[B]]) -> DFMonad
-        data = self._data.apply(lambda x: x.bind(func))
-        return self.wrap(data)
-
     def bind_elements(self, func):
         # type: (Callable[[A], sgm.Monad[B]]) -> DFMonad
         data = self._data.applymap(lambda x: x.bind(func))
+        return self.wrap(data)
+
+    # ROWS----------------------------------------------------------------------
+    def wrap_rows(self, monad=sgm.Monad, axis=0):
+        # type: (Type[sgm.Monad], int) -> DFMonad
+        data = self._data.apply(monad.wrap, axis=axis)
+        return self.wrap(data)
+
+    def unwrap_rows(self, axis=0):
+        # type: (int) -> DFMonad
+        data = self._data.apply(lambda x: x.unwrap(), axis=axis)
+        return self.wrap(data)
+
+    def fmap_rows(self, func, axis=0):
+        # type: (Callable[[A], B], int) -> DFMonad
+        data = self._data.apply(lambda x: x.fmap(func), axis=axis)
+        return self.wrap(data)
+
+    def app_rows(self, func, axis=0):
+        # type: (sgm.Monad[Callable[[A], B]], int) -> DFMonad
+        data = self._data.apply(lambda x: x.app(func), axis=axis)
+        return self.wrap(data)
+
+    def bind_rows(self, func, axis=0):
+        # type: (Callable[[A], sgm.Monad[B]], int) -> DFMonad
+        data = self._data.apply(lambda x: x.bind(func), axis=axis)
         return self.wrap(data)
