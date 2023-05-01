@@ -211,6 +211,7 @@ class Monad(Generic[A]):
     bind       (>>=)       Monad m       => m a -> (a -> m b) -> m b
     right      (>>)        Monad m       => m a -> m b -> m b
     fail       fail        Monad m       => String -> m a
+    unwrap                 Monad m       => m a -> a
     ========== =========== =========================================
     '''
 
