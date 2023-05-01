@@ -150,3 +150,44 @@ class MonadTests(unittest.TestCase):
         result = sgm.Monad.wrap(42).fail(error)
         self.assertIsInstance(result, sgm.Monad)
         self.assertIs(result.unwrap(), error)
+
+    def test_left_identity(self):
+        # Haskell: return a >>= h     =  ha
+        # Python:  wrap(a).bind(func) == func(a)
+        class TestMonad(sgm.Monad):
+            pass
+
+        x = 1
+        func = TestMonad.wrap
+        result = sgm.Monad.wrap(x).bind(func)
+        expected = func(x)
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result._data, expected._data)
+
+    def test_right_identity(self):
+        # Haskell: m >>= return   =  m
+        # Python:  m.bind(m.wrap) == m
+
+        m = sgm.Monad.wrap(99)
+        result = m.bind(m.wrap)
+        expected = m
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result._data, expected._data)
+
+    def test_associativity(self):
+        # Haskell: (m >>= g) >>= h = m >>= (\x -> g x >>= h)
+        # Python: m.bind(g).bind(h) == m.bind(lambda x: g(x).bind(h))
+
+        class TestMonad1(sgm.Monad):
+            pass
+
+        class TestMonad2(sgm.Monad):
+            pass
+
+        m = sgm.Monad(99)
+        g = TestMonad1
+        h = TestMonad2
+        result = m.bind(g).bind(h)
+        expected = m.bind(lambda x: g(x).bind(h))
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result._data, expected._data)
