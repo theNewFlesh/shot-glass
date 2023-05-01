@@ -158,7 +158,7 @@ class MonadTests(unittest.TestCase):
         result = str(Foo(99))
         self.assertEqual(result, 'Foo(99)')
 
-    def test_left_identity(self):
+    def test_bind_left_identity(self):
         # Haskell: return a >>= h     =  ha
         # Python:  wrap(a).bind(func) == func(a)
         class TestMonad(sgm.Monad):
@@ -171,7 +171,7 @@ class MonadTests(unittest.TestCase):
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(result._data, expected._data)
 
-    def test_right_identity(self):
+    def test_bind_right_identity(self):
         # Haskell: m >>= return   =  m
         # Python:  m.bind(m.wrap) == m
 
@@ -181,7 +181,7 @@ class MonadTests(unittest.TestCase):
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(result._data, expected._data)
 
-    def test_associativity(self):
+    def test_bind_associativity(self):
         # Haskell: (m >>= g) >>= h = m >>= (\x -> g x >>= h)
         # Python: m.bind(g).bind(h) == m.bind(lambda x: g(x).bind(h))
 
