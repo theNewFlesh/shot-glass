@@ -221,3 +221,12 @@ class MonadTests(unittest.TestCase):
         expected = m.fmap(g).fmap(h)
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(result._data, expected._data)
+
+    def test_app_identity(self):
+        # Haskell: pure id <*> v = v
+        # Python:  m.wrap(v).app( m.wrap(lambda x: x) )
+
+        m = sgm.Monad.wrap(99)
+        result = m.app(m.wrap(lambda x: x))
+        self.assertEqual(result.__class__, m.__class__)
+        self.assertEqual(result._data, m._data)
