@@ -211,6 +211,7 @@ class Monad(Generic[A]):
     bind       (>>=)       Monad m       => m a -> (a -> m b) -> m b
     right      (>>)        Monad m       => m a -> m b -> m b
     fail       fail        Monad m       => String -> m a
+    unwrap                 Monad m       => m a -> a
     ========== =========== =========================================
     '''
 
@@ -333,6 +334,7 @@ class Monad(Generic[A]):
             Monad: Error Monad.
         '''
         return fail(self, error)
+# ------------------------------------------------------------------------------
 
 
 Monadlike = Union[Monad, Type[Monad]]
