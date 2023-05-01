@@ -197,6 +197,21 @@ class Monad(Generic[A]):
     '''
     Monad is a generic base class for monads. It implements all the monad
     functions as methods which take itself as the first argument.
+
+    Haskell equivalence table:
+
+    ========== =========== =========================================
+    **Python** **Haskell** **Haskell Type Signature**
+    ---------- ----------- -----------------------------------------
+    fmap       fmap        Functor f     => (a -> b) -> fa -> fb
+    fmap       (<$>)       Functor f     => (a -> b) -> fa -> fb
+    app        (<*>)       Applicative f => f (a -> b) -> fa -> fb
+    wrap       pure        Applicative f => a -> f a
+    wrap       return      Monad m       => a -> m a
+    bind       (>>=)       Monad m       => m a -> (a -> m b) -> m b
+    right      (>>)        Monad m       => m a -> m b -> m b
+    fail       fail        Monad m       => String -> m a
+    ========== =========== =========================================
     '''
 
     def __init__(self, data):
