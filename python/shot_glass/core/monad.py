@@ -190,6 +190,18 @@ def fail(monad, error):
     msg = 'Error must be an instance of Exception. Given value: {a}'
     Enforce(error, 'instance of', Exception, message=msg)
     return wrap(monad, error)
+
+
+def try_(monad, func):
+    # type: (Monad[A], Callable[[A], B]) -> Union[Monad[B], Monad[Exception]]
+    '''
+    Try: MA -> (A -> B) -> (MB | ME)
+    '''
+    try:
+        data = func(unwrap(monad))
+        return wrap(monad, data)
+    except Exception as e:
+        return monad.fail(e)
 # ------------------------------------------------------------------------------
 
 
