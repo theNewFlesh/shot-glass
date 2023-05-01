@@ -151,6 +151,13 @@ class MonadTests(unittest.TestCase):
         self.assertIsInstance(result, sgm.Monad)
         self.assertIs(result.unwrap(), error)
 
+    def test_repr(self):
+        class Foo(sgm.Monad):
+            pass
+
+        result = str(Foo(99))
+        self.assertEqual(result, 'Foo(99)')
+
     def test_left_identity(self):
         # Haskell: return a >>= h     =  ha
         # Python:  wrap(a).bind(func) == func(a)
