@@ -1,0 +1,10 @@
+# Generated from HiFive data
+
+# Vertices
+v 0.0 0.0
+v 1.0 0.0
+v 1.0 1.0
+v 0.0 1.0
+
+# Faces
+f 1 2 3 4
