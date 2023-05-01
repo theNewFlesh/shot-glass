@@ -230,3 +230,28 @@ class MonadTests(unittest.TestCase):
         result = m.app(m.wrap(lambda x: x))
         self.assertEqual(result.__class__, m.__class__)
         self.assertEqual(result._data, m._data)
+
+    def test_app_homomorphism(self):
+        # Haskell: (pure f) <*> (pure x) = pure (f x)
+        # Python:  m.wrap(x).app(m.wrap(func)) == m.wrap(func(x))
+
+        m = sgm.Monad
+        func = lambda x: x + 2
+        x = 2
+        result = m.wrap(x).app(m.wrap(func))
+        expected = m.wrap(func(x))
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result._data, expected._data)
+
+    def test_app_interchange(self):
+        # Haskell: u <*> (pure y) = pure (\f -> f y) <*> u
+        # Python:  m(y).app(m.wrap(u)) == m(u).app(m.wrap(lambda f: f(y)))
+        #          u = lambda x: 42
+
+        m = sgm.Monad
+        u = lambda x: 42
+        y = 5
+        result = m.wrap(y).app(m.wrap(u))
+        expected = m.wrap(u).app(m.wrap(lambda f: f(y)))
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result._data, expected._data)
