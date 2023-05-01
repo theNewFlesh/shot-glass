@@ -198,3 +198,26 @@ class MonadTests(unittest.TestCase):
         expected = m.bind(lambda x: g(x).bind(h))
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(result._data, expected._data)
+
+    def test_fmap_identity(self):
+        # Haskell: fmap id = id
+        # Python:  m.fmap(lambda x: x) == lambda x: x
+
+        identity = lambda x: x
+        m = sgm.Monad.wrap(99)
+        result = m.fmap(identity)
+        expected = identity(m)
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result._data, expected._data)
+
+    def test_fmap_distributivity(self):
+        # Haskell: fmap (g . h) = (fmap g) . (fmap h)
+        # Python:  m.fmap(lambda x: h(g(x))) == m.fmap(g).fmap(h)
+
+        m = sgm.Monad.wrap(99)
+        g = lambda x: x - 1
+        h = lambda x: x * 2
+        result = m.fmap(lambda x: h(g(x)))
+        expected = m.fmap(g).fmap(h)
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result._data, expected._data)
