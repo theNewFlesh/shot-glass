@@ -1,0 +1,560 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>shot_glass.core.monad &mdash; shot-glass  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/style.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> shot-glass
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html#development-cli">Development CLI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../blender.html">blender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hifive.html">hifive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../obj.html">obj</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotly.html">plotly</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development CLI</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">shot-glass</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>shot_glass.core.monad</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for shot_glass.core.monad</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>  <span class="c1"># noqa: F401</span>
+
+<span class="kn">from</span> <span class="nn">lunchbox.enforce</span> <span class="kn">import</span> <span class="n">Enforce</span><span class="p">,</span> <span class="n">EnforceError</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="enforce_monad"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.enforce_monad">[docs]</a><span class="k">def</span> <span class="nf">enforce_monad</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+    <span class="c1"># type: (Any) -&gt; None</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Enforces item being a Monad subclass or instance.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        item (object): Item to be tested.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If item is not Monad subclass or instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="nb">isinstance</span>  <span class="c1"># type: Any</span>
+    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">:</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="nb">issubclass</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pred</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Monad</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">EnforceError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s1"> is not a subclass or instance of Monad.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wrap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.wrap">[docs]</a><span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="c1"># type: (Monadlike, A) -&gt; Monad[A]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Wrap: M -&gt; A -&gt; MA</span>
+
+<span class="sd">    .. image:: resources/wrap.png</span>
+
+<span class="sd">    Given a Monad class or instance, create a new Monad with given data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad (Monad): Monad class or instance.</span>
+<span class="sd">        data (Any): Data to be wrapped as Monad.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Monad[A]: Monad of data.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">monad</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unwrap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.unwrap">[docs]</a><span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="n">monad</span><span class="p">):</span>
+    <span class="c1"># type: (Monad[A]) -&gt; A</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Unwrap: MA -&gt; A</span>
+
+<span class="sd">    .. image:: resources/unwrap.png</span>
+
+<span class="sd">    Return the data of a given Monad instance.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad (Monad): Monad instance.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A: Monad data.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">monad</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="fmap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.fmap">[docs]</a><span class="k">def</span> <span class="nf">fmap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="c1"># type: (Monad[A], Callable[[A], B]) -&gt; Monad[B]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Functor map: MA -&gt; (A -&gt; B) -&gt; MB</span>
+
+<span class="sd">    .. image:: resources/fmap.png</span>
+
+<span class="sd">    Given a Monad of A (MA) and a function A to B, return a Monad of B (MB).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad (Monad): Monad of A.</span>
+<span class="sd">        func (function): Function (A -&gt; B).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Monad[B]: Monad of B.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">unwrap</span><span class="p">(</span><span class="n">monad</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="app"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.app">[docs]</a><span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">):</span>
+    <span class="c1"># type: (Monad[A], Monad[Callable[[A], B]]) -&gt; Monad[B]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Applicative: MA -&gt; M(A -&gt; B) -&gt; MB</span>
+
+<span class="sd">    .. image:: resources/app.png</span>
+
+<span class="sd">    Given a Monad of A (MA) and a Monad of a function A to B, return a Monad</span>
+<span class="sd">    of B (MB).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad (Monad): Monad of A.</span>
+<span class="sd">        func (Monad): Monad of function (A -&gt; B).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Monad[B]: Monad of B.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="n">unwrap</span><span class="p">(</span><span class="n">monad_func</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">unwrap</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="bind"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.bind">[docs]</a><span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="c1"># type: (Monad[A], Callable[[A], Monad[B]]) -&gt; Monad[B]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Bind: MA -&gt; (A -&gt; MB) -&gt; MB</span>
+
+<span class="sd">    .. image:: resources/bind.png</span>
+
+<span class="sd">    Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad (Monad): Monad of A.</span>
+<span class="sd">        func (function): Function (A -&gt; MB).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Monad[B]: Monad of B.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">unwrap</span><span class="p">(</span><span class="n">monad</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="right"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.right">[docs]</a><span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="n">monad_a</span><span class="p">,</span> <span class="n">monad_b</span><span class="p">):</span>
+    <span class="c1"># type: (Monad[A], Monad[B]) -&gt; Monad[B]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Right: MA -&gt; MB -&gt; MB</span>
+
+<span class="sd">    .. image:: resources/right.png</span>
+
+<span class="sd">    Given two Monads, a and b, return the right Monad b.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad_a (Monad): Left monad.</span>
+<span class="sd">        monad_b (Monad): Right monad.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Monad: Right Monad.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad_a</span><span class="p">)</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad_b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">monad_b</span></div>
+
+
+<div class="viewcode-block" id="fail"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.fail">[docs]</a><span class="k">def</span> <span class="nf">fail</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">error</span><span class="p">):</span>
+    <span class="c1"># type (Monad, Exception) -&gt; Monad[Exception]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Fail: M -&gt; E -&gt; ME</span>
+
+<span class="sd">    .. image:: resources/fail.png</span>
+
+<span class="sd">    Given a Monad and Exception, return a Monad of that Exception.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad (Monad): Monad to wrap error with.</span>
+<span class="sd">        error (Exception): Error.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+<span class="sd">        EnforceError: If error is not an instance of Exception.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Monad: Error Monad.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Error must be an instance of Exception. Given value: </span><span class="si">{a}</span><span class="s1">&#39;</span>
+    <span class="n">Enforce</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s1">&#39;instance of&#39;</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Monad"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad">[docs]</a><span class="k">class</span> <span class="nc">Monad</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">A</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Monad is a generic base class for monads. It implements all the monad</span>
+<span class="sd">    functions as methods which take itself as the first argument.</span>
+
+<span class="sd">    Haskell equivalence table:</span>
+
+<span class="sd">    ========== =========== =========================================</span>
+<span class="sd">    **Python** **Haskell** **Haskell Type Signature**</span>
+<span class="sd">    ---------- ----------- -----------------------------------------</span>
+<span class="sd">    fmap       fmap        Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    fmap       (&lt;$&gt;)       Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    app        (&lt;*&gt;)       Applicative f =&gt; f (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    wrap       pure        Applicative f =&gt; a -&gt; f a</span>
+<span class="sd">    wrap       return      Monad m       =&gt; a -&gt; m a</span>
+<span class="sd">    bind       (&gt;&gt;=)       Monad m       =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span>
+<span class="sd">    right      (&gt;&gt;)        Monad m       =&gt; m a -&gt; m b -&gt; m b</span>
+<span class="sd">    fail       fail        Monad m       =&gt; String -&gt; m a</span>
+<span class="sd">    unwrap                 Monad m       =&gt; m a -&gt; a</span>
+<span class="sd">    ========== =========== =========================================</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Monad.__init__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># type: (A) -&gt; None</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Constructs monad instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (object): Data to be wrapped with Monad.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="Monad.__repr__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># type: () -&gt; str</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        String representation of Monad instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span><span class="si">}</span><span class="s1">)&#39;</span></div>
+
+<div class="viewcode-block" id="Monad.wrap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.wrap">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># type: (A) -&gt; Monad[A]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Wrap: A -&gt; MA</span>
+
+<span class="sd">        Create a new Monad with given data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (Any): Data to be wrapped as Monad.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad[A]: Monad of data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.unwrap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.unwrap">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># type: () -&gt; A</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Unwrap: () -&gt; A</span>
+
+<span class="sd">        Return self._data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A: Monad data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.fmap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.fmap">[docs]</a>    <span class="k">def</span> <span class="nf">fmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="c1"># type: (Callable[[A], B]) -&gt; Monad[B]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Functor map: (A -&gt; B) -&gt; MB</span>
+
+<span class="sd">        Given a function A to B, return a Monad of B (MB).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (function): Function (A -&gt; B).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad[B]: Monad of B.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">fmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.app"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.app">[docs]</a>    <span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">):</span>
+        <span class="c1"># type: (Monad[Callable[[A], B]]) -&gt; Monad</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Applicative: M(A -&gt; B) -&gt; MB</span>
+
+<span class="sd">        Given a Monad of a function A to B, return a Monad of B (MB).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (Monad): Monad of function (A -&gt; B).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad[B]: Monad of B.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.bind"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="c1"># type: (Callable[[A], Monad[B]]) -&gt; Monad[B]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Bind: (A -&gt; MB) -&gt; MB</span>
+
+<span class="sd">        Given a function A to MB, return a Monad of B (MB).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (function): Function (A -&gt; MB).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad[B]: Monad of B.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.right"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.right">[docs]</a>    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad</span><span class="p">):</span>
+        <span class="c1"># type: (Monad[B]) -&gt; Monad[B]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Right: MB -&gt; MB</span>
+
+<span class="sd">        Return given monad (self is left, given monad is right).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            monad (Monad): Right monad.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad: Right Monad.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.fail"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.fail">[docs]</a>    <span class="k">def</span> <span class="nf">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">):</span>
+        <span class="c1"># type (Exception) -&gt; Monad[Exception]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fail: E -&gt; ME</span>
+
+<span class="sd">        Return a Monad of given Exception.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            error (Exception): Error.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad: Error Monad.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div></div>
+
+
+<span class="n">Monadlike</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Monad</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Monad</span><span class="p">]]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, Alex Braun &lt;alexander.g.braun@gmail.com&gt;.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
