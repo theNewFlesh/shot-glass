@@ -214,7 +214,7 @@ class Monad(Generic[A]):
         '''
         String representation of Monad instance.
         '''
-        return 'Monad(' + self._data.__repr__() + ')'
+        return f'{self.__class__.__name__}({self._data.__repr__()})'
 
     @classmethod
     def wrap(cls, data):
