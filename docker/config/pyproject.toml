@@ -36,6 +36,7 @@ dependencies = [
     "pytest",
     "wrapt",
     "tables>=3.7.0",
+    "infix>=1.2",
 ]
 
 [project.urls]
