@@ -65,6 +65,10 @@ class MonadFunctionTests(unittest.TestCase):
         with self.assertRaisesRegex(EnforceError, expected):
             sgm.app('foo', sgm.Monad(lambda x: x + 2))
 
+        expected = 'bar is not a subclass or instance of Monad.'
+        with self.assertRaisesRegex(EnforceError, expected):
+            sgm.app(sgm.Monad(2), 'bar')
+
     def test_bind(self):
         monad = sgm.wrap(sgm.Monad, 2)
         func = lambda x: sgm.Monad(x + 2)

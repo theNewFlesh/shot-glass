@@ -109,11 +109,13 @@ def app(monad, monad_func):
 
     Raises:
         EnforceError: If monad is not Monad subclass or instance.
+        EnforceError: If monad_func is not instance of Monad.
 
     Returns:
         Monad[B]: Monad of B.
     '''
     enforce_monad(monad)
+    enforce_monad(monad_func)
     func = unwrap(monad_func)
     value = unwrap(monad)
     return wrap(monad, func(value))
