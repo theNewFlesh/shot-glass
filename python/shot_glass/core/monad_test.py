@@ -198,6 +198,13 @@ class MonadInfixFunctionTests(unittest.TestCase):
         self.assertEqual(sgm.dot(fy, fx)('x'), 'xab')
         self.assertEqual((fy |sgm.dot| fx)('x'), 'xab')  # noqa: E225
 
+        fa = lambda x: dict(a='b')[x]
+        fb = lambda x: dict(b='c')[x]
+        fc = lambda x: dict(c='d')[x]
+
+        f = fc |sgm.dot| fb |sgm.dot| fa  # noqa: E225
+        self.assertEqual(f('a'), 'd')
+
 
 class MonadTests(unittest.TestCase):
     def test_init(self):
