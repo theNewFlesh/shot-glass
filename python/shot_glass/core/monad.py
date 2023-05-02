@@ -70,18 +70,18 @@ def unwrap(monad):
     return monad._data
 
 
-def fmap(monad, func):
-    # type: (Monad[A], Callable[[A], B]) -> Monad[B]
+def fmap(func, monad):
+    # type: (Callable[[A], B], Monad[A]) -> Monad[B]
     '''
-    Functor map: MA -> (A -> B) -> MB
+    Functor map: (A -> B) -> MA -> MB
 
     .. image:: resources/fmap.png
 
     Given a Monad of A (MA) and a function A to B, return a Monad of B (MB).
 
     Args:
-        monad (Monad): Monad of A.
         func (function): Function (A -> B).
+        monad (Monad): Monad of A.
 
     Raises:
         EnforceError: If monad is not Monad subclass or instance.
@@ -93,10 +93,10 @@ def fmap(monad, func):
     return wrap(monad, func(unwrap(monad)))
 
 
-def app(monad, monad_func):
-    # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
+def app(monad_func, monad):
+    # type: (Monad[Callable[[A], B]], Monad[A]) -> Monad[B]
     '''
-    Applicative: MA -> M(A -> B) -> MB
+    Applicative: M(A -> B) -> MA -> MB
 
     .. image:: resources/app.png
 
@@ -104,35 +104,35 @@ def app(monad, monad_func):
     of B (MB).
 
     Args:
+        monad_func (Monad): Monad of function (A -> B).
         monad (Monad): Monad of A.
-        func (Monad): Monad of function (A -> B).
 
     Raises:
-        EnforceError: If monad is not Monad subclass or instance.
         EnforceError: If monad_func is not instance of Monad.
+        EnforceError: If monad is not Monad subclass or instance.
 
     Returns:
         Monad[B]: Monad of B.
     '''
-    enforce_monad(monad)
     enforce_monad(monad_func)
+    enforce_monad(monad)
     func = unwrap(monad_func)
     value = unwrap(monad)
     return wrap(monad, func(value))
 
 
-def bind(monad, func):
-    # type: (Monad[A], Callable[[A], Monad[B]]) -> Monad[B]
+def bind(func, monad):
+    # type: (Callable[[A], Monad[B]], Monad[A]) -> Monad[B]
     '''
-    Bind: MA -> (A -> MB) -> MB
+    Bind: (A -> MB) -> MA -> MB
 
     .. image:: resources/bind.png
 
     Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).
 
     Args:
-        monad (Monad): Monad of A.
         func (function): Function (A -> MB).
+        monad (Monad): Monad of A.
 
     Raises:
         EnforceError: If monad is not Monad subclass or instance.
@@ -277,7 +277,7 @@ class Monad(Generic[A]):
         Returns:
             Monad[B]: Monad of B.
         '''
-        return fmap(self, func)
+        return fmap(func, self)
 
     def app(self, monad_func):
         # type: (Monad[Callable[[A], B]]) -> Monad
@@ -292,7 +292,7 @@ class Monad(Generic[A]):
         Returns:
             Monad[B]: Monad of B.
         '''
-        return app(self, monad_func)
+        return app(monad_func, self)
 
     def bind(self, func):
         # type: (Callable[[A], Monad[B]]) -> Monad[B]
@@ -307,7 +307,7 @@ class Monad(Generic[A]):
         Returns:
             Monad[B]: Monad of B.
         '''
-        return bind(self, func)
+        return bind(func, self)
 
     def right(self, monad):
         # type: (Monad[B]) -> Monad[B]

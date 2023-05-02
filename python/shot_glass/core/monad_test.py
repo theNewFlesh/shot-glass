@@ -1,4 +1,5 @@
 import unittest
+from functools import partial
 
 from lunchbox.enforce import EnforceError
 
@@ -44,42 +45,42 @@ class MonadFunctionTests(unittest.TestCase):
     def test_fmap(self):
         monad = sgm.wrap(sgm.Monad, 2)
         func = lambda x: x + 2
-        result = sgm.fmap(monad, func)
+        result = sgm.fmap(func, monad)
         self.assertIsInstance(result, sgm.Monad)
         self.assertEqual(sgm.unwrap(result), 4)
 
     def test_fmap_errors(self):
         expected = 'foo is not a subclass or instance of Monad.'
         with self.assertRaisesRegex(EnforceError, expected):
-            sgm.fmap('foo', lambda x: x)
+            sgm.fmap(lambda x: x, 'foo')
 
     def test_app(self):
         monad = sgm.wrap(sgm.Monad, 2)
         func = sgm.Monad(lambda x: x + 2)
-        result = sgm.app(monad, func)
+        result = sgm.app(func, monad)
         self.assertIsInstance(result, sgm.Monad)
         self.assertEqual(sgm.unwrap(result), 4)
 
     def test_app_errors(self):
-        expected = 'foo is not a subclass or instance of Monad.'
-        with self.assertRaisesRegex(EnforceError, expected):
-            sgm.app('foo', sgm.Monad(lambda x: x + 2))
-
         expected = 'bar is not a subclass or instance of Monad.'
         with self.assertRaisesRegex(EnforceError, expected):
-            sgm.app(sgm.Monad(2), 'bar')
+            sgm.app('bar', sgm.Monad(2))
+
+        expected = 'foo is not a subclass or instance of Monad.'
+        with self.assertRaisesRegex(EnforceError, expected):
+            sgm.app(sgm.Monad(lambda x: x + 2), 'foo')
 
     def test_bind(self):
         monad = sgm.wrap(sgm.Monad, 2)
         func = lambda x: sgm.Monad(x + 2)
-        result = sgm.bind(monad, func)
+        result = sgm.bind(func, monad)
         self.assertIsInstance(result, sgm.Monad)
         self.assertEqual(sgm.unwrap(result), 4)
 
     def test_bind_errors(self):
         expected = 'foo is not a subclass or instance of Monad.'
         with self.assertRaisesRegex(EnforceError, expected):
-            sgm.bind('foo', lambda x: sgm.Monad(x + 2))
+            sgm.bind(lambda x: sgm.Monad(x + 2), 'foo')
 
     def test_right(self):
         a = sgm.wrap(sgm.Monad, 2)
