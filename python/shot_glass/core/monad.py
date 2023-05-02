@@ -268,6 +268,7 @@ class Monad(Generic[A]):
         Functor map: (A -> B) -> MB
 
         Given a function A to B, return a Monad of B (MB).
+        Example: m.fmap(lambda x: x + 2)
 
         Args:
             func (function): Function (A -> B).
@@ -336,6 +337,61 @@ class Monad(Generic[A]):
             Monad: Error Monad.
         '''
         return fail(self, error)
+
+    def __and__(self, func):
+        # type: (Callable[[A], B]) -> Monad[B]
+        '''
+        Functor map: (A -> B) -> MB
+
+        Given a function A to B, return a Monad of B (MB).
+        Example: m & (lambda x: x + 2)
+
+        Args:
+            func (function): Function (A -> B).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
+        return self.fmap(func)
+
+    def __xor__(self, monad_func):
+        # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
+        '''
+        Applicative: MA -> M(A -> B) -> MB
+
+        .. image:: resources/app.png
+
+        Given a Monad of A (MA) and a Monad of a function A to B, return a Monad
+        of B (MB).
+        Example: m ^ Monad.wrap(lambda x: x + 2)
+
+        Args:
+            monad (Monad): Monad of A.
+            func (Monad): Monad of function (A -> B).
+
+        Raises:
+            EnforceError: If monad is not Monad subclass or instance.
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
+        return self.app(monad_func)
+
+    def __rshift__(self, func):
+        # type: (Callable[[A], Monad[B]]) -> Monad[B]
+        '''
+        Bind: (A -> MB) -> MB
+
+        Given a function A to MB, return a Monad of B (MB).
+        Example: m >> Monad
+
+        Args:
+            func (function): Function (A -> MB).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
+        return self.bind(func)
 
 
 Monadlike = Union[Monad, Type[Monad]]

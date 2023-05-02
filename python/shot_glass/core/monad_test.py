@@ -162,6 +162,33 @@ class MonadTests(unittest.TestCase):
         result = str(Foo(99))
         self.assertEqual(result, 'Foo(99)')
 
+    def test_and(self):
+        m = sgm.Monad(99)
+        func = lambda x: x + 2
+        result = m & func
+        expected = m.fmap(func)
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertIs(result.unwrap(), expected.unwrap())
+
+    def test_xor(self):
+        m = sgm.Monad.wrap(99)
+        func = sgm.Monad(lambda x: x + 10)
+        result = m ^ func
+        expected = m.app(func)
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertIs(result.unwrap(), expected.unwrap())
+
+    def test_rshift(self):
+        class Foo(sgm.Monad):
+            pass
+
+        m = sgm.Monad(99)
+        result = m >> Foo
+        expected = m.bind(Foo)
+        self.assertIsInstance(result, Foo)
+        self.assertIs(result.unwrap(), expected.unwrap())
+
+    # LAWS----------------------------------------------------------------------
     def test_bind_left_identity(self):
         # Haskell: return a >>= h     =  ha
         # Python:  wrap(a).bind(func) == func(a)
