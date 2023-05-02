@@ -202,19 +202,20 @@ class Monad(Generic[A]):
 
     Haskell equivalence table:
 
-    ========== =========== =========================================
-    **Python** **Haskell** **Haskell Type Signature**
-    ---------- ----------- -----------------------------------------
-    fmap       fmap        Functor f     => (a -> b) -> fa -> fb
-    fmap       (<$>)       Functor f     => (a -> b) -> fa -> fb
-    app        (<*>)       Applicative f => f (a -> b) -> fa -> fb
-    wrap       pure        Applicative f => a -> f a
-    wrap       return      Monad m       => a -> m a
-    bind       (>>=)       Monad m       => m a -> (a -> m b) -> m b
-    right      (>>)        Monad m       => m a -> m b -> m b
-    fail       fail        Monad m       => String -> m a
-    unwrap                 Monad m       => m a -> a
-    ========== =========== =========================================
+    ====== ===== ====== ===== ================ ========================
+    **Python**   **Haskell**  **Haskell Type Signature**
+    ------------ ------------ -----------------------------------------
+    prefix infix prefix infix
+    ====== ===== ====== ===== ================ ========================
+    app    ^            <*>   Applicative f => f (a -> b) -> fa -> fb
+    bind   >>           >>=   Monad m       => m a -> (a -> m b) -> m b
+    fail         fail         Monad m       => String -> m a
+    fmap   &     fmap   <$>   Functor f     => (a -> b) -> fa -> fb
+    right               >>    Monad m       => m a -> m b -> m b
+    unwrap                    Monad m       => m a -> a
+    wrap         pure         Applicative f => a -> f a
+    wrap         return       Monad m       => a -> m a
+    ====== ===== ====== ===== ================ ========================
     '''
 
     def __init__(self, data):
