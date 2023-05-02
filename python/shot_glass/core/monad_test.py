@@ -379,3 +379,36 @@ class MonadTests(unittest.TestCase):
         expected = m.wrap(u).app(m.wrap(lambda f: f(y)))
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(result._data, expected._data)
+
+    def test_app_composition(self):
+        # Haskell: u <*> (v <*> w) = pure (.) <*> u <*> v <*> w
+        #          . :: (b -> c) -> (a -> b) -> (a -> c)
+        # Python:
+
+        # app :: m(a -> b)-> ma -> mb
+
+        app = sgm.app
+        M = sgm.Monad
+        u = M(lambda x: x - 1)
+        v = M(lambda x: x - 2)
+        w = M(3)
+
+        result = u |app| (v |app| w)  # noqa: E225
+        exp = M(0)
+        self.assertEqual(result.__class__, exp.__class__)
+        self.assertEqual(result.unwrap(), exp.unwrap())
+        exp = w.app(v).app(u)
+        self.assertEqual(result.unwrap(), exp.unwrap())
+
+        # pure :: a -> f a
+        # ((( (pure (.)) <*> u) <*> v) <*> w)
+        # x1 = M.wrap(d)
+        # x2 = x1 |app| u  # noqa: E225
+        # x3 = x2 |app| v  # noqa: E225
+        # x4 = x3 |app| w  # noqa: E225
+
+        # expected = pure(d) |app| u |app| v |app| w
+        # expected = pure |app| u |app| v |app| w  # noqa: E225
+        # expected = M |pure| dot |app| u |app| v |app| w  # noqa: E225
+        # self.assertEqual(result.__class__, expected.__class__)
+        # self.assertEqual(result._data, expected._data)
