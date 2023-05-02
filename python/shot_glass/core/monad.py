@@ -7,6 +7,7 @@ import infix
 
 A = TypeVar('A')
 B = TypeVar('B')
+C = TypeVar('C')
 # ------------------------------------------------------------------------------
 
 
@@ -218,6 +219,35 @@ def curry(func, *args, **kwargs):
         function: Curried function.
     '''
     return partial(func, *args, **kwargs)
+
+
+@infix.or_infix
+def dot(func_b, func_a):
+    # type: (Callable[[B], C], Callable[[A], B]) -> Callable[[A], C]
+    '''
+    Dot: (b -> c) -> (a -> b) -> (a -> c)
+         fb |dot| fa == fb(fa)
+
+    Composes two functions.
+
+    Example:
+        ```
+        fa = lambda x: x + 'a'
+        fb = lambda x: x + 'b'
+        dot(fb, fa)('x') == 'xab'
+        (fb |dot| fa)('x') == 'xab'
+        ```
+
+    Args:
+        func_b (function): Outer function.
+        func_a (function): Inner function.
+
+    Returns:
+        partial: Function composition.
+    '''
+    def of(b, a, *args, **kwargs):
+        return b(a(*args, **kwargs))
+    return partial(of, func_b, func_a)
 # ------------------------------------------------------------------------------
 
 

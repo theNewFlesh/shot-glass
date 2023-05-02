@@ -175,6 +175,29 @@ class MonadInfixFunctionTests(unittest.TestCase):
         result = func |sgm.curry| 1 |sgm.curry| 2  # noqa: E225
         self.assertEqual(result(), 3)
 
+    def test_dot(self):
+        fa = lambda x: dict(a='b')[x]
+        fb = lambda x: dict(b='c')[x]
+
+        self.assertIsInstance(sgm.dot(fb, fa), partial)
+        self.assertIsInstance(fb |sgm.dot| fa, partial)  # noqa: E225
+
+        self.assertEqual(sgm.dot(fb, fa)('a'), 'c')
+        self.assertEqual((fb |sgm.dot| fa)('a'), 'c')  # noqa: E225
+
+        with self.assertRaises(KeyError):
+            sgm.dot(fb, fa)('b')
+
+        with self.assertRaises(KeyError):
+            f = fb |sgm.dot| fa  # noqa: E225
+            f('b')
+
+        fx = lambda x: x + 'a'
+        fy = lambda x: x + 'b'
+
+        self.assertEqual(sgm.dot(fy, fx)('x'), 'xab')
+        self.assertEqual((fy |sgm.dot| fx)('x'), 'xab')  # noqa: E225
+
 
 class MonadTests(unittest.TestCase):
     def test_init(self):
