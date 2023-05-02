@@ -1,5 +1,7 @@
 from typing import Any, Callable, Generic, Type, TypeVar, Union  # noqa: F401
 
+from functools import partial
+
 from lunchbox.enforce import Enforce, EnforceError
 import infix
 
@@ -199,6 +201,23 @@ def fail(monad, error):
     msg = 'Error must be an instance of Exception. Given value: {a}'
     Enforce(error, 'instance of', Exception, message=msg)
     return wrap(monad, error)
+
+
+@infix.or_infix
+def curry(func, *args, **kwargs):
+    # type: (Callable, Any, Any) -> Callable
+    '''
+    Infix notation for functools.partial.
+
+    Args:
+        func (function): Function to be curried.
+        args (optional): Arguments.
+        kwargs (optional): Keyword arguments.
+
+    Returns:
+        function: Curried function.
+    '''
+    return partial(func, *args, **kwargs)
 # ------------------------------------------------------------------------------
 
 

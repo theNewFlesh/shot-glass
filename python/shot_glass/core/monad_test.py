@@ -1,3 +1,4 @@
+from functools import partial
 import unittest
 
 from lunchbox.enforce import EnforceError
@@ -117,7 +118,7 @@ class MonadInfixFunctionTests(unittest.TestCase):
     def test_wrap_infix(self):
         monad = sgm.Monad
         data = 99
-        result = monad |sgm.wrap| data    # noqa: E225
+        result = monad |sgm.wrap| data  # noqa: E225
         expected = sgm.wrap(monad, data)
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(sgm.unwrap(result), sgm.unwrap(expected))
@@ -125,7 +126,7 @@ class MonadInfixFunctionTests(unittest.TestCase):
     def test_fmap_infix(self):
         func = lambda x: x + 7
         monad = sgm.Monad(14)
-        result = func |sgm.fmap| monad    # noqa: E225
+        result = func |sgm.fmap| monad  # noqa: E225
         expected = sgm.fmap(func, monad)
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(sgm.unwrap(result), sgm.unwrap(expected))
@@ -133,7 +134,7 @@ class MonadInfixFunctionTests(unittest.TestCase):
     def test_app_infix(self):
         monad_func = sgm.Monad(lambda x: x * 2)
         monad = sgm.Monad(5)
-        result = monad_func |sgm.app| monad    # noqa: E225
+        result = monad_func |sgm.app| monad  # noqa: E225
         expected = sgm.app(monad_func, monad)
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(sgm.unwrap(result), sgm.unwrap(expected))
@@ -152,7 +153,7 @@ class MonadInfixFunctionTests(unittest.TestCase):
     def test_right_infix(self):
         monad_a = sgm.Monad('a')
         monad_b = sgm.Monad('b')
-        result = monad_a |sgm.right| monad_b    # noqa: E225
+        result = monad_a |sgm.right| monad_b  # noqa: E225
         expected = sgm.right(monad_a, monad_b)
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(sgm.unwrap(result), sgm.unwrap(expected))
@@ -160,10 +161,19 @@ class MonadInfixFunctionTests(unittest.TestCase):
     def test_fail_infix(self):
         monad = sgm.Monad
         error = SyntaxError('foobar')
-        result = monad |sgm.fail| error    # noqa: E225
+        result = monad |sgm.fail| error  # noqa: E225
         expected = sgm.fail(monad, error)
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(sgm.unwrap(result), sgm.unwrap(expected))
+
+    def test_curry(self):
+        func = lambda x, y: x + y
+        cur = func |sgm.curry| 'a'  # noqa: E225
+        self.assertIsInstance(cur, partial)
+        self.assertEqual(cur('b'), 'ab')
+
+        result = func |sgm.curry| 1 |sgm.curry| 2  # noqa: E225
+        self.assertEqual(result(), 3)
 
 
 class MonadTests(unittest.TestCase):
