@@ -1,6 +1,7 @@
 from typing import Any, Callable, Generic, Type, TypeVar, Union  # noqa: F401
 
 from lunchbox.enforce import Enforce, EnforceError
+import infix
 
 A = TypeVar('A')
 B = TypeVar('B')
@@ -25,6 +26,7 @@ def enforce_monad(item):
         raise EnforceError(f'{item} is not a subclass or instance of Monad.')
 
 
+@infix.or_infix
 def wrap(monad, data):
     # type: (Monadlike, A) -> Monad[A]
     '''
@@ -70,6 +72,7 @@ def unwrap(monad):
     return monad._data
 
 
+@infix.or_infix
 def fmap(func, monad):
     # type: (Callable[[A], B], Monad[A]) -> Monad[B]
     '''
@@ -93,6 +96,7 @@ def fmap(func, monad):
     return wrap(monad, func(unwrap(monad)))
 
 
+@infix.or_infix
 def app(monad_func, monad):
     # type: (Monad[Callable[[A], B]], Monad[A]) -> Monad[B]
     '''
@@ -121,6 +125,7 @@ def app(monad_func, monad):
     return wrap(monad, func(value))
 
 
+@infix.or_infix
 def bind(func, monad):
     # type: (Callable[[A], Monad[B]], Monad[A]) -> Monad[B]
     '''
@@ -144,6 +149,7 @@ def bind(func, monad):
     return func(unwrap(monad))
 
 
+@infix.or_infix
 def right(monad_a, monad_b):
     # type: (Monad[A], Monad[B]) -> Monad[B]
     '''
@@ -168,6 +174,7 @@ def right(monad_a, monad_b):
     return monad_b
 
 
+@infix.or_infix
 def fail(monad, error):
     # type (Monad, Exception) -> Monad[Exception]
     '''
