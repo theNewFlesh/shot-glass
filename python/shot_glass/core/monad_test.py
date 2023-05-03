@@ -423,3 +423,31 @@ class MonadTests(unittest.TestCase):
         expected = M(0)
         self.assertEqual(result.__class__, expected.__class__)
         self.assertEqual(result.unwrap(), expected.unwrap())
+
+        result = app(app(app(M.wrap(d), u), v), w)
+        self.assertEqual(result.unwrap(), expected.unwrap())
+
+        result = w.app(v.app(u.app(M.wrap(d))))
+        self.assertEqual(result.unwrap(), expected.unwrap())
+
+        result = w ^ (v ^ (u ^ M.wrap(d)))
+        self.assertEqual(result.unwrap(), expected.unwrap())
+
+        result = M.wrap(d) |app| u |app| v |app| w  # noqa: E225
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result.unwrap(), expected.unwrap())
+
+    def test_app_composition(self):
+        # Haskell: u <*> (v <*> w) = pure (.) <*> u <*> v <*> w
+
+        app = sgm.app
+        M = sgm.Monad
+        d = lambda x: partial(sgm.dot, x)
+        u = M(lambda x: x - 1)
+        v = M(lambda x: x - 2)
+        w = M(3)
+
+        result = u |app| (v |app| w)  # noqa: E225
+        expected = M(d) |app| u |app| v |app| w  # noqa: E225
+        self.assertEqual(result.__class__, expected.__class__)
+        self.assertEqual(result.unwrap(), expected.unwrap())
