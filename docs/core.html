@@ -128,9 +128,17 @@
 <li class="toctree-l4"><a class="reference internal" href="#shot_glass.core.monad.Monad.wrap"><code class="docutils literal notranslate"><span class="pre">Monad.wrap()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.app"><code class="docutils literal notranslate"><span class="pre">app()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.bind"><code class="docutils literal notranslate"><span class="pre">bind()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.curry"><code class="docutils literal notranslate"><span class="pre">curry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.dot"><code class="docutils literal notranslate"><span class="pre">dot()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.enforce_monad"><code class="docutils literal notranslate"><span class="pre">enforce_monad()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.fail"><code class="docutils literal notranslate"><span class="pre">fail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.fmap"><code class="docutils literal notranslate"><span class="pre">fmap()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.partial_dot"><code class="docutils literal notranslate"><span class="pre">partial_dot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.right"><code class="docutils literal notranslate"><span class="pre">right()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.unwrap"><code class="docutils literal notranslate"><span class="pre">unwrap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.core.monad.wrap"><code class="docutils literal notranslate"><span class="pre">wrap()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -238,35 +246,35 @@ functions it calls.</p>
 </thead>
 <tbody>
 <tr class="row-odd"><td><p>app</p></td>
-<td><p><a href="#id1"><span class="problematic" id="id2">|app|</span></a></p></td>
+<td><p>⏐iapp⏐</p></td>
 <td></td>
 <td><p>&lt;*&gt;</p></td>
 <td><p>Applicative f =&gt;</p></td>
 <td><p>f (a -&gt; b) -&gt; fa -&gt; fb</p></td>
 </tr>
 <tr class="row-even"><td><p>bind</p></td>
-<td><p><a href="#id3"><span class="problematic" id="id4">|bind|</span></a></p></td>
+<td><p>⏐ibind⏐</p></td>
 <td></td>
 <td><p>&gt;&gt;=</p></td>
 <td><p>Monad m       =&gt;</p></td>
 <td><p>m a -&gt; (a -&gt; m b) -&gt; m b</p></td>
 </tr>
 <tr class="row-odd"><td><p>fail</p></td>
-<td><p><a href="#id5"><span class="problematic" id="id6">|fail|</span></a></p></td>
+<td><p>⏐ifail⏐</p></td>
 <td><p>fail</p></td>
 <td></td>
 <td><p>Monad m       =&gt;</p></td>
 <td><p>String -&gt; m a</p></td>
 </tr>
 <tr class="row-even"><td><p>fmap</p></td>
-<td><p><a href="#id7"><span class="problematic" id="id8">|fmap|</span></a></p></td>
+<td><p>⏐ifmap⏐</p></td>
 <td><p>fmap</p></td>
 <td><p>&lt;$&gt;</p></td>
 <td><p>Functor f     =&gt;</p></td>
 <td><p>(a -&gt; b) -&gt; fa -&gt; fb</p></td>
 </tr>
 <tr class="row-odd"><td><p>right</p></td>
-<td><p><a href="#id9"><span class="problematic" id="id10">|right|</span></a></p></td>
+<td><p>⏐iright⏐</p></td>
 <td></td>
 <td><p>&gt;&gt;</p></td>
 <td><p>Monad m       =&gt;</p></td>
@@ -280,28 +288,28 @@ functions it calls.</p>
 <td><p>m a -&gt; a</p></td>
 </tr>
 <tr class="row-odd"><td><p>wrap</p></td>
-<td><p><a href="#id11"><span class="problematic" id="id12">|wrap|</span></a></p></td>
+<td><p>⏐iwrap⏐</p></td>
 <td><p>pure</p></td>
 <td></td>
 <td><p>Applicative f =&gt;</p></td>
 <td><p>a -&gt; f a</p></td>
 </tr>
 <tr class="row-even"><td><p>wrap</p></td>
-<td><p><a href="#id13"><span class="problematic" id="id14">|wrap|</span></a></p></td>
+<td><p>⏐iwrap⏐</p></td>
 <td><p>return</p></td>
 <td></td>
 <td><p>Monad m       =&gt;</p></td>
 <td><p>a -&gt; m a</p></td>
 </tr>
 <tr class="row-odd"><td><p>curry</p></td>
-<td><p><a href="#id15"><span class="problematic" id="id16">|curry|</span></a></p></td>
+<td><p>⏐icurry⏐</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>dot</p></td>
-<td><p><a href="#id17"><span class="problematic" id="id18">|dot|</span></a></p></td>
+<td><p>⏐idot⏐</p></td>
 <td><p>.</p></td>
 <td><p>.</p></td>
 <td></td>
@@ -645,6 +653,112 @@ Example: m.fmap(lambda x: x + 2)</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.core.monad.app">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monad_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.app" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applicative: M(A -&gt; B) -&gt; MA -&gt; MB</p>
+<img alt="resources/app.png" src="resources/app.png" />
+<p>Given a Monad of A (MA) and a Monad of a function A to B, return a Monad
+of B (MB).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>monad_func</strong> (<a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad"><em>Monad</em></a>) – Monad of function (A -&gt; B).</p></li>
+<li><p><strong>monad</strong> (<a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad"><em>Monad</em></a>) – Monad of A.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>EnforceError</strong> – If monad_func is not instance of Monad.</p></li>
+<li><p><strong>EnforceError</strong> – If monad is not Monad subclass or instance.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Monad of B.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad">Monad</a>[B]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.core.monad.bind">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">bind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#bind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.bind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bind: (A -&gt; MB) -&gt; MA -&gt; MB</p>
+<img alt="resources/bind.png" src="resources/bind.png" />
+<p>Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>function</em>) – Function (A -&gt; MB).</p></li>
+<li><p><strong>monad</strong> (<a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad"><em>Monad</em></a>) – Monad of A.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>EnforceError</strong> – If monad is not Monad subclass or instance.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Monad of B.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad">Monad</a>[B]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.core.monad.curry">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">curry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#curry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.curry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infix notation for functools.partial.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>function</em>) – Function to be curried.</p></li>
+<li><p><strong>args</strong> (<em>optional</em>) – Arguments.</p></li>
+<li><p><strong>kwargs</strong> (<em>optional</em>) – Keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Curried function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.core.monad.dot">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.dot" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Dot: (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</dt><dd><p>fb <a href="#id1"><span class="problematic" id="id2">|idot|</span></a> fa == fb(fa)</p>
+</dd>
+</dl>
+<p>Composes two functions.</p>
+<p class="rubric">Example</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">fa</span> <span class="pre">=</span> <span class="pre">lambda</span> <span class="pre">x:</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">'a'</span>
+<span class="pre">fb</span> <span class="pre">=</span> <span class="pre">lambda</span> <span class="pre">x:</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">'b'</span>
+<span class="pre">dot(fb,</span> <span class="pre">fa)('x')</span> <span class="pre">==</span> <span class="pre">'xab'</span>
+<span class="pre">(fb</span> <span class="pre">|idot|</span> <span class="pre">fa)('x')</span> <span class="pre">==</span> <span class="pre">'xab'</span>
+<span class="pre">`</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func_b</strong> (<em>function</em>) – Outer function.</p></li>
+<li><p><strong>func_a</strong> (<em>function</em>) – Inner function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Function composition.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>partial</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="shot_glass.core.monad.enforce_monad">
 <span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">enforce_monad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#enforce_monad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.enforce_monad" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enforces item being a Monad subclass or instance.</p>
@@ -662,6 +776,59 @@ Example: m.fmap(lambda x: x + 2)</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.core.monad.fail">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.fail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fail: M -&gt; E -&gt; ME</p>
+<img alt="resources/fail.png" src="resources/fail.png" />
+<p>Given a Monad and Exception, return a Monad of that Exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>monad</strong> (<a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad"><em>Monad</em></a>) – Monad to wrap error with.</p></li>
+<li><p><strong>error</strong> (<em>Exception</em>) – Error.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>EnforceError</strong> – If monad is not Monad subclass or instance.</p></li>
+<li><p><strong>EnforceError</strong> – If error is not an instance of Exception.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Error Monad.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad">Monad</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.core.monad.fmap">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">fmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#fmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.fmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functor map: (A -&gt; B) -&gt; MA -&gt; MB</p>
+<img alt="resources/fmap.png" src="resources/fmap.png" />
+<p>Given a Monad of A (MA) and a function A to B, return a Monad of B (MB).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>function</em>) – Function (A -&gt; B).</p></li>
+<li><p><strong>monad</strong> (<a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad"><em>Monad</em></a>) – Monad of A.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>EnforceError</strong> – If monad is not Monad subclass or instance.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Monad of B.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad">Monad</a>[B]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="shot_glass.core.monad.partial_dot">
 <span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">partial_dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#partial_dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.partial_dot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partial Dot: (b -&gt; c) -&gt; (a -&gt; b)</p>
@@ -672,7 +839,7 @@ Example: m.fmap(lambda x: x + 2)</p>
 <span class="pre">u</span> <span class="pre">=</span> <span class="pre">Monad(lambda</span> <span class="pre">x:</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">1)</span>
 <span class="pre">v</span> <span class="pre">=</span> <span class="pre">Monad(lambda</span> <span class="pre">x:</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">2)</span>
 <span class="pre">w</span> <span class="pre">=</span> <span class="pre">Monad(3)</span>
-<span class="pre">Monad(partial_dot)</span> <span class="pre">|app|</span> <span class="pre">u</span> <span class="pre">|app|</span> <span class="pre">v</span> <span class="pre">|app|</span> <span class="pre">w</span>
+<span class="pre">Monad(partial_dot)</span> <span class="pre">|iapp|</span> <span class="pre">u</span> <span class="pre">|iapp|</span> <span class="pre">v</span> <span class="pre">|iapp|</span> <span class="pre">w</span>
 <span class="pre">`</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -683,6 +850,31 @@ Example: m.fmap(lambda x: x + 2)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>partial</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.core.monad.right">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">right</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monad_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monad_b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#right"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.right" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right: MA -&gt; MB -&gt; MB</p>
+<img alt="resources/right.png" src="resources/right.png" />
+<p>Given two Monads, a and b, return the right Monad b.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>monad_a</strong> (<a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad"><em>Monad</em></a>) – Left monad.</p></li>
+<li><p><strong>monad_b</strong> (<a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad"><em>Monad</em></a>) – Right monad.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>EnforceError</strong> – If monad is not Monad subclass or instance.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Right Monad.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad">Monad</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -705,6 +897,31 @@ Example: m.fmap(lambda x: x + 2)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>A</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.core.monad.wrap">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.core.monad.</span></span><span class="sig-name descname"><span class="pre">wrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/core/monad.html#wrap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.core.monad.wrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap: M -&gt; A -&gt; MA</p>
+<img alt="resources/wrap.png" src="resources/wrap.png" />
+<p>Given a Monad class or instance, create a new Monad with given data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>monad</strong> (<a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad"><em>Monad</em></a>) – Monad class or instance.</p></li>
+<li><p><strong>data</strong> (<em>Any</em>) – Data to be wrapped as Monad.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>EnforceError</strong> – If monad is not Monad subclass or instance.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Monad of data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#shot_glass.core.monad.Monad" title="shot_glass.core.monad.Monad">Monad</a>[A]</p>
 </dd>
 </dl>
 </dd></dl>
