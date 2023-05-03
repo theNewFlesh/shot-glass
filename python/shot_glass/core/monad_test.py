@@ -216,6 +216,16 @@ class MonadInfixFunctionTests(unittest.TestCase):
             lambda x: f'1st-{x}')(lambda x: f'2nd-{x}')('3rd')
         self.assertEqual(result, '1st-2nd-3rd')
 
+    def test_infix(self):
+        import infix
+        def or_infix():
+            opdict = dict(
+                __or__=infix.base_infix.left,
+                __ror__=infix.base_infix.right,
+            )
+            return type('or_infix', (infix.base_infix,), opdict)
+        or_infix()
+        pass
 
 class MonadTests(unittest.TestCase):
     def test_init(self):
