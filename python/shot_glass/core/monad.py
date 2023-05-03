@@ -17,23 +17,23 @@ functions it calls.
 
 Haskell equivalence table:
 
-    =========== ======= ====== ===== ================ ================================
-    **Python**          **Haskell**  **Haskell Type Signature**
-    ------------------- ------------ -------------------------------------------------
-    prefix      infix   prefix infix implication      signature
-    =========== ======= ====== ===== ================ ================================
-    app         ⏐app⏐          <*>   Applicative f => f (a -> b) -> fa -> fb
-    bind        ⏐bind⏐         >>=   Monad m       => m a -> (a -> m b) -> m b
-    fail        ⏐fail⏐  fail         Monad m       => String -> m a
-    fmap        ⏐fmap⏐  fmap   <$>   Functor f     => (a -> b) -> fa -> fb
-    right       ⏐right⏐        >>    Monad m       => m a -> m b -> m b
-    unwrap                           Monad m       => m a -> a
-    wrap        ⏐wrap⏐  pure         Applicative f => a -> f a
-    wrap        ⏐wrap⏐  return       Monad m       => a -> m a
-    curry       ⏐curry⏐
-    dot         ⏐dot⏐   .      .                      (b -> c) -> (a -> b) -> (a -> c)
-    partial_dot         .      .                      (b -> c) -> (a -> b) -> (a -> c)
-    =========== ======= ====== ===== ================ ================================
+    =========== ======== ====== ===== ================ ================================
+    **Python**           **Haskell**  **Haskell Type Signature**
+    -------------------- ------------ -------------------------------------------------
+    prefix      infix    prefix infix implication      signature
+    =========== ======== ====== ===== ================ ================================
+    app         ⏐iapp⏐          <*>   Applicative f => f (a -> b) -> fa -> fb
+    bind        ⏐ibind⏐         >>=   Monad m       => m a -> (a -> m b) -> m b
+    fail        ⏐ifail⏐  fail         Monad m       => String -> m a
+    fmap        ⏐ifmap⏐  fmap   <$>   Functor f     => (a -> b) -> fa -> fb
+    right       ⏐iright⏐        >>    Monad m       => m a -> m b -> m b
+    unwrap                            Monad m       => m a -> a
+    wrap        ⏐iwrap⏐  pure         Applicative f => a -> f a
+    wrap        ⏐iwrap⏐  return       Monad m       => a -> m a
+    curry       ⏐icurry⏐
+    dot         ⏐idot⏐   .      .                      (b -> c) -> (a -> b) -> (a -> c)
+    partial_dot          .      .                      (b -> c) -> (a -> b) -> (a -> c)
+    =========== ======== ====== ===== ================ ================================
 '''
 
 
@@ -56,6 +56,10 @@ def enforce_monad(item):
 
 
 @infix.or_infix
+def iwrap(*args, **kwargs):
+    return wrap(*args, **kwargs)
+
+
 def wrap(monad, data):
     # type: (Monadlike, A) -> Monad[A]
     '''
@@ -102,6 +106,10 @@ def unwrap(monad):
 
 
 @infix.or_infix
+def ifmap(*args, **kwargs):
+    return fmap(*args, **kwargs)
+
+
 def fmap(func, monad):
     # type: (Callable[[A], B], Monad[A]) -> Monad[B]
     '''
@@ -126,6 +134,10 @@ def fmap(func, monad):
 
 
 @infix.or_infix
+def iapp(*args, **kwargs):
+    return app(*args, **kwargs)
+
+
 def app(monad_func, monad):
     # type: (Monad[Callable[[A], B]], Monad[A]) -> Monad[B]
     '''
@@ -155,6 +167,10 @@ def app(monad_func, monad):
 
 
 @infix.or_infix
+def ibind(*args, **kwargs):
+    return bind(*args, **kwargs)
+
+
 def bind(func, monad):
     # type: (Callable[[A], Monad[B]], Monad[A]) -> Monad[B]
     '''
@@ -179,6 +195,10 @@ def bind(func, monad):
 
 
 @infix.or_infix
+def iright(*args, **kwargs):
+    return right(*args, **kwargs)
+
+
 def right(monad_a, monad_b):
     # type: (Monad[A], Monad[B]) -> Monad[B]
     '''
@@ -204,6 +224,10 @@ def right(monad_a, monad_b):
 
 
 @infix.or_infix
+def ifail(*args, **kwargs):
+    return fail(*args, **kwargs)
+
+
 def fail(monad, error):
     # type (Monad, Exception) -> Monad[Exception]
     '''
@@ -231,6 +255,10 @@ def fail(monad, error):
 
 
 @infix.or_infix
+def icurry(*args, **kwargs):
+    return curry(*args, **kwargs)
+
+
 def curry(func, *args, **kwargs):
     # type: (Callable, Any, Any) -> Callable
     '''
@@ -248,11 +276,15 @@ def curry(func, *args, **kwargs):
 
 
 @infix.or_infix
+def idot(*args, **kwargs):
+    return dot(*args, **kwargs)
+
+
 def dot(func_b, func_a):
     # type: (Callable[[B], C], Callable[[A], B]) -> Callable[[A], C]
     '''
     Dot: (b -> c) -> (a -> b) -> (a -> c)
-         fb |dot| fa == fb(fa)
+         fb |idot| fa == fb(fa)
 
     Composes two functions.
 
@@ -261,7 +293,7 @@ def dot(func_b, func_a):
         fa = lambda x: x + 'a'
         fb = lambda x: x + 'b'
         dot(fb, fa)('x') == 'xab'
-        (fb |dot| fa)('x') == 'xab'
+        (fb |idot| fa)('x') == 'xab'
         ```
 
     Args:
@@ -289,7 +321,7 @@ def partial_dot(func):
         u = Monad(lambda x: x + 1)
         v = Monad(lambda x: x + 2)
         w = Monad(3)
-        Monad(partial_dot) |app| u |app| v |app| w
+        Monad(partial_dot) |iapp| u |iapp| v |iapp| w
         ```
 
     Args:
