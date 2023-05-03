@@ -32,7 +32,7 @@ Haskell equivalence table:
     wrap        |wrap|  return       Monad m       => a -> m a
     curry       |curry|
     dot         |dot|   .      .                      (b -> c) -> (a -> b) -> (a -> c)
-    partial_dot
+    partial_dot         .      .                      (b -> c) -> (a -> b) -> (a -> c)
     =========== ======= ====== ===== ================ ================================
 '''
 
