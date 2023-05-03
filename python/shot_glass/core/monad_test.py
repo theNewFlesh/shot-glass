@@ -205,6 +205,17 @@ class MonadInfixFunctionTests(unittest.TestCase):
         f = fc |sgm.dot| fb |sgm.dot| fa  # noqa: E225
         self.assertEqual(f('a'), 'd')
 
+    def test_partial_dot(self):
+        result = sgm.partial_dot(lambda x: x + 2)
+        self.assertIsInstance(result, partial)
+
+        result = sgm.partial_dot(lambda x: x + 2)(lambda x: x + 3)(5)
+        self.assertEqual(result, 10)
+
+        result = sgm.partial_dot(
+            lambda x: f'1st-{x}')(lambda x: f'2nd-{x}')('3rd')
+        self.assertEqual(result, '1st-2nd-3rd')
+
 
 class MonadTests(unittest.TestCase):
     def test_init(self):
@@ -442,7 +453,7 @@ class MonadTests(unittest.TestCase):
 
         app = sgm.app
         M = sgm.Monad
-        d = lambda x: partial(sgm.dot, x)
+        d = sgm.partial_dot
         u = M(lambda x: x - 1)
         v = M(lambda x: x - 2)
         w = M(3)

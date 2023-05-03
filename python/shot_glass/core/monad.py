@@ -248,6 +248,31 @@ def dot(func_b, func_a):
     def of(b, a, *args, **kwargs):
         return b(a(*args, **kwargs))
     return partial(of, func_b, func_a)
+
+
+def partial_dot(func):
+    # type: (Callable[[B], C]) -> partial[Callable[[A], B]]
+    '''
+    Partial Dot: (b -> c) -> (a -> b)
+
+    Partial version of dot function.
+
+    Example:
+        ```
+        app = sgm.app
+        u = Monad(lambda x: x + 1)
+        v = Monad(lambda x: x + 2)
+        w = Monad(3)
+        Monad(partial_dot) |app| u |app| v |app| w
+        ```
+
+    Args:
+        func (function): Outer composition function.
+
+    Returns:
+        partial: Function composition.
+    '''
+    return partial(dot, func)
 # ------------------------------------------------------------------------------
 
 
