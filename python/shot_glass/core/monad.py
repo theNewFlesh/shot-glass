@@ -22,16 +22,16 @@ Haskell equivalence table:
     ------------------- ------------ -------------------------------------------------
     prefix      infix   prefix infix implication      signature
     =========== ======= ====== ===== ================ ================================
-    app         |app|          <*>   Applicative f => f (a -> b) -> fa -> fb
-    bind        |bind|         >>=   Monad m       => m a -> (a -> m b) -> m b
-    fail        |fail|  fail         Monad m       => String -> m a
-    fmap        |fmap|  fmap   <$>   Functor f     => (a -> b) -> fa -> fb
-    right       |right|        >>    Monad m       => m a -> m b -> m b
+    app         ⏐app⏐          <*>   Applicative f => f (a -> b) -> fa -> fb
+    bind        ⏐bind⏐         >>=   Monad m       => m a -> (a -> m b) -> m b
+    fail        ⏐fail⏐  fail         Monad m       => String -> m a
+    fmap        ⏐fmap⏐  fmap   <$>   Functor f     => (a -> b) -> fa -> fb
+    right       ⏐right⏐        >>    Monad m       => m a -> m b -> m b
     unwrap                           Monad m       => m a -> a
-    wrap        |wrap|  pure         Applicative f => a -> f a
-    wrap        |wrap|  return       Monad m       => a -> m a
-    curry       |curry|
-    dot         |dot|   .      .                      (b -> c) -> (a -> b) -> (a -> c)
+    wrap        ⏐wrap⏐  pure         Applicative f => a -> f a
+    wrap        ⏐wrap⏐  return       Monad m       => a -> m a
+    curry       ⏐curry⏐
+    dot         ⏐dot⏐   .      .                      (b -> c) -> (a -> b) -> (a -> c)
     partial_dot         .      .                      (b -> c) -> (a -> b) -> (a -> c)
     =========== ======= ====== ===== ================ ================================
 '''
