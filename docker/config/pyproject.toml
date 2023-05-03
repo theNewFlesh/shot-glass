@@ -28,15 +28,15 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
     "click",
+    "infix>=1.2",
     "lunchbox",
     "numpy",
     "pandas",
     "plotly",
     "pyparsing",
     "pytest",
-    "wrapt",
     "tables>=3.7.0",
-    "infix>=1.2",
+    "wrapt",
 ]
 
 [project.urls]
