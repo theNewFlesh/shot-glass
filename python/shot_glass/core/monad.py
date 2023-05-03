@@ -11,6 +11,32 @@ C = TypeVar('C')
 # ------------------------------------------------------------------------------
 
 
+'''
+Monad is a library containing the Monad class and a library of monadic
+functions it calls.
+
+Haskell equivalence table:
+
+    =========== ======= ====== ===== ================ ================================
+    **Python**          **Haskell**  **Haskell Type Signature**
+    ------------------- ------------ -------------------------------------------------
+    prefix      infix   prefix infix implication      signature
+    =========== ======= ====== ===== ================ ================================
+    app         |app|          <*>   Applicative f => f (a -> b) -> fa -> fb
+    bind        |bind|         >>=   Monad m       => m a -> (a -> m b) -> m b
+    fail        |fail|  fail         Monad m       => String -> m a
+    fmap        |fmap|  fmap   <$>   Functor f     => (a -> b) -> fa -> fb
+    right       |right|        >>    Monad m       => m a -> m b -> m b
+    unwrap                           Monad m       => m a -> a
+    wrap        |wrap|  pure         Applicative f => a -> f a
+    wrap        |wrap|  return       Monad m       => a -> m a
+    curry       |curry|
+    dot         |dot|   .      .                      (b -> c) -> (a -> b) -> (a -> c)
+    partial_dot
+    =========== ======= ====== ===== ================ ================================
+'''
+
+
 def enforce_monad(item):
     # type: (Any) -> None
     '''
@@ -286,7 +312,7 @@ class Monad(Generic[A]):
     ====== ===== ====== ===== ================ ========================
     **Python**   **Haskell**  **Haskell Type Signature**
     ------------ ------------ -----------------------------------------
-    prefix infix prefix infix
+    prefix infix prefix infix implication      signature
     ====== ===== ====== ===== ================ ========================
     app    ^            <*>   Applicative f => f (a -> b) -> fa -> fb
     bind   >>           >>=   Monad m       => m a -> (a -> m b) -> m b
