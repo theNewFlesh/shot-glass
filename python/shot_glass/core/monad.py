@@ -1,10 +1,40 @@
 from typing import Any, Callable, Generic, Type, TypeVar, Union  # noqa: F401
 
+from functools import partial
+
 from lunchbox.enforce import Enforce, EnforceError
+import infix
 
 A = TypeVar('A')
 B = TypeVar('B')
+C = TypeVar('C')
 # ------------------------------------------------------------------------------
+
+
+'''
+Monad is a library containing the Monad class and a library of monadic
+functions it calls.
+
+Haskell equivalence table:
+
+    =========== ======== ====== ===== ================ ================================
+    **Python**           **Haskell**  **Haskell Type Signature**
+    -------------------- ------------ -------------------------------------------------
+    prefix      infix    prefix infix implication      signature
+    =========== ======== ====== ===== ================ ================================
+    app         ⏐iapp⏐          <*>   Applicative f => f (a -> b) -> fa -> fb
+    bind        ⏐ibind⏐         >>=   Monad m       => m a -> (a -> m b) -> m b
+    fail        ⏐ifail⏐  fail         Monad m       => String -> m a
+    fmap        ⏐ifmap⏐  fmap   <$>   Functor f     => (a -> b) -> fa -> fb
+    right       ⏐iright⏐        >>    Monad m       => m a -> m b -> m b
+    unwrap                            Monad m       => m a -> a
+    wrap        ⏐iwrap⏐  pure         Applicative f => a -> f a
+    wrap        ⏐iwrap⏐  return       Monad m       => a -> m a
+    curry       ⏐icurry⏐
+    dot         ⏐idot⏐   .      .                      (b -> c) -> (a -> b) -> (a -> c)
+    partial_dot          .      .                      (b -> c) -> (a -> b) -> (a -> c)
+    =========== ======== ====== ===== ================ ================================
+'''
 
 
 def enforce_monad(item):
@@ -23,6 +53,11 @@ def enforce_monad(item):
         pred = issubclass
     if not pred(item, Monad):
         raise EnforceError(f'{item} is not a subclass or instance of Monad.')
+
+
+@infix.or_infix
+def iwrap(*args, **kwargs):
+    return wrap(*args, **kwargs)
 
 
 def wrap(monad, data):
@@ -70,18 +105,23 @@ def unwrap(monad):
     return monad._data
 
 
-def fmap(monad, func):
-    # type: (Monad[A], Callable[[A], B]) -> Monad[B]
+@infix.or_infix
+def ifmap(*args, **kwargs):
+    return fmap(*args, **kwargs)
+
+
+def fmap(func, monad):
+    # type: (Callable[[A], B], Monad[A]) -> Monad[B]
     '''
-    Functor map: MA -> (A -> B) -> MB
+    Functor map: (A -> B) -> MA -> MB
 
     .. image:: resources/fmap.png
 
     Given a Monad of A (MA) and a function A to B, return a Monad of B (MB).
 
     Args:
-        monad (Monad): Monad of A.
         func (function): Function (A -> B).
+        monad (Monad): Monad of A.
 
     Raises:
         EnforceError: If monad is not Monad subclass or instance.
@@ -93,10 +133,15 @@ def fmap(monad, func):
     return wrap(monad, func(unwrap(monad)))
 
 
-def app(monad, monad_func):
-    # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
+@infix.or_infix
+def iapp(*args, **kwargs):
+    return app(*args, **kwargs)
+
+
+def app(monad_func, monad):
+    # type: (Monad[Callable[[A], B]], Monad[A]) -> Monad[B]
     '''
-    Applicative: MA -> M(A -> B) -> MB
+    Applicative: M(A -> B) -> MA -> MB
 
     .. image:: resources/app.png
 
@@ -104,33 +149,40 @@ def app(monad, monad_func):
     of B (MB).
 
     Args:
+        monad_func (Monad): Monad of function (A -> B).
         monad (Monad): Monad of A.
-        func (Monad): Monad of function (A -> B).
 
     Raises:
+        EnforceError: If monad_func is not instance of Monad.
         EnforceError: If monad is not Monad subclass or instance.
 
     Returns:
         Monad[B]: Monad of B.
     '''
+    enforce_monad(monad_func)
     enforce_monad(monad)
     func = unwrap(monad_func)
     value = unwrap(monad)
     return wrap(monad, func(value))
 
 
-def bind(monad, func):
-    # type: (Monad[A], Callable[[A], Monad[B]]) -> Monad[B]
+@infix.or_infix
+def ibind(*args, **kwargs):
+    return bind(*args, **kwargs)
+
+
+def bind(func, monad):
+    # type: (Callable[[A], Monad[B]], Monad[A]) -> Monad[B]
     '''
-    Bind: MA -> (A -> MB) -> MB
+    Bind: (A -> MB) -> MA -> MB
 
     .. image:: resources/bind.png
 
     Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).
 
     Args:
-        monad (Monad): Monad of A.
         func (function): Function (A -> MB).
+        monad (Monad): Monad of A.
 
     Raises:
         EnforceError: If monad is not Monad subclass or instance.
@@ -140,6 +192,11 @@ def bind(monad, func):
     '''
     enforce_monad(monad)
     return func(unwrap(monad))
+
+
+@infix.or_infix
+def iright(*args, **kwargs):
+    return right(*args, **kwargs)
 
 
 def right(monad_a, monad_b):
@@ -164,6 +221,11 @@ def right(monad_a, monad_b):
     enforce_monad(monad_a)
     enforce_monad(monad_b)
     return monad_b
+
+
+@infix.or_infix
+def ifail(*args, **kwargs):
+    return fail(*args, **kwargs)
 
 
 def fail(monad, error):
@@ -202,6 +264,85 @@ def try_(monad, func):
         return wrap(monad, data)
     except Exception as e:
         return monad.fail(e)
+
+
+@infix.or_infix
+def icurry(*args, **kwargs):
+    return curry(*args, **kwargs)
+
+
+def curry(func, *args, **kwargs):
+    # type: (Callable, Any, Any) -> Callable
+    '''
+    Infix notation for functools.partial.
+
+    Args:
+        func (function): Function to be curried.
+        args (optional): Arguments.
+        kwargs (optional): Keyword arguments.
+
+    Returns:
+        function: Curried function.
+    '''
+    return partial(func, *args, **kwargs)
+
+
+@infix.or_infix
+def idot(*args, **kwargs):
+    return dot(*args, **kwargs)
+
+
+def dot(func_b, func_a):
+    # type: (Callable[[B], C], Callable[[A], B]) -> Callable[[A], C]
+    '''
+    Dot: (b -> c) -> (a -> b) -> (a -> c)
+         fb |idot| fa == fb(fa)
+
+    Composes two functions.
+
+    Example:
+        ```
+        fa = lambda x: x + 'a'
+        fb = lambda x: x + 'b'
+        dot(fb, fa)('x') == 'xab'
+        (fb |idot| fa)('x') == 'xab'
+        ```
+
+    Args:
+        func_b (function): Outer function.
+        func_a (function): Inner function.
+
+    Returns:
+        partial: Function composition.
+    '''
+    def of(b, a, *args, **kwargs):
+        return b(a(*args, **kwargs))
+    return partial(of, func_b, func_a)
+
+
+def partial_dot(func):
+    # type: (Callable[[B], C]) -> partial[Callable[[A], B]]
+    '''
+    Partial Dot: (b -> c) -> (a -> b)
+
+    Partial version of dot function.
+
+    Example:
+        ```
+        app = sgm.app
+        u = Monad(lambda x: x + 1)
+        v = Monad(lambda x: x + 2)
+        w = Monad(3)
+        Monad(partial_dot) |iapp| u |iapp| v |iapp| w
+        ```
+
+    Args:
+        func (function): Outer composition function.
+
+    Returns:
+        partial: Function composition.
+    '''
+    return partial(dot, func)
 # ------------------------------------------------------------------------------
 
 
@@ -212,19 +353,20 @@ class Monad(Generic[A]):
 
     Haskell equivalence table:
 
-    ========== =========== =========================================
-    **Python** **Haskell** **Haskell Type Signature**
-    ---------- ----------- -----------------------------------------
-    fmap       fmap        Functor f     => (a -> b) -> fa -> fb
-    fmap       (<$>)       Functor f     => (a -> b) -> fa -> fb
-    app        (<*>)       Applicative f => f (a -> b) -> fa -> fb
-    wrap       pure        Applicative f => a -> f a
-    wrap       return      Monad m       => a -> m a
-    bind       (>>=)       Monad m       => m a -> (a -> m b) -> m b
-    right      (>>)        Monad m       => m a -> m b -> m b
-    fail       fail        Monad m       => String -> m a
-    unwrap                 Monad m       => m a -> a
-    ========== =========== =========================================
+    ====== ===== ====== ===== ================ ========================
+    **Python**   **Haskell**  **Haskell Type Signature**
+    ------------ ------------ -----------------------------------------
+    prefix infix prefix infix implication      signature
+    ====== ===== ====== ===== ================ ========================
+    app    ^            <*>   Applicative f => f (a -> b) -> fa -> fb
+    bind   >>           >>=   Monad m       => m a -> (a -> m b) -> m b
+    fail         fail         Monad m       => String -> m a
+    fmap   &     fmap   <$>   Functor f     => (a -> b) -> fa -> fb
+    right               >>    Monad m       => m a -> m b -> m b
+    unwrap                    Monad m       => m a -> a
+    wrap         pure         Applicative f => a -> f a
+    wrap         return       Monad m       => a -> m a
+    ====== ===== ====== ===== ================ ========================
     '''
 
     def __init__(self, data):
@@ -278,6 +420,7 @@ class Monad(Generic[A]):
         Functor map: (A -> B) -> MB
 
         Given a function A to B, return a Monad of B (MB).
+        Example: m.fmap(lambda x: x + 2)
 
         Args:
             func (function): Function (A -> B).
@@ -285,7 +428,7 @@ class Monad(Generic[A]):
         Returns:
             Monad[B]: Monad of B.
         '''
-        return fmap(self, func)
+        return fmap(func, self)
 
     def app(self, monad_func):
         # type: (Monad[Callable[[A], B]]) -> Monad
@@ -300,7 +443,7 @@ class Monad(Generic[A]):
         Returns:
             Monad[B]: Monad of B.
         '''
-        return app(self, monad_func)
+        return app(monad_func, self)
 
     def bind(self, func):
         # type: (Callable[[A], Monad[B]]) -> Monad[B]
@@ -315,7 +458,7 @@ class Monad(Generic[A]):
         Returns:
             Monad[B]: Monad of B.
         '''
-        return bind(self, func)
+        return bind(func, self)
 
     def right(self, monad):
         # type: (Monad[B]) -> Monad[B]
@@ -347,6 +490,61 @@ class Monad(Generic[A]):
         '''
         return fail(self, error)
 # ------------------------------------------------------------------------------
+
+    def __and__(self, func):
+        # type: (Callable[[A], B]) -> Monad[B]
+        '''
+        Functor map: (A -> B) -> MB
+
+        Given a function A to B, return a Monad of B (MB).
+        Example: m & (lambda x: x + 2)
+
+        Args:
+            func (function): Function (A -> B).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
+        return self.fmap(func)
+
+    def __xor__(self, monad_func):
+        # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
+        '''
+        Applicative: MA -> M(A -> B) -> MB
+
+        .. image:: resources/app.png
+
+        Given a Monad of A (MA) and a Monad of a function A to B, return a Monad
+        of B (MB).
+        Example: m ^ Monad.wrap(lambda x: x + 2)
+
+        Args:
+            monad (Monad): Monad of A.
+            func (Monad): Monad of function (A -> B).
+
+        Raises:
+            EnforceError: If monad is not Monad subclass or instance.
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
+        return self.app(monad_func)
+
+    def __rshift__(self, func):
+        # type: (Callable[[A], Monad[B]]) -> Monad[B]
+        '''
+        Bind: (A -> MB) -> MB
+
+        Given a function A to MB, return a Monad of B (MB).
+        Example: m >> Monad
+
+        Args:
+            func (function): Function (A -> MB).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
+        return self.bind(func)
 
 
 Monadlike = Union[Monad, Type[Monad]]

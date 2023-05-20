@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.4.1
               </div>
             
           
@@ -175,11 +175,41 @@
   <h1>Source code for shot_glass.core.monad</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>  <span class="c1"># noqa: F401</span>
 
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
 <span class="kn">from</span> <span class="nn">lunchbox.enforce</span> <span class="kn">import</span> <span class="n">Enforce</span><span class="p">,</span> <span class="n">EnforceError</span>
+<span class="kn">import</span> <span class="nn">infix</span>
 
 <span class="n">A</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
 <span class="n">B</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
 <span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Monad is a library containing the Monad class and a library of monadic</span>
+<span class="sd">functions it calls.</span>
+
+<span class="sd">Haskell equivalence table:</span>
+
+<span class="sd">    =========== ======== ====== ===== ================ ================================</span>
+<span class="sd">    **Python**           **Haskell**  **Haskell Type Signature**</span>
+<span class="sd">    -------------------- ------------ -------------------------------------------------</span>
+<span class="sd">    prefix      infix    prefix infix implication      signature</span>
+<span class="sd">    =========== ======== ====== ===== ================ ================================</span>
+<span class="sd">    app         ⏐iapp⏐          &lt;*&gt;   Applicative f =&gt; f (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    bind        ⏐ibind⏐         &gt;&gt;=   Monad m       =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span>
+<span class="sd">    fail        ⏐ifail⏐  fail         Monad m       =&gt; String -&gt; m a</span>
+<span class="sd">    fmap        ⏐ifmap⏐  fmap   &lt;$&gt;   Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    right       ⏐iright⏐        &gt;&gt;    Monad m       =&gt; m a -&gt; m b -&gt; m b</span>
+<span class="sd">    unwrap                            Monad m       =&gt; m a -&gt; a</span>
+<span class="sd">    wrap        ⏐iwrap⏐  pure         Applicative f =&gt; a -&gt; f a</span>
+<span class="sd">    wrap        ⏐iwrap⏐  return       Monad m       =&gt; a -&gt; m a</span>
+<span class="sd">    curry       ⏐icurry⏐</span>
+<span class="sd">    dot         ⏐idot⏐   .      .                      (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
+<span class="sd">    partial_dot          .      .                      (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
+<span class="sd">    =========== ======== ====== ===== ================ ================================</span>
+<span class="sd">&#39;&#39;&#39;</span>
 
 
 <div class="viewcode-block" id="enforce_monad"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.enforce_monad">[docs]</a><span class="k">def</span> <span class="nf">enforce_monad</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
@@ -198,6 +228,11 @@
         <span class="n">pred</span> <span class="o">=</span> <span class="nb">issubclass</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">pred</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Monad</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">EnforceError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s1"> is not a subclass or instance of Monad.&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
+<span class="k">def</span> <span class="nf">iwrap</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="wrap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.wrap">[docs]</a><span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -245,18 +280,23 @@
     <span class="k">return</span> <span class="n">monad</span><span class="o">.</span><span class="n">_data</span></div>
 
 
-<div class="viewcode-block" id="fmap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.fmap">[docs]</a><span class="k">def</span> <span class="nf">fmap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-    <span class="c1"># type: (Monad[A], Callable[[A], B]) -&gt; Monad[B]</span>
+<span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
+<span class="k">def</span> <span class="nf">ifmap</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fmap</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="fmap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.fmap">[docs]</a><span class="k">def</span> <span class="nf">fmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">monad</span><span class="p">):</span>
+    <span class="c1"># type: (Callable[[A], B], Monad[A]) -&gt; Monad[B]</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Functor map: MA -&gt; (A -&gt; B) -&gt; MB</span>
+<span class="sd">    Functor map: (A -&gt; B) -&gt; MA -&gt; MB</span>
 
 <span class="sd">    .. image:: resources/fmap.png</span>
 
 <span class="sd">    Given a Monad of A (MA) and a function A to B, return a Monad of B (MB).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        monad (Monad): Monad of A.</span>
 <span class="sd">        func (function): Function (A -&gt; B).</span>
+<span class="sd">        monad (Monad): Monad of A.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
@@ -268,10 +308,15 @@
     <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">unwrap</span><span class="p">(</span><span class="n">monad</span><span class="p">)))</span></div>
 
 
-<div class="viewcode-block" id="app"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.app">[docs]</a><span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">):</span>
-    <span class="c1"># type: (Monad[A], Monad[Callable[[A], B]]) -&gt; Monad[B]</span>
+<span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
+<span class="k">def</span> <span class="nf">iapp</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">app</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="app"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.app">[docs]</a><span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="n">monad_func</span><span class="p">,</span> <span class="n">monad</span><span class="p">):</span>
+    <span class="c1"># type: (Monad[Callable[[A], B]], Monad[A]) -&gt; Monad[B]</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Applicative: MA -&gt; M(A -&gt; B) -&gt; MB</span>
+<span class="sd">    Applicative: M(A -&gt; B) -&gt; MA -&gt; MB</span>
 
 <span class="sd">    .. image:: resources/app.png</span>
 
@@ -279,33 +324,40 @@
 <span class="sd">    of B (MB).</span>
 
 <span class="sd">    Args:</span>
+<span class="sd">        monad_func (Monad): Monad of function (A -&gt; B).</span>
 <span class="sd">        monad (Monad): Monad of A.</span>
-<span class="sd">        func (Monad): Monad of function (A -&gt; B).</span>
 
 <span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad_func is not instance of Monad.</span>
 <span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Monad[B]: Monad of B.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad_func</span><span class="p">)</span>
     <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
     <span class="n">func</span> <span class="o">=</span> <span class="n">unwrap</span><span class="p">(</span><span class="n">monad_func</span><span class="p">)</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">unwrap</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="bind"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.bind">[docs]</a><span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-    <span class="c1"># type: (Monad[A], Callable[[A], Monad[B]]) -&gt; Monad[B]</span>
+<span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
+<span class="k">def</span> <span class="nf">ibind</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">bind</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="bind"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.bind">[docs]</a><span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">monad</span><span class="p">):</span>
+    <span class="c1"># type: (Callable[[A], Monad[B]], Monad[A]) -&gt; Monad[B]</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Bind: MA -&gt; (A -&gt; MB) -&gt; MB</span>
+<span class="sd">    Bind: (A -&gt; MB) -&gt; MA -&gt; MB</span>
 
 <span class="sd">    .. image:: resources/bind.png</span>
 
 <span class="sd">    Given a Monad of A (MA) and a function A to MB, return a Monad of B (MB).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        monad (Monad): Monad of A.</span>
 <span class="sd">        func (function): Function (A -&gt; MB).</span>
+<span class="sd">        monad (Monad): Monad of A.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
@@ -315,6 +367,11 @@
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">unwrap</span><span class="p">(</span><span class="n">monad</span><span class="p">))</span></div>
+
+
+<span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
+<span class="k">def</span> <span class="nf">iright</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">right</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="right"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.right">[docs]</a><span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="n">monad_a</span><span class="p">,</span> <span class="n">monad_b</span><span class="p">):</span>
@@ -341,6 +398,11 @@
     <span class="k">return</span> <span class="n">monad_b</span></div>
 
 
+<span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
+<span class="k">def</span> <span class="nf">ifail</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="fail"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.fail">[docs]</a><span class="k">def</span> <span class="nf">fail</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">error</span><span class="p">):</span>
     <span class="c1"># type (Monad, Exception) -&gt; Monad[Exception]</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
@@ -365,6 +427,85 @@
     <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Error must be an instance of Exception. Given value: </span><span class="si">{a}</span><span class="s1">&#39;</span>
     <span class="n">Enforce</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s1">&#39;instance of&#39;</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div>
+
+
+<span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
+<span class="k">def</span> <span class="nf">icurry</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">curry</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="curry"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.curry">[docs]</a><span class="k">def</span> <span class="nf">curry</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># type: (Callable, Any, Any) -&gt; Callable</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Infix notation for functools.partial.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        func (function): Function to be curried.</span>
+<span class="sd">        args (optional): Arguments.</span>
+<span class="sd">        kwargs (optional): Keyword arguments.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        function: Curried function.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
+<span class="k">def</span> <span class="nf">idot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="dot"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.dot">[docs]</a><span class="k">def</span> <span class="nf">dot</span><span class="p">(</span><span class="n">func_b</span><span class="p">,</span> <span class="n">func_a</span><span class="p">):</span>
+    <span class="c1"># type: (Callable[[B], C], Callable[[A], B]) -&gt; Callable[[A], C]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Dot: (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
+<span class="sd">         fb |idot| fa == fb(fa)</span>
+
+<span class="sd">    Composes two functions.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        ```</span>
+<span class="sd">        fa = lambda x: x + &#39;a&#39;</span>
+<span class="sd">        fb = lambda x: x + &#39;b&#39;</span>
+<span class="sd">        dot(fb, fa)(&#39;x&#39;) == &#39;xab&#39;</span>
+<span class="sd">        (fb |idot| fa)(&#39;x&#39;) == &#39;xab&#39;</span>
+<span class="sd">        ```</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        func_b (function): Outer function.</span>
+<span class="sd">        func_a (function): Inner function.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        partial: Function composition.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">of</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">b</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">of</span><span class="p">,</span> <span class="n">func_b</span><span class="p">,</span> <span class="n">func_a</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="partial_dot"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.partial_dot">[docs]</a><span class="k">def</span> <span class="nf">partial_dot</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="c1"># type: (Callable[[B], C]) -&gt; partial[Callable[[A], B]]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Partial Dot: (b -&gt; c) -&gt; (a -&gt; b)</span>
+
+<span class="sd">    Partial version of dot function.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        ```</span>
+<span class="sd">        app = sgm.app</span>
+<span class="sd">        u = Monad(lambda x: x + 1)</span>
+<span class="sd">        v = Monad(lambda x: x + 2)</span>
+<span class="sd">        w = Monad(3)</span>
+<span class="sd">        Monad(partial_dot) |iapp| u |iapp| v |iapp| w</span>
+<span class="sd">        ```</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        func (function): Outer composition function.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        partial: Function composition.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">dot</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
 <span class="c1"># ------------------------------------------------------------------------------</span>
 
 
@@ -375,19 +516,20 @@
 
 <span class="sd">    Haskell equivalence table:</span>
 
-<span class="sd">    ========== =========== =========================================</span>
-<span class="sd">    **Python** **Haskell** **Haskell Type Signature**</span>
-<span class="sd">    ---------- ----------- -----------------------------------------</span>
-<span class="sd">    fmap       fmap        Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
-<span class="sd">    fmap       (&lt;$&gt;)       Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
-<span class="sd">    app        (&lt;*&gt;)       Applicative f =&gt; f (a -&gt; b) -&gt; fa -&gt; fb</span>
-<span class="sd">    wrap       pure        Applicative f =&gt; a -&gt; f a</span>
-<span class="sd">    wrap       return      Monad m       =&gt; a -&gt; m a</span>
-<span class="sd">    bind       (&gt;&gt;=)       Monad m       =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span>
-<span class="sd">    right      (&gt;&gt;)        Monad m       =&gt; m a -&gt; m b -&gt; m b</span>
-<span class="sd">    fail       fail        Monad m       =&gt; String -&gt; m a</span>
-<span class="sd">    unwrap                 Monad m       =&gt; m a -&gt; a</span>
-<span class="sd">    ========== =========== =========================================</span>
+<span class="sd">    ====== ===== ====== ===== ================ ========================</span>
+<span class="sd">    **Python**   **Haskell**  **Haskell Type Signature**</span>
+<span class="sd">    ------------ ------------ -----------------------------------------</span>
+<span class="sd">    prefix infix prefix infix implication      signature</span>
+<span class="sd">    ====== ===== ====== ===== ================ ========================</span>
+<span class="sd">    app    ^            &lt;*&gt;   Applicative f =&gt; f (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    bind   &gt;&gt;           &gt;&gt;=   Monad m       =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span>
+<span class="sd">    fail         fail         Monad m       =&gt; String -&gt; m a</span>
+<span class="sd">    fmap   &amp;     fmap   &lt;$&gt;   Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    right               &gt;&gt;    Monad m       =&gt; m a -&gt; m b -&gt; m b</span>
+<span class="sd">    unwrap                    Monad m       =&gt; m a -&gt; a</span>
+<span class="sd">    wrap         pure         Applicative f =&gt; a -&gt; f a</span>
+<span class="sd">    wrap         return       Monad m       =&gt; a -&gt; m a</span>
+<span class="sd">    ====== ===== ====== ===== ================ ========================</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
 <div class="viewcode-block" id="Monad.__init__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -441,6 +583,7 @@
 <span class="sd">        Functor map: (A -&gt; B) -&gt; MB</span>
 
 <span class="sd">        Given a function A to B, return a Monad of B (MB).</span>
+<span class="sd">        Example: m.fmap(lambda x: x + 2)</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            func (function): Function (A -&gt; B).</span>
@@ -448,7 +591,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Monad[B]: Monad of B.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="n">fmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">fmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.app"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.app">[docs]</a>    <span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">):</span>
         <span class="c1"># type: (Monad[Callable[[A], B]]) -&gt; Monad</span>
@@ -463,7 +606,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Monad[B]: Monad of B.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="n">app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">app</span><span class="p">(</span><span class="n">monad_func</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.bind"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
         <span class="c1"># type: (Callable[[A], Monad[B]]) -&gt; Monad[B]</span>
@@ -478,7 +621,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Monad[B]: Monad of B.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="n">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">bind</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.right"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.right">[docs]</a>    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad</span><span class="p">):</span>
         <span class="c1"># type: (Monad[B]) -&gt; Monad[B]</span>
@@ -508,7 +651,62 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Monad: Error Monad.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.__and__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__and__">[docs]</a>    <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="c1"># type: (Callable[[A], B]) -&gt; Monad[B]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Functor map: (A -&gt; B) -&gt; MB</span>
+
+<span class="sd">        Given a function A to B, return a Monad of B (MB).</span>
+<span class="sd">        Example: m &amp; (lambda x: x + 2)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (function): Function (A -&gt; B).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad[B]: Monad of B.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fmap</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.__xor__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__xor__">[docs]</a>    <span class="k">def</span> <span class="fm">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">):</span>
+        <span class="c1"># type: (Monad[A], Monad[Callable[[A], B]]) -&gt; Monad[B]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Applicative: MA -&gt; M(A -&gt; B) -&gt; MB</span>
+
+<span class="sd">        .. image:: resources/app.png</span>
+
+<span class="sd">        Given a Monad of A (MA) and a Monad of a function A to B, return a Monad</span>
+<span class="sd">        of B (MB).</span>
+<span class="sd">        Example: m ^ Monad.wrap(lambda x: x + 2)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            monad (Monad): Monad of A.</span>
+<span class="sd">            func (Monad): Monad of function (A -&gt; B).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            EnforceError: If monad is not Monad subclass or instance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad[B]: Monad of B.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="n">monad_func</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Monad.__rshift__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__rshift__">[docs]</a>    <span class="k">def</span> <span class="fm">__rshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="c1"># type: (Callable[[A], Monad[B]]) -&gt; Monad[B]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Bind: (A -&gt; MB) -&gt; MB</span>
+
+<span class="sd">        Given a function A to MB, return a Monad of B (MB).</span>
+<span class="sd">        Example: m &gt;&gt; Monad</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (function): Function (A -&gt; MB).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Monad[B]: Monad of B.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></div></div>
 
 
 <span class="n">Monadlike</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Monad</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Monad</span><span class="p">]]</span>
