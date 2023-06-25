@@ -385,7 +385,7 @@ class HiFive():
         # will produce this lut:
         # {
         #   0: [a, b]
-        #   1: [b, c]
+        #   1: [c, d]
         # }
 
         # and this new column to the table:
