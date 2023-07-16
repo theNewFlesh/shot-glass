@@ -77,7 +77,6 @@ Its usage pattern is: `bin/shot-glass COMMAND [-a --args]=ARGS [-h --help] [--dr
 | docker-build         | Build image of shot-glass                                           |
 | docker-build-prod    | Build production image of shot-glass                                |
 | docker-container     | Display the Docker container id of shot-glass                       |
-| docker-coverage      | Generate coverage report for shot-glass                             |
 | docker-destroy       | Shutdown shot-glass container and destroy its image                 |
 | docker-destroy-prod  | Shutdown shot-glass production container and destroy its image      |
 | docker-image         | Display the Docker image id of shot-glass                           |
