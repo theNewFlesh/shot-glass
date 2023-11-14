@@ -1,7 +1,10 @@
+from typing import Dict, List, Union
+
 import json
 import os
 import re
 
+from lunchbox.enforce import Enforce
 import pandas as pd
 
 from shot_glass.core.tools import ValidationError
@@ -149,3 +152,72 @@ def validate_file_extension(filepath, extension):
     if ext != extension:
         msg = f'Expected extension: {extension}, found: {ext}.'
         raise ValidationError(msg)
+
+
+# GEOMETRY----------------------------------------------------------------------
+def fold_vertex(vertex_ids, components):
+    # type: (List[int], Union[list, dict]) -> Dict[int, dict]
+    '''
+    Combine vertex id and components into a single dictionary object.
+
+    Args:
+        vertex_ids (list[int]): List of vertex ids
+        components (list): Vertex compoenents.
+
+    Raises:
+        EnforceError: If vertex_ids is not a list of a single integer.
+        EnforceError: If components is not a dictionary or list.
+
+    Returns:
+        dict: Vertex dictionary.
+    '''
+    # vertex_ids
+    msg = 'vertex_ids must be a list containing a single integer. '
+    msg += f'Given value: {vertex_ids}.'
+    Enforce(vertex_ids, 'instance of', list, message=msg)
+    Enforce(len(vertex_ids), '==', 1, message=msg)
+    Enforce(vertex_ids[0], 'instance of', int, message=msg)
+
+    # components
+    if isinstance(components, tuple):
+        components = list(components)
+    if isinstance(components, list):
+        components = dict(zip(list('xyz'), components))
+    Enforce(components, 'instance of', dict)
+    # --------------------------------------------------------------------------
+
+    return {vertex_ids[0]: components}
+
+
+def fold(ids, components):
+    # type: (List[int], list) -> Dict[int, dict]
+    '''
+    Combine id and components into a single dictionary object.
+
+    Args:
+        ids (list[int]): List of ids
+        components (list): Vertex compoenents.
+
+    Raises:
+        EnforceError: If ids is not a list of a single integer.
+        EnforceError: If components is not a dictionary or list.
+
+    Returns:
+        dict: Vertex dictionary.
+    '''
+    # ids
+    msg = 'ids must be a list containing a single integer. '
+    msg += f'Given value: {ids}.'
+    Enforce(ids, 'instance of', list, message=msg)
+    Enforce(len(ids), '==', 1, message=msg)
+    Enforce(ids[0], 'instance of', int, message=msg)
+
+    # components
+    if isinstance(components, tuple):
+        components = list(components)
+    if isinstance(components, list):
+        components = dict(zip(list('xyz'), components))
+    Enforce(components, 'instance of', dict)
+    # --------------------------------------------------------------------------
+
+    return {ids[0]: components}
