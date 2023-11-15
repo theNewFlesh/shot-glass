@@ -1212,6 +1212,15 @@ requires_python = ">=3.8"
 summary = "sphinxcontrib-htmlhelp is a sphinx extension which renders HTML help files"
 
 [[package]]
+name = "sphinxcontrib-jquery"
+version = "4.1"
+requires_python = ">=2.7"
+summary = "Extension to include jQuery on newer Sphinx releases"
+dependencies = [
+    "Sphinx>=1.8",
+]
+
+[[package]]
 name = "sphinxcontrib-jsmath"
 version = "1.0.1"
 requires_python = ">=3.5"
@@ -1379,7 +1388,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:1527a58bc2e5bcbff7fca16c75f6b3e2bd23754cbd6df0c21690c9e2acbbb7b1"
+content_hash = "sha256:91e6f129a1e8a418f3a1804c60bd14802359ca62961eeea92da79d6d9fd75421"
 
 [metadata.files]
 "aiofiles 22.1.0" = [
@@ -2658,6 +2667,10 @@ content_hash = "sha256:1527a58bc2e5bcbff7fca16c75f6b3e2bd23754cbd6df0c21690c9e2a
 "sphinxcontrib-htmlhelp 2.0.1" = [
     {url = "https://files.pythonhosted.org/packages/6e/ee/a1f5e39046cbb5f8bc8fba87d1ddf1c6643fbc9194e58d26e606de4b9074/sphinxcontrib_htmlhelp-2.0.1-py3-none-any.whl", hash = "sha256:c38cb46dccf316c79de6e5515e1770414b797162b23cd3d06e67020e1d2a6903"},
     {url = "https://files.pythonhosted.org/packages/b3/47/64cff68ea3aa450c373301e5bebfbb9fce0a3e70aca245fcadd4af06cd75/sphinxcontrib-htmlhelp-2.0.1.tar.gz", hash = "sha256:0cbdd302815330058422b98a113195c9249825d681e18f11e8b1f78a2f11efff"},
+]
+"sphinxcontrib-jquery 4.1" = [
+    {url = "https://files.pythonhosted.org/packages/76/85/749bd22d1a68db7291c89e2ebca53f4306c3f205853cf31e9de279034c3c/sphinxcontrib_jquery-4.1-py2.py3-none-any.whl", hash = "sha256:f936030d7d0147dd026a4f2b5a57343d233f1fc7b363f68b3d4f1cb0993878ae"},
+    {url = "https://files.pythonhosted.org/packages/de/f3/aa67467e051df70a6330fe7770894b3e4f09436dea6881ae0b4f3d87cad8/sphinxcontrib-jquery-4.1.tar.gz", hash = "sha256:1620739f04e36a2c779f1a131a2dfd49b2fd07351bf1968ced074365933abc7a"},
 ]
 "sphinxcontrib-jsmath 1.0.1" = [
     {url = "https://files.pythonhosted.org/packages/b2/e8/9ed3830aeed71f17c026a07a5097edcf44b692850ef215b161b8ad875729/sphinxcontrib-jsmath-1.0.1.tar.gz", hash = "sha256:a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8"},
