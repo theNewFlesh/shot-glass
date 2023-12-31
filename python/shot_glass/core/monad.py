@@ -331,18 +331,6 @@ def partial_dot(func):
         partial: Function composition.
     '''
     return partial(dot, func)
-
-
-def try_(monad, func):
-    # type: (Monad[A], Callable[[A], B]) -> Union[Monad[B], Monad[Exception]]
-    '''
-    Try: MA -> (A -> B) -> (MB | ME)
-    '''
-    try:
-        data = func(unwrap(monad))
-        return wrap(monad, data)
-    except Exception as e:
-        return monad.fail(e)
 # ------------------------------------------------------------------------------
 
 
