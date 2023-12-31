@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generic, TypeVar  # noqa: F401
+from typing import Any, Callable, TypeVar  # noqa: F401
 
 import pandas as pd
 
