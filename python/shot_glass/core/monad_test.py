@@ -278,6 +278,14 @@ class MonadTests(unittest.TestCase):
         self.assertIsInstance(result, sgm.Monad)
         self.assertIs(result.unwrap(), error)
 
+    def test_succeed(self):
+        sgm.succeed(sgm.Monad, 42)
+
+        expected = 'Error must not be an instance of Exception. '
+        expected += 'Given value: foo.'
+        with self.assertRaisesRegex(EnforceError, expected):
+            sgm.succeed(sgm.Monad, SyntaxError('foo'))
+
     def test_repr(self):
         class Foo(sgm.Monad):
             pass

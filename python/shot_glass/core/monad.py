@@ -249,9 +249,35 @@ def fail(monad, error):
         Monad: Error Monad.
     '''
     enforce_monad(monad)
-    msg = 'Error must be an instance of Exception. Given value: {a}'
+    msg = 'Error must be an instance of Exception. Given value: {a}.'
     Enforce(error, 'instance of', Exception, message=msg)
     return wrap(monad, error)
+
+
+def succeed(monad, value):
+    # type (Monad, A) -> Monad[A]
+    '''
+    Succed: M -> A -> MA
+
+    .. image:: resources/wrap.png
+
+    Given a Monad and a value, return a Monad of that value.
+
+    Args:
+        monad (Monad): Monad to wrap value with.
+        value (object): Value.
+
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+        EnforceError: If value is an instance of Exception.
+
+    Returns:
+        Monad: Monad of value.
+    '''
+    enforce_monad(monad)
+    msg = 'Error must not be an instance of Exception. Given value: {a}.'
+    Enforce(value, 'not instance of', Exception, message=msg)
+    return wrap(monad, value)
 
 
 @infix.or_infix
