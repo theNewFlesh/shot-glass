@@ -248,35 +248,35 @@ functions it calls.</p>
 </thead>
 <tbody>
 <tr class="row-odd"><td><p>app</p></td>
-<td><p>⏐iapp⏐</p></td>
+<td><p>│iapp│</p></td>
 <td></td>
 <td><p>&lt;*&gt;</p></td>
 <td><p>Applicative f =&gt;</p></td>
 <td><p>f (a -&gt; b) -&gt; fa -&gt; fb</p></td>
 </tr>
 <tr class="row-even"><td><p>bind</p></td>
-<td><p>⏐ibind⏐</p></td>
+<td><p>│ibind│</p></td>
 <td></td>
 <td><p>&gt;&gt;=</p></td>
 <td><p>Monad m       =&gt;</p></td>
 <td><p>m a -&gt; (a -&gt; m b) -&gt; m b</p></td>
 </tr>
 <tr class="row-odd"><td><p>fail</p></td>
-<td><p>⏐ifail⏐</p></td>
+<td><p>│ifail│</p></td>
 <td><p>fail</p></td>
 <td></td>
 <td><p>Monad m       =&gt;</p></td>
 <td><p>String -&gt; m a</p></td>
 </tr>
 <tr class="row-even"><td><p>fmap</p></td>
-<td><p>⏐ifmap⏐</p></td>
+<td><p>│ifmap│</p></td>
 <td><p>fmap</p></td>
 <td><p>&lt;$&gt;</p></td>
 <td><p>Functor f     =&gt;</p></td>
 <td><p>(a -&gt; b) -&gt; fa -&gt; fb</p></td>
 </tr>
 <tr class="row-odd"><td><p>right</p></td>
-<td><p>⏐iright⏐</p></td>
+<td><p>│iright│</p></td>
 <td></td>
 <td><p>&gt;&gt;</p></td>
 <td><p>Monad m       =&gt;</p></td>
@@ -290,28 +290,28 @@ functions it calls.</p>
 <td><p>m a -&gt; a</p></td>
 </tr>
 <tr class="row-odd"><td><p>wrap</p></td>
-<td><p>⏐iwrap⏐</p></td>
+<td><p>│iwrap│</p></td>
 <td><p>pure</p></td>
 <td></td>
 <td><p>Applicative f =&gt;</p></td>
 <td><p>a -&gt; f a</p></td>
 </tr>
 <tr class="row-even"><td><p>wrap</p></td>
-<td><p>⏐iwrap⏐</p></td>
+<td><p>│iwrap│</p></td>
 <td><p>return</p></td>
 <td></td>
 <td><p>Monad m       =&gt;</p></td>
 <td><p>a -&gt; m a</p></td>
 </tr>
 <tr class="row-odd"><td><p>curry</p></td>
-<td><p>⏐icurry⏐</p></td>
+<td><p>│icurry│</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>dot</p></td>
-<td><p>⏐idot⏐</p></td>
+<td><p>│idot│</p></td>
 <td><p>.</p></td>
 <td><p>.</p></td>
 <td></td>

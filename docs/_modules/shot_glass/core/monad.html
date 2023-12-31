@@ -199,16 +199,16 @@
 <span class="sd">    -------------------- ------------ -------------------------------------------------</span>
 <span class="sd">    prefix      infix    prefix infix implication      signature</span>
 <span class="sd">    =========== ======== ====== ===== ================ ================================</span>
-<span class="sd">    app         ⏐iapp⏐          &lt;*&gt;   Applicative f =&gt; f (a -&gt; b) -&gt; fa -&gt; fb</span>
-<span class="sd">    bind        ⏐ibind⏐         &gt;&gt;=   Monad m       =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span>
-<span class="sd">    fail        ⏐ifail⏐  fail         Monad m       =&gt; String -&gt; m a</span>
-<span class="sd">    fmap        ⏐ifmap⏐  fmap   &lt;$&gt;   Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
-<span class="sd">    right       ⏐iright⏐        &gt;&gt;    Monad m       =&gt; m a -&gt; m b -&gt; m b</span>
+<span class="sd">    app         │iapp│          &lt;*&gt;   Applicative f =&gt; f (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    bind        │ibind│         &gt;&gt;=   Monad m       =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span>
+<span class="sd">    fail        │ifail│  fail         Monad m       =&gt; String -&gt; m a</span>
+<span class="sd">    fmap        │ifmap│  fmap   &lt;$&gt;   Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    right       │iright│        &gt;&gt;    Monad m       =&gt; m a -&gt; m b -&gt; m b</span>
 <span class="sd">    unwrap                            Monad m       =&gt; m a -&gt; a</span>
-<span class="sd">    wrap        ⏐iwrap⏐  pure         Applicative f =&gt; a -&gt; f a</span>
-<span class="sd">    wrap        ⏐iwrap⏐  return       Monad m       =&gt; a -&gt; m a</span>
-<span class="sd">    curry       ⏐icurry⏐</span>
-<span class="sd">    dot         ⏐idot⏐   .      .                      (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
+<span class="sd">    wrap        │iwrap│  pure         Applicative f =&gt; a -&gt; f a</span>
+<span class="sd">    wrap        │iwrap│  return       Monad m       =&gt; a -&gt; m a</span>
+<span class="sd">    curry       │icurry│</span>
+<span class="sd">    dot         │idot│   .      .                      (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
 <span class="sd">    partial_dot          .      .                      (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
 <span class="sd">    =========== ======== ====== ===== ================ ================================</span>
 <span class="sd">&#39;&#39;&#39;</span>
