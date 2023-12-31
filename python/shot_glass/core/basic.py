@@ -1,4 +1,4 @@
-from typing import Any, Callable, TypeVar  # noqa: F401
+from typing import Any, Callable, Generic, TypeVar  # noqa: F401
 
 import pandas as pd
 
@@ -60,7 +60,7 @@ class Try(Monad):
         return 'success'
 
     def fmap(self, func):
-        # type: (Callable[[A], B]) -> Try[B | Exception]
+        # type: (Callable[[A], B]) -> Try
         '''
         Functor map: (A -> B) -> MB
 
@@ -76,7 +76,7 @@ class Try(Monad):
         return sgm.catch(self, sgm.fmap)(func, self)
 
     def bind(self, func):
-        # type: (Callable[[A], Monad[B]]) -> Try[B | Exception]
+        # type: (Callable[[A], Monad[B]]) -> Try
         '''
         Bind: (A -> MB) -> MB
 
@@ -91,7 +91,7 @@ class Try(Monad):
         return sgm.catch(self, sgm.bind)(func, self)
 
     def app(self, monad_func):
-        # type: (Monad[Callable[[A], B]]) -> Try[B | Exception]
+        # type: (Monad[Callable[[A], B]]) -> Try
         '''
         Applicative: M(A -> B) -> MB
 
