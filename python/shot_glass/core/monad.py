@@ -472,7 +472,7 @@ class Monad(Generic[A]):
         return fmap(func, self)
 
     def app(self, monad_func):
-        # type: (Monad[Callable[[A], B]]) -> Monad
+        # type: (Monad[Callable[[A], B]]) -> Monad[B]
         '''
         Applicative: M(A -> B) -> MB
 
