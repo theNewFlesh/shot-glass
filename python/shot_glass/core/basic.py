@@ -11,10 +11,10 @@ C = TypeVar('C')
 # ------------------------------------------------------------------------------
 
 
-class Maybe(Monad):
+class Maybe(Monad, Generic[A]):
     @classmethod
     def just(cls, value):
-        # type: (Any) -> Maybe
+        # type: (A) -> Maybe[A]
         '''
         Just constructor for Maybe class.
 
