@@ -479,7 +479,7 @@ class Monad(Generic[A]):
         Given a Monad of a function A to B, return a Monad of B (MB).
 
         Args:
-            func (Monad): Monad of function (A -> B).
+            monad_func (Monad): Monad of function (A -> B).
 
         Returns:
             Monad[B]: Monad of B.

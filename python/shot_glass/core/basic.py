@@ -1,9 +1,13 @@
-from typing import Any, Callable  # noqa: F401
+from typing import Any, Callable, TypeVar, Union  # noqa: F401
 
 import pandas as pd
 
 import shot_glass.core.monad as sgm
 from shot_glass.core.monad import Monad
+
+A = TypeVar('A')
+B = TypeVar('B')
+C = TypeVar('C')
 # ------------------------------------------------------------------------------
 
 
@@ -56,10 +60,47 @@ class Try(Monad):
         return 'success'
 
     def fmap(self, func):
+        # type: (Callable[[A], B]) -> Try[Union[B, Exception]]
+        '''
+        Functor map: (A -> B) -> MB
+
+        Given a function A to B, return a Monad of B (MB).
+        Example: m.fmap(lambda x: x + 2)
+
+        Args:
+            func (function): Function (A -> B).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
         return sgm.catch(self, sgm.fmap)(func, self)
 
     def bind(self, func):
+        # type: (Callable[[A], Monad[B]]) -> Try[Union[B, Exception]]
+        '''
+        Bind: (A -> MB) -> MB
+
+        Given a function A to MB, return a Monad of B (MB).
+
+        Args:
+            func (function): Function (A -> MB).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
         return sgm.catch(self, sgm.bind)(func, self)
 
-    def app(self, func):
-        return sgm.catch(self, sgm.app)(func, self)
+    def app(self, monad_func):
+        # type: (Monad[Callable[[A], B]]) -> Try[Union[B, Exception]]
+        '''
+        Applicative: M(A -> B) -> MB
+
+        Given a Monad of a function A to B, return a Monad of B (MB).
+
+        Args:
+            monad_func (Monad): Monad of function (A -> B).
+
+        Returns:
+            Monad[B]: Monad of B.
+        '''
+        return sgm.catch(self, sgm.app)(monad_func, self)
