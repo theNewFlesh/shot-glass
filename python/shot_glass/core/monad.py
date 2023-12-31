@@ -331,6 +331,27 @@ def partial_dot(func):
         partial: Function composition.
     '''
     return partial(dot, func)
+
+
+def catch(monad, func):
+    # type: (Monad[A], Callable[[A], B]) -> Union[Monad[B], Monad[Exception]]
+    '''
+    Catch: MA -> (A -> B) -> (MB | ME)
+
+    Catches exception and returns it rather then raising an error.
+
+    Args:
+        monad (Monad): Monad.
+        func (function): Function to attempt.
+
+    Returns:
+        object: Result of function call.
+    '''
+    try:
+        result = func(unwrap(monad))
+    except Exception as error:
+        return fail(monad, error)
+    return wrap(monad, result)
 # ------------------------------------------------------------------------------
 
 

@@ -219,6 +219,17 @@ class MonadInfixFunctionTests(unittest.TestCase):
             lambda x: f'1st-{x}')(lambda x: f'2nd-{x}')('3rd')
         self.assertEqual(result, '1st-2nd-3rd')
 
+    def test_catch(self):
+        m = sgm.Monad(1)
+        result = sgm.catch(m, lambda x: x + 2)
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertEqual(result.unwrap(), 3)
+
+        # error
+        result = sgm.catch(m, lambda x: x + 'foobar')
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertIsInstance(result.unwrap(), TypeError)
+
 
 class MonadTests(unittest.TestCase):
     def test_init(self):
