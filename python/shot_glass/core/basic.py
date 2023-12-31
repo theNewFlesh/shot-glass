@@ -111,7 +111,10 @@ class Try(Monad):
         Returns:
             Try[B]: Try Monad of B.
         '''
-        return sgm.catch(self, sgm.fmap)(func, self)
+        try:
+            return self.fmap(func)
+        except Exception as error:
+            return self.fail(error)
 
     def bind(self, func):
         # type: (Callable[[A], Monad[B]]) -> Try
@@ -126,7 +129,10 @@ class Try(Monad):
         Returns:
             Try[B]: Try Monad of B.
         '''
-        return sgm.catch(self, sgm.bind)(func, self)
+        try:
+            return self.bind(func)
+        except Exception as error:
+            return self.fail(error)
 
     def app(self, monad_func):
         # type: (Monad[Callable[[A], B]]) -> Try
@@ -141,4 +147,7 @@ class Try(Monad):
         Returns:
             Try[B]: Try Monad of B.
         '''
-        return sgm.catch(self, sgm.app)(monad_func, self)
+        try:
+            return self.app(monad_func)
+        except Exception as error:
+            return self.fail(error)

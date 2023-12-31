@@ -360,7 +360,7 @@ def partial_dot(func):
 
 
 def catch(monad, func):
-    # xtype: (MA, Callable[[A], B]) -> Callable[[A], Union[B, Exception]]
+    # type: (MA, Callable[[A], B]) -> Callable[[A], Union[B, Exception]]
     '''
     Catch: MA -> (A -> B) -> (MB | ME)
 
