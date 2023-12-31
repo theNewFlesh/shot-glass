@@ -10,19 +10,23 @@ from shot_glass.core.monad import Monad
 class Maybe(Monad):
     @classmethod
     def just(cls, value):
+        # type: (Any) -> Maybe
         return cls(value)
 
     @classmethod
     def nothing(cls):
+        # type: () -> Maybe
         return cls(None)
 
     def __repr__(self):
+        # type: () -> str
         if self.state == 'just':
             return f'Just({self._data})'
         return 'Nothing'
 
     @property
     def state(self):
+        # type: () -> str
         data = self._data
         if data is None or pd.isna(data):
             return 'nothing'
@@ -41,10 +45,12 @@ class Try(Monad):
         return sgm.fail(cls, error)
 
     def __repr__(self):
+        # type: () -> str
         return f'{self.state.capitalize()}({self._data})'
 
     @property
     def state(self):
+        # type: () -> str
         if isinstance(self._data, Exception):
             return 'failure'
         return 'success'
