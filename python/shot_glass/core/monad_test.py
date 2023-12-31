@@ -220,13 +220,45 @@ class MonadInfixFunctionTests(unittest.TestCase):
         self.assertEqual(result, '1st-2nd-3rd')
 
     def test_catch(self):
-        m = sgm.Monad(1)
-        result = sgm.catch(m, lambda x: x + 2)
-        self.assertIsInstance(result, sgm.Monad)
-        self.assertEqual(result.unwrap(), 3)
+        result = sgm.catch(sgm.Monad, lambda x: x + 2)(1)
+        self.assertEqual(result, 3)
 
         # error
-        result = sgm.catch(m, lambda x: x + 'foobar')
+        result = sgm.catch(sgm.Monad, lambda x: x + 'bar')(1)
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertIsInstance(result.unwrap(), TypeError)
+
+    def test_catch_monadic_funcs(self):
+        # fmap
+        func = lambda x: x + 'bar'
+        result = sgm.catch(sgm.Monad, sgm.fmap)(func, sgm.Monad('foo'))
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertEqual(result.unwrap(), 'foobar')
+
+        # fmap error
+        result = sgm.catch(sgm.Monad, sgm.fmap)(func, sgm.Monad(1))
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertIsInstance(result.unwrap(), TypeError)
+
+        # bind
+        func = lambda x: sgm.Monad(x + 'bar')
+        result = sgm.catch(sgm.Monad, sgm.bind)(func, sgm.Monad('foo'))
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertEqual(result.unwrap(), 'foobar')
+
+        # bind error
+        result = sgm.catch(sgm.Monad, sgm.bind)(func, sgm.Monad(1))
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertIsInstance(result.unwrap(), TypeError)
+
+        # app
+        func = sgm.Monad(lambda x: x + 'bar')
+        result = sgm.catch(sgm.Monad, sgm.app)(func, sgm.Monad('foo'))
+        self.assertIsInstance(result, sgm.Monad)
+        self.assertEqual(result.unwrap(), 'foobar')
+
+        # app error
+        result = sgm.catch(sgm.Monad, sgm.app)(func, sgm.Monad(1))
         self.assertIsInstance(result, sgm.Monad)
         self.assertIsInstance(result.unwrap(), TypeError)
 

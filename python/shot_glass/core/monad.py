@@ -360,7 +360,7 @@ def partial_dot(func):
 
 
 def catch(monad, func):
-    # type: (Monad[A], Callable[[A], B]) -> Union[Monad[B], Monad[Exception]]
+    # type: (Monad[A], Callable[[A], B]) -> Callable[[A], Union[B, Exception]]
     '''
     Catch: MA -> (A -> B) -> (MB | ME)
 
@@ -374,14 +374,16 @@ def catch(monad, func):
         EnforceError: If monad is not Monad subclass or instance.
 
     Returns:
-        object: Result of function call.
+        object: Partial function with catch logic.
     '''
     enforce_monad(monad)
-    try:
-        result = func(unwrap(monad))
-    except Exception as error:
-        return fail(monad, error)
-    return wrap(monad, result)
+
+    def catch_(func, *args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as error:
+            return fail(monad, error)
+    return partial(catch_, func)
 # ------------------------------------------------------------------------------
 
 
