@@ -15,15 +15,31 @@ class Maybe(Monad):
     @classmethod
     def just(cls, value):
         # type: (Any) -> Maybe
+        '''
+        Just constructor for Maybe class.
+
+        Args:
+            value (object): Non-null value.
+
+        Returns:
+            Maybe: Maybe monad of value.
+        '''
         return cls(value)
 
     @classmethod
     def nothing(cls):
         # type: () -> Maybe
+        '''
+        Nothing constructor for Maybe class.
+
+        Returns:
+            Maybe: Nothing monad.
+        '''
         return cls(None)
 
     def __repr__(self):
         # type: () -> str
+        '''String representation of monad.'''
         if self.state == 'just':
             return f'Just({self._data})'
         return 'Nothing'
@@ -31,6 +47,7 @@ class Maybe(Monad):
     @property
     def state(self):
         # type: () -> str
+        '''State of monad. Either just or nothing.'''
         data = self._data
         if data is None or pd.isna(data):
             return 'nothing'
@@ -41,20 +58,40 @@ class Try(Monad):
     @classmethod
     def success(cls, value):
         # type: (Any) -> Try
+        '''
+        Success constructor for Try class.
+
+        Args:
+            value (object): Non-error value.
+
+        Returns:
+            Maybe: Try monad of value.
+        '''
         return sgm.succeed(cls, value)
 
     @classmethod
     def failure(cls, error):
         # type: (Exception) -> Try
+        '''
+        Success constructor for Try class.
+
+        Args:
+            error (Exception): Error.
+
+        Returns:
+            Maybe: Try monad of error.
+        '''
         return sgm.fail(cls, error)
 
     def __repr__(self):
         # type: () -> str
+        '''String representation of monad.'''
         return f'{self.state.capitalize()}({self._data})'
 
     @property
     def state(self):
         # type: () -> str
+        '''State of monad. Either success or failure.'''
         if isinstance(self._data, Exception):
             return 'failure'
         return 'success'
