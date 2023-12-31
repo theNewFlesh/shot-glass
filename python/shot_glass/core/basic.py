@@ -52,6 +52,7 @@ class Maybe(Monad):
         if data is None or pd.isna(data):
             return 'nothing'
         return 'just'
+# ------------------------------------------------------------------------------
 
 
 class Try(Monad):
