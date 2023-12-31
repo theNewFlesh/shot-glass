@@ -344,9 +344,13 @@ def catch(monad, func):
         monad (Monad): Monad.
         func (function): Function to attempt.
 
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+
     Returns:
         object: Result of function call.
     '''
+    enforce_monad(monad)
     try:
         result = func(unwrap(monad))
     except Exception as error:

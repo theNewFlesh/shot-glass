@@ -230,6 +230,11 @@ class MonadInfixFunctionTests(unittest.TestCase):
         self.assertIsInstance(result, sgm.Monad)
         self.assertIsInstance(result.unwrap(), TypeError)
 
+    def test_catch_errors(self):
+        expected = 'foo is not a subclass or instance of Monad.'
+        with self.assertRaisesRegex(EnforceError, expected):
+            sgm.catch('foo', 99)
+
 
 class MonadTests(unittest.TestCase):
     def test_init(self):
