@@ -1,4 +1,4 @@
-from typing import Any, Callable, TypeVar  # noqa: F401
+from typing import Any, Callable, Generic, TypeVar  # noqa: F401
 
 import pandas as pd
 
@@ -55,10 +55,10 @@ class Maybe(Monad):
 # ------------------------------------------------------------------------------
 
 
-class Try(Monad):
+class Try(Monad, Generic[A]):
     @classmethod
     def success(cls, value):
-        # type: (Any) -> Try
+        # type: (A) -> Try[A]
         '''
         Success constructor for Try class.
 
@@ -72,7 +72,7 @@ class Try(Monad):
 
     @classmethod
     def failure(cls, error):
-        # type: (Exception) -> Try
+        # type: (Exception) -> Try[Exception]
         '''
         Success constructor for Try class.
 
@@ -98,7 +98,7 @@ class Try(Monad):
         return 'success'
 
     def fmap(self, func):
-        # type: (Callable[[A], B]) -> Try
+        # type: (Callable[[A], B]) -> Try[B | Exception]
         '''
         Functor map: (A -> B) -> MB
 
@@ -117,7 +117,7 @@ class Try(Monad):
             return self.fail(error)
 
     def bind(self, func):
-        # type: (Callable[[A], Monad[B]]) -> Try
+        # type: (Callable[[A], Monad[B]]) -> Try[B | Exception]
         '''
         Bind: (A -> MB) -> MB
 
@@ -135,7 +135,7 @@ class Try(Monad):
             return self.fail(error)
 
     def app(self, monad_func):
-        # type: (Monad[Callable[[A], B]]) -> Try
+        # type: (Monad[Callable[[A], B]]) -> Try[B | Exception]
         '''
         Applicative: M(A -> B) -> MB
 
