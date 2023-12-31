@@ -1,4 +1,4 @@
-from typing import Any, Callable, TypeVar, Union  # noqa: F401
+from typing import Any, Callable, TypeVar  # noqa: F401
 
 import pandas as pd
 
@@ -60,7 +60,7 @@ class Try(Monad):
         return 'success'
 
     def fmap(self, func):
-        # type: (Callable[[A], B]) -> Try[Union[B, Exception]]
+        # type: (Callable[[A], B]) -> Try[B | Exception]
         '''
         Functor map: (A -> B) -> MB
 
@@ -71,12 +71,12 @@ class Try(Monad):
             func (function): Function (A -> B).
 
         Returns:
-            Monad[B]: Monad of B.
+            Try[B]: Try Monad of B.
         '''
         return sgm.catch(self, sgm.fmap)(func, self)
 
     def bind(self, func):
-        # type: (Callable[[A], Monad[B]]) -> Try[Union[B, Exception]]
+        # type: (Callable[[A], Monad[B]]) -> Try[B | Exception]
         '''
         Bind: (A -> MB) -> MB
 
@@ -86,12 +86,12 @@ class Try(Monad):
             func (function): Function (A -> MB).
 
         Returns:
-            Monad[B]: Monad of B.
+            Try[B]: Try Monad of B.
         '''
         return sgm.catch(self, sgm.bind)(func, self)
 
     def app(self, monad_func):
-        # type: (Monad[Callable[[A], B]]) -> Try[Union[B, Exception]]
+        # type: (Monad[Callable[[A], B]]) -> Try[B | Exception]
         '''
         Applicative: M(A -> B) -> MB
 
@@ -101,6 +101,6 @@ class Try(Monad):
             monad_func (Monad): Monad of function (A -> B).
 
         Returns:
-            Monad[B]: Monad of B.
+            Try[B]: Try Monad of B.
         '''
         return sgm.catch(self, sgm.app)(monad_func, self)

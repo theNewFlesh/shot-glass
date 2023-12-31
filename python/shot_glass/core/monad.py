@@ -360,7 +360,7 @@ def partial_dot(func):
 
 
 def catch(monad, func):
-    # type: (Monad[A], Callable[[A], B]) -> Callable[[A], Union[B, Exception]]
+    # xtype: (MA, Callable[[A], B]) -> Callable[[A], Union[B, Exception]]
     '''
     Catch: MA -> (A -> B) -> (MB | ME)
 
@@ -429,7 +429,7 @@ class Monad(Generic[A]):
 
     @classmethod
     def wrap(cls, data):
-        # type: (A) -> Monad[A]
+        # type: (A) -> MA
         '''
         Wrap: A -> MA
 
@@ -456,7 +456,7 @@ class Monad(Generic[A]):
         return unwrap(self)
 
     def fmap(self, func):
-        # type: (Callable[[A], B]) -> Monad[B]
+        # type: (Callable[[A], B]) -> MB
         '''
         Functor map: (A -> B) -> MB
 
@@ -472,7 +472,7 @@ class Monad(Generic[A]):
         return fmap(func, self)
 
     def app(self, monad_func):
-        # type: (Monad[Callable[[A], B]]) -> Monad[B]
+        # type: (Monad[Callable[[A], B]]) -> MB
         '''
         Applicative: M(A -> B) -> MB
 
@@ -487,7 +487,7 @@ class Monad(Generic[A]):
         return app(monad_func, self)
 
     def bind(self, func):
-        # type: (Callable[[A], Monad[B]]) -> Monad[B]
+        # type: (Callable[[A], MB]) -> MB
         '''
         Bind: (A -> MB) -> MB
 
@@ -502,7 +502,7 @@ class Monad(Generic[A]):
         return bind(func, self)
 
     def right(self, monad):
-        # type: (Monad[B]) -> Monad[B]
+        # type: (MB) -> MB
         '''
         Right: MB -> MB
 
@@ -532,7 +532,7 @@ class Monad(Generic[A]):
         return fail(self, error)
 
     def __and__(self, func):
-        # type: (Callable[[A], B]) -> Monad[B]
+        # type: (Callable[[A], B]) -> MB
         '''
         Functor map: (A -> B) -> MB
 
@@ -548,7 +548,7 @@ class Monad(Generic[A]):
         return self.fmap(func)
 
     def __xor__(self, monad_func):
-        # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
+        # type: (MA, Monad[Callable[[A], B]]) -> MB
         '''
         Applicative: MA -> M(A -> B) -> MB
 
@@ -571,7 +571,7 @@ class Monad(Generic[A]):
         return self.app(monad_func)
 
     def __rshift__(self, func):
-        # type: (Callable[[A], Monad[B]]) -> Monad[B]
+        # type: (Callable[[A], MB]) -> MB
         '''
         Bind: (A -> MB) -> MB
 
@@ -588,3 +588,6 @@ class Monad(Generic[A]):
 
 
 Monadlike = Union[Monad, Type[Monad]]
+MA = Monad[A]
+MB = Monad[B]
+MC = Monad[C]
