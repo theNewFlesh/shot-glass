@@ -489,13 +489,7 @@
 <polygon fill="#343434" stroke="#343434" points="1340,-64 1282,-64 1282,-28 1340,-28 1340,-64"/>
 <text text-anchor="middle" x="1311" y="-42.3" font-family="Courier,monospace" font-size="14.00" fill="#de958e">wrapt</text>
 </g>
-<!-- pandas&#45;&gt;shot_glass.blender.blender_tools -->
-<g id="edge50" class="edge">
-<title>pandas&#45;&gt;shot_glass.blender.blender_tools</title>
-<path fill="none" stroke="#de958e" d="M501.21,-437.86C534.31,-454.66 587.68,-480.29 636,-497 765.69,-541.84 801.37,-543.42 936,-570 963.51,-575.43 1407.6,-640.04 1435,-646 1471.47,-653.94 1511.54,-665.16 1544.18,-674.96"/>
-<polygon fill="#de958e" stroke="#de958e" points="1543.47,-678.4 1554.05,-677.95 1545.5,-671.7 1543.47,-678.4"/>
-</g>
-<!-- pandas&#45;&gt;shot_glass.core.df_monad -->
+<!-- wrapt&#45;&gt;shot_glass.hifive.operator_tools -->
 <g id="edge51" class="edge">
 <title>wrapt&#45;&gt;shot_glass.hifive.operator_tools</title>
 <path fill="none" stroke="#de958e" d="M1340.08,-52.49C1381.48,-62.06 1460.68,-80.37 1522.72,-94.71"/>
