@@ -1,9 +1,9 @@
 core
 ====
 
-df_monad
---------
-.. automodule:: shot_glass.core.df_monad
+basic
+-----
+.. automodule:: shot_glass.core.basic
    :members:
    :private-members:
    :special-members:
@@ -13,15 +13,6 @@ df_monad
 monad
 -----
 .. automodule:: shot_glass.core.monad
-   :members:
-   :private-members:
-   :special-members:
-   :undoc-members:
-   :show-inheritance:
-
-s_monad
--------
-.. automodule:: shot_glass.core.s_monad
    :members:
    :private-members:
    :special-members:
