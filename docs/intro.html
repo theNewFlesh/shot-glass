@@ -33,6 +33,8 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -67,7 +69,7 @@
             
             
               <div class="version">
-                0.4.1
+                0.5.0
               </div>
             
           
@@ -285,136 +287,133 @@ any version of python 2.7 and above, as it has no dependencies.</p>
 <tr class="row-even"><td><p>docker-container</p></td>
 <td><p>Display the Docker container id of shot-glass</p></td>
 </tr>
-<tr class="row-odd"><td><p>docker-coverage</p></td>
-<td><p>Generate coverage report for shot-glass</p></td>
-</tr>
-<tr class="row-even"><td><p>docker-destroy</p></td>
+<tr class="row-odd"><td><p>docker-destroy</p></td>
 <td><p>Shutdown shot-glass container and destroy its image</p></td>
 </tr>
-<tr class="row-odd"><td><p>docker-destroy-prod</p></td>
+<tr class="row-even"><td><p>docker-destroy-prod</p></td>
 <td><p>Shutdown shot-glass production container and destroy its image</p></td>
 </tr>
-<tr class="row-even"><td><p>docker-image</p></td>
+<tr class="row-odd"><td><p>docker-image</p></td>
 <td><p>Display the Docker image id of shot-glass</p></td>
 </tr>
-<tr class="row-odd"><td><p>docker-prod</p></td>
+<tr class="row-even"><td><p>docker-prod</p></td>
 <td><p>Start shot-glass production container</p></td>
 </tr>
-<tr class="row-even"><td><p>docker-push</p></td>
+<tr class="row-odd"><td><p>docker-push</p></td>
 <td><p>Push shot-glass production image to Dockerhub</p></td>
 </tr>
-<tr class="row-odd"><td><p>docker-remove</p></td>
+<tr class="row-even"><td><p>docker-remove</p></td>
 <td><p>Remove shot-glass Docker image</p></td>
 </tr>
-<tr class="row-even"><td><p>docker-restart</p></td>
+<tr class="row-odd"><td><p>docker-restart</p></td>
 <td><p>Restart shot-glass container</p></td>
 </tr>
-<tr class="row-odd"><td><p>docker-start</p></td>
+<tr class="row-even"><td><p>docker-start</p></td>
 <td><p>Start shot-glass container</p></td>
 </tr>
-<tr class="row-even"><td><p>docker-stop</p></td>
+<tr class="row-odd"><td><p>docker-stop</p></td>
 <td><p>Stop shot-glass container</p></td>
 </tr>
-<tr class="row-odd"><td><p>docs</p></td>
+<tr class="row-even"><td><p>docs</p></td>
 <td><p>Generate sphinx documentation</p></td>
 </tr>
-<tr class="row-even"><td><p>docs-architecture</p></td>
+<tr class="row-odd"><td><p>docs-architecture</p></td>
 <td><p>Generate architecture.svg diagram from all import statements</p></td>
 </tr>
-<tr class="row-odd"><td><p>docs-full</p></td>
+<tr class="row-even"><td><p>docs-full</p></td>
 <td><p>Generate documentation, coverage report, diagram and code</p></td>
 </tr>
-<tr class="row-even"><td><p>docs-metrics</p></td>
+<tr class="row-odd"><td><p>docs-metrics</p></td>
 <td><p>Generate code metrics report, plots and tables</p></td>
 </tr>
-<tr class="row-odd"><td><p>library-add</p></td>
+<tr class="row-even"><td><p>library-add</p></td>
 <td><p>Add a given package to a given dependency group</p></td>
 </tr>
-<tr class="row-even"><td><p>library-graph-dev</p></td>
+<tr class="row-odd"><td><p>library-graph-dev</p></td>
 <td><p>Graph dependencies in dev environment</p></td>
 </tr>
-<tr class="row-odd"><td><p>library-graph-prod</p></td>
+<tr class="row-even"><td><p>library-graph-prod</p></td>
 <td><p>Graph dependencies in prod environment</p></td>
 </tr>
-<tr class="row-even"><td><p>library-install-dev</p></td>
+<tr class="row-odd"><td><p>library-install-dev</p></td>
 <td><p>Install all dependencies into dev environment</p></td>
 </tr>
-<tr class="row-odd"><td><p>library-install-prod</p></td>
+<tr class="row-even"><td><p>library-install-prod</p></td>
 <td><p>Install all dependencies into prod environment</p></td>
 </tr>
-<tr class="row-even"><td><p>library-list-dev</p></td>
+<tr class="row-odd"><td><p>library-list-dev</p></td>
 <td><p>List packages in dev environment</p></td>
 </tr>
-<tr class="row-odd"><td><p>library-list-prod</p></td>
+<tr class="row-even"><td><p>library-list-prod</p></td>
 <td><p>List packages in prod environment</p></td>
 </tr>
-<tr class="row-even"><td><p>library-lock-dev</p></td>
+<tr class="row-odd"><td><p>library-lock-dev</p></td>
 <td><p>Resolve dev.lock file</p></td>
 </tr>
-<tr class="row-odd"><td><p>library-lock-prod</p></td>
+<tr class="row-even"><td><p>library-lock-prod</p></td>
 <td><p>Resolve prod.lock file</p></td>
 </tr>
-<tr class="row-even"><td><p>library-remove</p></td>
+<tr class="row-odd"><td><p>library-remove</p></td>
 <td><p>Remove a given package from a given dependency group</p></td>
 </tr>
-<tr class="row-odd"><td><p>library-search</p></td>
+<tr class="row-even"><td><p>library-search</p></td>
 <td><p>Search for pip packages</p></td>
 </tr>
-<tr class="row-even"><td><p>library-sync-dev</p></td>
+<tr class="row-odd"><td><p>library-sync-dev</p></td>
 <td><p>Sync dev environment with packages listed in dev.lock</p></td>
 </tr>
-<tr class="row-odd"><td><p>library-sync-prod</p></td>
+<tr class="row-even"><td><p>library-sync-prod</p></td>
 <td><p>Sync prod environment with packages listed in prod.lock</p></td>
 </tr>
-<tr class="row-even"><td><p>library-update</p></td>
+<tr class="row-odd"><td><p>library-update</p></td>
 <td><p>Update dev dependencies</p></td>
 </tr>
-<tr class="row-odd"><td><p>library-update-pdm</p></td>
+<tr class="row-even"><td><p>library-update-pdm</p></td>
 <td><p>Update PDM</p></td>
 </tr>
-<tr class="row-even"><td><p>session-lab</p></td>
+<tr class="row-odd"><td><p>session-lab</p></td>
 <td><p>Run jupyter lab server</p></td>
 </tr>
-<tr class="row-odd"><td><p>session-python</p></td>
+<tr class="row-even"><td><p>session-python</p></td>
 <td><p>Run python session with dev dependencies</p></td>
 </tr>
-<tr class="row-even"><td><p>state</p></td>
+<tr class="row-odd"><td><p>state</p></td>
 <td><p>State of shot-glass</p></td>
 </tr>
-<tr class="row-odd"><td><p>test-coverage</p></td>
+<tr class="row-even"><td><p>test-coverage</p></td>
 <td><p>Generate test coverage report</p></td>
 </tr>
-<tr class="row-even"><td><p>test-dev</p></td>
+<tr class="row-odd"><td><p>test-dev</p></td>
 <td><p>Run all tests</p></td>
 </tr>
-<tr class="row-odd"><td><p>test-fast</p></td>
+<tr class="row-even"><td><p>test-fast</p></td>
 <td><p>Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator</p></td>
 </tr>
-<tr class="row-even"><td><p>test-lint</p></td>
+<tr class="row-odd"><td><p>test-lint</p></td>
 <td><p>Run linting and type checking</p></td>
 </tr>
-<tr class="row-odd"><td><p>test-prod</p></td>
+<tr class="row-even"><td><p>test-prod</p></td>
 <td><p>Run tests across all support python versions</p></td>
 </tr>
-<tr class="row-even"><td><p>version</p></td>
+<tr class="row-odd"><td><p>version</p></td>
 <td><p>Full resolution of repo: dependencies, linting, tests, docs, etc</p></td>
 </tr>
-<tr class="row-odd"><td><p>version-bump-major</p></td>
+<tr class="row-even"><td><p>version-bump-major</p></td>
 <td><p>Bump pyproject major version</p></td>
 </tr>
-<tr class="row-even"><td><p>version-bump-minor</p></td>
+<tr class="row-odd"><td><p>version-bump-minor</p></td>
 <td><p>Bump pyproject minor version</p></td>
 </tr>
-<tr class="row-odd"><td><p>version-bump-patch</p></td>
+<tr class="row-even"><td><p>version-bump-patch</p></td>
 <td><p>Bump pyproject patch version</p></td>
 </tr>
-<tr class="row-even"><td><p>zsh</p></td>
+<tr class="row-odd"><td><p>zsh</p></td>
 <td><p>Run ZSH session inside shot-glass container</p></td>
 </tr>
-<tr class="row-odd"><td><p>zsh-complete</p></td>
+<tr class="row-even"><td><p>zsh-complete</p></td>
 <td><p>Generate oh-my-zsh completions</p></td>
 </tr>
-<tr class="row-even"><td><p>zsh-root</p></td>
+<tr class="row-odd"><td><p>zsh-root</p></td>
 <td><p>Run ZSH session as root inside shot-glass container</p></td>
 </tr>
 </tbody>

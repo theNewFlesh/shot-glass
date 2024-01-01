@@ -22,16 +22,16 @@ Haskell equivalence table:
     -------------------- ------------ -------------------------------------------------
     prefix      infix    prefix infix implication      signature
     =========== ======== ====== ===== ================ ================================
-    app         ⏐iapp⏐          <*>   Applicative f => f (a -> b) -> fa -> fb
-    bind        ⏐ibind⏐         >>=   Monad m       => m a -> (a -> m b) -> m b
-    fail        ⏐ifail⏐  fail         Monad m       => String -> m a
-    fmap        ⏐ifmap⏐  fmap   <$>   Functor f     => (a -> b) -> fa -> fb
-    right       ⏐iright⏐        >>    Monad m       => m a -> m b -> m b
+    app         │iapp│          <*>   Applicative f => f (a -> b) -> fa -> fb
+    bind        │ibind│         >>=   Monad m       => m a -> (a -> m b) -> m b
+    fail        │ifail│  fail         Monad m       => String -> m a
+    fmap        │ifmap│  fmap   <$>   Functor f     => (a -> b) -> fa -> fb
+    right       │iright│        >>    Monad m       => m a -> m b -> m b
     unwrap                            Monad m       => m a -> a
-    wrap        ⏐iwrap⏐  pure         Applicative f => a -> f a
-    wrap        ⏐iwrap⏐  return       Monad m       => a -> m a
-    curry       ⏐icurry⏐
-    dot         ⏐idot⏐   .      .                      (b -> c) -> (a -> b) -> (a -> c)
+    wrap        │iwrap│  pure         Applicative f => a -> f a
+    wrap        │iwrap│  return       Monad m       => a -> m a
+    curry       │icurry│
+    dot         │idot│   .      .                      (b -> c) -> (a -> b) -> (a -> c)
     partial_dot          .      .                      (b -> c) -> (a -> b) -> (a -> c)
     =========== ======== ====== ===== ================ ================================
 '''
@@ -249,9 +249,35 @@ def fail(monad, error):
         Monad: Error Monad.
     '''
     enforce_monad(monad)
-    msg = 'Error must be an instance of Exception. Given value: {a}'
+    msg = 'Error must be an instance of Exception. Given value: {a}.'
     Enforce(error, 'instance of', Exception, message=msg)
     return wrap(monad, error)
+
+
+def succeed(monad, value):
+    # type (Monad, A) -> Monad[A]
+    '''
+    Succed: M -> A -> MA
+
+    .. image:: resources/wrap.png
+
+    Given a Monad and a value, return a Monad of that value.
+
+    Args:
+        monad (Monad): Monad to wrap value with.
+        value (object): Value.
+
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+        EnforceError: If value is an instance of Exception.
+
+    Returns:
+        Monad: Monad of value.
+    '''
+    enforce_monad(monad)
+    msg = 'Error must not be an instance of Exception. Given value: {a}.'
+    Enforce(value, 'not instance of', Exception, message=msg)
+    return wrap(monad, value)
 
 
 @infix.or_infix
@@ -331,6 +357,33 @@ def partial_dot(func):
         partial: Function composition.
     '''
     return partial(dot, func)
+
+
+def catch(monad, func):
+    # type: (MA, Callable[[A], B]) -> Callable[[A], Union[B, Exception]]
+    '''
+    Catch: MA -> (A -> B) -> (MB | ME)
+
+    Catches exception and returns it rather then raising an error.
+
+    Args:
+        monad (Monad): Monad.
+        func (function): Function to attempt.
+
+    Raises:
+        EnforceError: If monad is not Monad subclass or instance.
+
+    Returns:
+        object: Partial function with catch logic.
+    '''
+    enforce_monad(monad)
+
+    def catch_(func, *args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as error:
+            return fail(monad, error)
+    return partial(catch_, func)
 # ------------------------------------------------------------------------------
 
 
@@ -376,7 +429,7 @@ class Monad(Generic[A]):
 
     @classmethod
     def wrap(cls, data):
-        # type: (A) -> Monad[A]
+        # type: (A) -> MA
         '''
         Wrap: A -> MA
 
@@ -403,7 +456,7 @@ class Monad(Generic[A]):
         return unwrap(self)
 
     def fmap(self, func):
-        # type: (Callable[[A], B]) -> Monad[B]
+        # type: (Callable[[A], B]) -> MB
         '''
         Functor map: (A -> B) -> MB
 
@@ -419,14 +472,14 @@ class Monad(Generic[A]):
         return fmap(func, self)
 
     def app(self, monad_func):
-        # type: (Monad[Callable[[A], B]]) -> Monad
+        # type: (Monad[Callable[[A], B]]) -> MB
         '''
         Applicative: M(A -> B) -> MB
 
         Given a Monad of a function A to B, return a Monad of B (MB).
 
         Args:
-            func (Monad): Monad of function (A -> B).
+            monad_func (Monad): Monad of function (A -> B).
 
         Returns:
             Monad[B]: Monad of B.
@@ -434,7 +487,7 @@ class Monad(Generic[A]):
         return app(monad_func, self)
 
     def bind(self, func):
-        # type: (Callable[[A], Monad[B]]) -> Monad[B]
+        # type: (Callable[[A], MB]) -> MB
         '''
         Bind: (A -> MB) -> MB
 
@@ -449,7 +502,7 @@ class Monad(Generic[A]):
         return bind(func, self)
 
     def right(self, monad):
-        # type: (Monad[B]) -> Monad[B]
+        # type: (MB) -> MB
         '''
         Right: MB -> MB
 
@@ -479,7 +532,7 @@ class Monad(Generic[A]):
         return fail(self, error)
 
     def __and__(self, func):
-        # type: (Callable[[A], B]) -> Monad[B]
+        # type: (Callable[[A], B]) -> MB
         '''
         Functor map: (A -> B) -> MB
 
@@ -495,7 +548,7 @@ class Monad(Generic[A]):
         return self.fmap(func)
 
     def __xor__(self, monad_func):
-        # type: (Monad[A], Monad[Callable[[A], B]]) -> Monad[B]
+        # type: (MA, Monad[Callable[[A], B]]) -> MB
         '''
         Applicative: MA -> M(A -> B) -> MB
 
@@ -518,7 +571,7 @@ class Monad(Generic[A]):
         return self.app(monad_func)
 
     def __rshift__(self, func):
-        # type: (Callable[[A], Monad[B]]) -> Monad[B]
+        # type: (Callable[[A], MB]) -> MB
         '''
         Bind: (A -> MB) -> MB
 
@@ -535,3 +588,6 @@ class Monad(Generic[A]):
 
 
 Monadlike = Union[Monad, Type[Monad]]
+MA = Monad[A]
+MB = Monad[B]
+MC = Monad[C]

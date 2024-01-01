@@ -32,6 +32,8 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
@@ -64,7 +66,7 @@
             
             
               <div class="version">
-                0.4.1
+                0.5.0
               </div>
             
           
@@ -197,16 +199,16 @@
 <span class="sd">    -------------------- ------------ -------------------------------------------------</span>
 <span class="sd">    prefix      infix    prefix infix implication      signature</span>
 <span class="sd">    =========== ======== ====== ===== ================ ================================</span>
-<span class="sd">    app         ⏐iapp⏐          &lt;*&gt;   Applicative f =&gt; f (a -&gt; b) -&gt; fa -&gt; fb</span>
-<span class="sd">    bind        ⏐ibind⏐         &gt;&gt;=   Monad m       =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span>
-<span class="sd">    fail        ⏐ifail⏐  fail         Monad m       =&gt; String -&gt; m a</span>
-<span class="sd">    fmap        ⏐ifmap⏐  fmap   &lt;$&gt;   Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
-<span class="sd">    right       ⏐iright⏐        &gt;&gt;    Monad m       =&gt; m a -&gt; m b -&gt; m b</span>
+<span class="sd">    app         │iapp│          &lt;*&gt;   Applicative f =&gt; f (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    bind        │ibind│         &gt;&gt;=   Monad m       =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span>
+<span class="sd">    fail        │ifail│  fail         Monad m       =&gt; String -&gt; m a</span>
+<span class="sd">    fmap        │ifmap│  fmap   &lt;$&gt;   Functor f     =&gt; (a -&gt; b) -&gt; fa -&gt; fb</span>
+<span class="sd">    right       │iright│        &gt;&gt;    Monad m       =&gt; m a -&gt; m b -&gt; m b</span>
 <span class="sd">    unwrap                            Monad m       =&gt; m a -&gt; a</span>
-<span class="sd">    wrap        ⏐iwrap⏐  pure         Applicative f =&gt; a -&gt; f a</span>
-<span class="sd">    wrap        ⏐iwrap⏐  return       Monad m       =&gt; a -&gt; m a</span>
-<span class="sd">    curry       ⏐icurry⏐</span>
-<span class="sd">    dot         ⏐idot⏐   .      .                      (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
+<span class="sd">    wrap        │iwrap│  pure         Applicative f =&gt; a -&gt; f a</span>
+<span class="sd">    wrap        │iwrap│  return       Monad m       =&gt; a -&gt; m a</span>
+<span class="sd">    curry       │icurry│</span>
+<span class="sd">    dot         │idot│   .      .                      (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
 <span class="sd">    partial_dot          .      .                      (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span>
 <span class="sd">    =========== ======== ====== ===== ================ ================================</span>
 <span class="sd">&#39;&#39;&#39;</span>
@@ -424,9 +426,35 @@
 <span class="sd">        Monad: Error Monad.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Error must be an instance of Exception. Given value: </span><span class="si">{a}</span><span class="s1">&#39;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Error must be an instance of Exception. Given value: </span><span class="si">{a}</span><span class="s1">.&#39;</span>
     <span class="n">Enforce</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s1">&#39;instance of&#39;</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="succeed"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.succeed">[docs]</a><span class="k">def</span> <span class="nf">succeed</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="c1"># type (Monad, A) -&gt; Monad[A]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Succed: M -&gt; A -&gt; MA</span>
+
+<span class="sd">    .. image:: resources/wrap.png</span>
+
+<span class="sd">    Given a Monad and a value, return a Monad of that value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad (Monad): Monad to wrap value with.</span>
+<span class="sd">        value (object): Value.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+<span class="sd">        EnforceError: If value is an instance of Exception.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Monad: Monad of value.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Error must not be an instance of Exception. Given value: </span><span class="si">{a}</span><span class="s1">.&#39;</span>
+    <span class="n">Enforce</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;not instance of&#39;</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
 
 <span class="nd">@infix</span><span class="o">.</span><span class="n">or_infix</span>
@@ -506,6 +534,33 @@
 <span class="sd">        partial: Function composition.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">dot</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="catch"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.catch">[docs]</a><span class="k">def</span> <span class="nf">catch</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="c1"># type: (MA, Callable[[A], B]) -&gt; Callable[[A], Union[B, Exception]]</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Catch: MA -&gt; (A -&gt; B) -&gt; (MB | ME)</span>
+
+<span class="sd">    Catches exception and returns it rather then raising an error.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        monad (Monad): Monad.</span>
+<span class="sd">        func (function): Function to attempt.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        EnforceError: If monad is not Monad subclass or instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: Partial function with catch logic.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">enforce_monad</span><span class="p">(</span><span class="n">monad</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">catch_</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="n">monad</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">catch_</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
 <span class="c1"># ------------------------------------------------------------------------------</span>
 
 
@@ -551,7 +606,7 @@
 
 <div class="viewcode-block" id="Monad.wrap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.wrap">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="c1"># type: (A) -&gt; Monad[A]</span>
+        <span class="c1"># type: (A) -&gt; MA</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Wrap: A -&gt; MA</span>
 
@@ -578,7 +633,7 @@
         <span class="k">return</span> <span class="n">unwrap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.fmap"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.fmap">[docs]</a>    <span class="k">def</span> <span class="nf">fmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="c1"># type: (Callable[[A], B]) -&gt; Monad[B]</span>
+        <span class="c1"># type: (Callable[[A], B]) -&gt; MB</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Functor map: (A -&gt; B) -&gt; MB</span>
 
@@ -594,14 +649,14 @@
         <span class="k">return</span> <span class="n">fmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.app"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.app">[docs]</a>    <span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">):</span>
-        <span class="c1"># type: (Monad[Callable[[A], B]]) -&gt; Monad</span>
+        <span class="c1"># type: (Monad[Callable[[A], B]]) -&gt; MB</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Applicative: M(A -&gt; B) -&gt; MB</span>
 
 <span class="sd">        Given a Monad of a function A to B, return a Monad of B (MB).</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            func (Monad): Monad of function (A -&gt; B).</span>
+<span class="sd">            monad_func (Monad): Monad of function (A -&gt; B).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Monad[B]: Monad of B.</span>
@@ -609,7 +664,7 @@
         <span class="k">return</span> <span class="n">app</span><span class="p">(</span><span class="n">monad_func</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.bind"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="c1"># type: (Callable[[A], Monad[B]]) -&gt; Monad[B]</span>
+        <span class="c1"># type: (Callable[[A], MB]) -&gt; MB</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Bind: (A -&gt; MB) -&gt; MB</span>
 
@@ -624,7 +679,7 @@
         <span class="k">return</span> <span class="n">bind</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.right"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.right">[docs]</a>    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad</span><span class="p">):</span>
-        <span class="c1"># type: (Monad[B]) -&gt; Monad[B]</span>
+        <span class="c1"># type: (MB) -&gt; MB</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Right: MB -&gt; MB</span>
 
@@ -654,7 +709,7 @@
         <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.__and__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__and__">[docs]</a>    <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="c1"># type: (Callable[[A], B]) -&gt; Monad[B]</span>
+        <span class="c1"># type: (Callable[[A], B]) -&gt; MB</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Functor map: (A -&gt; B) -&gt; MB</span>
 
@@ -670,7 +725,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fmap</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.__xor__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__xor__">[docs]</a>    <span class="k">def</span> <span class="fm">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monad_func</span><span class="p">):</span>
-        <span class="c1"># type: (Monad[A], Monad[Callable[[A], B]]) -&gt; Monad[B]</span>
+        <span class="c1"># type: (MA, Monad[Callable[[A], B]]) -&gt; MB</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Applicative: MA -&gt; M(A -&gt; B) -&gt; MB</span>
 
@@ -693,7 +748,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="n">monad_func</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monad.__rshift__"><a class="viewcode-back" href="../../../core.html#shot_glass.core.monad.Monad.__rshift__">[docs]</a>    <span class="k">def</span> <span class="fm">__rshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="c1"># type: (Callable[[A], Monad[B]]) -&gt; Monad[B]</span>
+        <span class="c1"># type: (Callable[[A], MB]) -&gt; MB</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Bind: (A -&gt; MB) -&gt; MB</span>
 
@@ -710,6 +765,9 @@
 
 
 <span class="n">Monadlike</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Monad</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Monad</span><span class="p">]]</span>
+<span class="n">MA</span> <span class="o">=</span> <span class="n">Monad</span><span class="p">[</span><span class="n">A</span><span class="p">]</span>
+<span class="n">MB</span> <span class="o">=</span> <span class="n">Monad</span><span class="p">[</span><span class="n">B</span><span class="p">]</span>
+<span class="n">MC</span> <span class="o">=</span> <span class="n">Monad</span><span class="p">[</span><span class="n">C</span><span class="p">]</span>
 </pre></div>
 
            </div>

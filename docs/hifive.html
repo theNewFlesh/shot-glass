@@ -33,6 +33,8 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -67,7 +69,7 @@
             
             
               <div class="version">
-                0.4.1
+                0.5.0
               </div>
             
           
@@ -507,10 +509,10 @@ per a group column.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>ValidationError</strong> – If column name does not have 3 parts separated by
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If column name does not have 3 parts separated by
     ‘_’.</p></li>
-<li><p><strong>ValidationError</strong> – If indicated ctype is illegal.</p></li>
-<li><p><strong>ValidationError</strong> – If indicated dtype is illegal.</p></li>
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If indicated ctype is illegal.</p></li>
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If indicated dtype is illegal.</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -597,7 +599,7 @@ type and each row contains a unique edge id.</p>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>TypeError</strong> – If id is not of integer dtype.</p></li>
-<li><p><strong>ValidationError</strong> – If source, target or id names are invalid.</p></li>
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If source, target or id names are invalid.</p></li>
 <li><p><strong>TypeError</strong> – If source, target or id values are invalid.</p></li>
 </ul>
 </dd>
@@ -693,9 +695,9 @@ aggregator.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>ValidationError</strong> – If target column ctype is illegal.</p></li>
-<li><p><strong>ValidationError</strong> – If target column dtype is illegal.</p></li>
-<li><p><strong>ValidationError</strong> – If source column contains null values.</p></li>
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If target column ctype is illegal.</p></li>
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If target column dtype is illegal.</p></li>
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If source column contains null values.</p></li>
 <li><p><strong>TypeError</strong> – If target column values are illegal.</p></li>
 </ul>
 </dd>
@@ -718,7 +720,7 @@ aggregator.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>ValidationError</strong> – If file does not end in ‘hi5’ extension.</p></li>
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If file does not end in ‘hi5’ extension.</p></li>
 <li><p><strong>TypeError</strong> – If column names or values of data are invalid.</p></li>
 </ul>
 </dd>
@@ -737,7 +739,7 @@ aggregator.</p>
 <dd><p>Validate all column names and values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValidationError</strong> – If any column name or set of values are invalid.</p>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If any column name or set of values are invalid.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>self.</p>
@@ -758,7 +760,7 @@ type indicator.</p>
 <dd class="field-odd"><p><strong>column</strong> (<em>str</em>) – Column name.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If column name or values are invalid.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If column name or values are invalid.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>self.</p>
@@ -786,7 +788,7 @@ type and each row contains a unique vertex id.</p>
 <dd class="field-odd"><p><strong>fullpath</strong> (<em>str</em>) – Full path to hi5 file.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If file does not end in ‘hi5’ extension.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If file does not end in ‘hi5’ extension.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>self.</p>
@@ -1007,7 +1009,7 @@ snake_case string.</p>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If file extension does not match.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If file extension does not match.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1133,7 +1135,7 @@ vertices. Only vertices and faces are currently supported.</p>
 <dd class="field-odd"><p><strong>fullpath</strong> (<em>str</em>) – Fullpath to OBJ file.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If file is missing vertex id, x, y, or z data.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If file is missing vertex id, x, y, or z data.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>HiFive instance with OBJ data.</p>
@@ -1477,7 +1479,7 @@ specified order.</p>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given columns of given DataFrame are not of the type
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given columns of given DataFrame are not of the type
     indicated by the given type_str.</p>
 </dd>
 </dl>
@@ -1491,7 +1493,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>fullpath</strong> (<em>str</em>) – Full path to file on disk.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If file does not exist.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If file does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1504,7 +1506,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>fullpath</strong> (<em>str</em>) – Full path to file.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given filepath does not have a json extension.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given filepath does not have a json extension.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1517,7 +1519,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>fullpath</strong> (<em>str</em>) – Full path to file.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given filepath does not have an obj extension.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given filepath does not have an obj extension.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1530,7 +1532,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>item</strong> (<em>object</em>) – Object to be tested.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given item’s name attribute is not  coercible into
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given item’s name attribute is not  coercible into
     an integer.</p>
 </dd>
 </dl>
@@ -1544,7 +1546,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>item</strong> (<em>object</em>) – Object to be tested.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given item is not a Blender mesh object.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given item is not a Blender mesh object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1557,7 +1559,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>item</strong> (<em>object</em>) – Object to be tested.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given item is not a Blender object.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given item is not a Blender object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1570,7 +1572,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>item</strong> (<em>object</em>) – Object to be tested.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given item is not a Blender scene.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given item is not a Blender scene.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1588,7 +1590,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>item</strong> (<em>object</em>) – Object to be tested.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given item is not a HiFive instance.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given item is not a HiFive instance.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1601,7 +1603,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>fullpath</strong> (<em>str</em>) – Full path to JSON file.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given JSON filepath is not in records format.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given JSON filepath is not in records format.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1614,7 +1616,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>infix</strong> (<em>str</em>) – String to be tested.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If given string is a valid infix for a HiFive object.</p>
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If given string is a valid infix for a HiFive object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1627,7 +1629,7 @@ specified order.</p>
 <dd class="field-odd"><p><strong>data</strong> (<em>DataFrame</em>) – DataFrame to be tested.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If integer or float columns of given DataFrame have
+<dd class="field-even"><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If integer or float columns of given DataFrame have
     non-ints or non-floats in them respectively.</p>
 </dd>
 </dl>
@@ -1642,7 +1644,7 @@ specified order.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>ValidationError</strong> – If necessary columns for creating a Blender mesh do</p></li>
+<li><p><a class="reference internal" href="core.html#shot_glass.core.tools.ValidationError" title="shot_glass.core.tools.ValidationError"><strong>ValidationError</strong></a> – If necessary columns for creating a Blender mesh do</p></li>
 <li><p><strong>not exist within given DataFrame.</strong> – </p></li>
 </ul>
 </dd>

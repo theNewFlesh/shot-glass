@@ -1,6 +1,6 @@
 [project]
 name = "shot-glass"
-version = "0.4.1"
+version = "0.5.0"
 description = "3D Data Science via Blender and Category Theory"
 authors = [
     { name = "Alex Braun", email = "alexander.g.braun@gmail.com" },
@@ -61,6 +61,7 @@ dev = [
     "sphinx-autodoc-typehints>=1.22",
     "sphinx-rtd-theme",
     "sphinx<7.0.0",
+    "sphinxcontrib-jquery>=4.1",
     "toml>=0.10.2",
 ]
 test = [
