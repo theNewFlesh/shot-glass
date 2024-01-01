@@ -530,7 +530,6 @@ class Monad(Generic[A]):
             Monad: Error Monad.
         '''
         return fail(self, error)
-# ------------------------------------------------------------------------------
 
     def __and__(self, func):
         # type: (Callable[[A], B]) -> MB
