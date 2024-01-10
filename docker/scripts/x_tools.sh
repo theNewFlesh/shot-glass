@@ -10,6 +10,7 @@ export BUILD_DIR="$HOME/build"
 export CONFIG_DIR="$REPO_DIR/docker/config"
 export PDM_DIR="$HOME/pdm"
 export SCRIPT_DIR="$REPO_DIR/docker/scripts"
+export DOCS_DIR="$REPO_DIR/docs"
 export MIN_PYTHON_VERSION="3.10"
 export MAX_PYTHON_VERSION="3.10"
 export MIN_BPY_VERSION="3.4.0"
@@ -363,7 +364,7 @@ x_docs_architecture () {
     echo "${CYAN2}GENERATING ARCHITECTURE DIAGRAM${CLEAR}\n";
     x_env_activate_dev;
     rolling-pin graph \
-        $REPO_DIR/python $REPO_DIR/docs/architecture.svg \
+        $REPO_DIR/python $DOCS_DIR/architecture.svg \
         --exclude 'test|mock|__init__' \
         --orient 'lr';
 }
@@ -380,9 +381,9 @@ x_docs_metrics () {
     x_env_activate_dev;
     cd $REPO_DIR;
     rolling-pin plot \
-        $REPO_DIR/python $REPO_DIR/docs/plots.html;
+        $REPO_DIR/python $DOCS_DIR/plots.html;
     rolling-pin table \
-        $REPO_DIR/python $REPO_DIR/docs;
+        $REPO_DIR/python $DOCS_DIR;
 }
 
 # LIBRARY-FUNCTIONS-------------------------------------------------------------
@@ -587,8 +588,9 @@ x_test_coverage () {
         --verbosity $TEST_VERBOSITY \
         --cov=$REPO_DIR/python \
         --cov-config=$CONFIG_DIR/pyproject.toml \
-        --cov-report=html:$REPO_DIR/docs/htmlcov \
+        --cov-report=html:$DOCS_DIR/htmlcov \
         $REPO_SUBPACKAGE;
+    rm -f $DOCS_DIR/htmlcov/.gitignore;
 }
 
 x_test_dev () {
