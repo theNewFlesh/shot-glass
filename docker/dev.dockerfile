@@ -142,8 +142,7 @@ ENV LC_ALL "C.UTF-8"
 
 FROM base AS dev
 
-USER ubuntu
-WORKDIR /home/ubuntu
+USER root
 
 # install blender dependencies
 RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
@@ -155,6 +154,9 @@ RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
         libxkbcommon-x11-0 \
         libxxf86vm-dev \
     && rm -rf /var/lib/apt/lists/*
+
+USER ubuntu
+WORKDIR /home/ubuntu
 
 # install dev dependencies
 RUN echo "\n${CYAN}INSTALL DEV DEPENDENCIES${CLEAR}"; \
