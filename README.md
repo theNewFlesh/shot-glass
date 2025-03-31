@@ -26,100 +26,196 @@
     </a>
 </p>
 
-<!-- <img id="logo" src="resources/logo.png" style="max-width: 717px"> -->
+[![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/thenewflesh/shot-glass/blob/master/LICENSE)
+[![](https://img.shields.io/pypi/pyversions/shot-glass?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/thenewflesh/shot-glass/blob/master/docker/config/pyproject.toml)
+[![](https://img.shields.io/pypi/v/shot-glass?style=for-the-badge&label=PyPI&color=5F95DE&logo=pypi&logoColor=5F95DE)](https://pypi.org/project/shot-glass/)
+[![](https://img.shields.io/pypi/dm/shot-glass?style=for-the-badge&label=Downloads&color=5F95DE)](https://pepy.tech/project/shot-glass)
 
-[![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/theNewFlesh/shot-glass/blob/master/LICENSE)
-[![](https://img.shields.io/badge/3.10-F77E70?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/theNewFlesh/shot-glass/blob/master/docker/config/pyproject.toml)
-[![](https://img.shields.io/badge/0.1.0-5F95DE?style=for-the-badge&label=Version&color=5F95DE&logo=pypi&logoColor=5F95DE)](https://github.com/theNewFlesh/shot-glass/blob/master/docker/config/pyproject.toml)
-<!-- [![](https://img.shields.io/pypi/pyversions/shot-glass?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/theNewFlesh/shot-glass/blob/master/docker/config/pyproject.toml) -->
-<!-- [![](https://img.shields.io/pypi/v/shot-glass?style=for-the-badge&label=PyPI&color=5F95DE&logo=pypi&logoColor=5F95DE)](https://pypi.org/project/shot-glass/) -->
-<!-- [![](https://img.shields.io/pypi/dm/shot-glass?style=for-the-badge&label=Downloads&color=5F95DE)](https://pepy.tech/project/shot-glass) -->
+<!-- <img id="logo" src="sphinx/images/logo.png" style="max-width: 717px"> -->
 
 # Introduction
 3D Data Science via Blender and Category Theory.
 
-See [documentation](https://theNewFlesh.github.io/shot-glass/) for details.
+See [documentation](https://thenewflesh.github.io/shot-glass/) for details.
 
-# Installation
-### Python
-`pip install shot-glass`
+# Installation for Developers
 
 ### Docker
 1. Install [docker-desktop](https://docs.docker.com/desktop/)
-2. `docker pull thenewflesh/shot-glass:latest`
-
-### Docker For Developers
-1. Install [docker-desktop](https://docs.docker.com/desktop/)
 2. Ensure docker-desktop has at least 4 GB of memory allocated to it.
-4. `git clone git@github.com:theNewFlesh/shot-glass.git`
-5. `cd shot-glass`
-6. `chmod +x bin/shot-glass`
-7. `bin/shot-glass docker-start`
+3. `git clone git@github.com:theNewFlesh/shot-glass.git`
+4. `cd shot-glass`
+5. `chmod +x bin/shot-glass`
+6. `bin/shot-glass docker-start`
+   - If building on a M1 Mac run `export DOCKER_DEFAULT_PLATFORM=linux/amd64` first.
 
 The service should take a few minutes to start up.
 
 Run `bin/shot-glass --help` for more help on the command line tool.
 
+### ZSH Setup
+1. `bin/shot-glass` must be run from this repository's top level directory.
+2. Therefore, if using zsh, it is recommended that you paste the following line
+    in your ~/.zshrc file:
+    - `alias shot-glass="cd [parent dir]/shot-glass; bin/shot-glass"`
+    - Replace `[parent dir]` with the parent directory of this repository
+3. Consider adding the following line to your ~/.zshrc if you are using a M1 Mac:
+    - `export DOCKER_DEFAULT_PLATFORM=linux/amd64`
+4. Running the `zsh-complete` command will enable tab completions of the cli
+   commands, in the next shell session.
+
+   For example:
+   - `shot-glass [tab]` will show you all the cli options, which you can press
+     tab to cycle through
+   - `shot-glass docker-[tab]` will show you only the cli options that begin with
+     "docker-"
+
+# Installation for Production
+
+### Python
+`pip install shot-glass`
+
+Please see the prod.dockerfile for an official example of how to build a docker
+image with shot-glass.
+
+### Docker
+1. Install [docker-desktop](https://docs.docker.com/desktop/)
+2. `docker pull theNewFlesh/shot-glass:[mode]-[version]`
+
+
+---
+
+# Quickstart Guide
+This repository contains a suite commands for the whole development process.
+This includes everything from testing, to documentation generation and
+publishing pip packages.
+
+These commands can be accessed through:
+
+  - The VSCode task runner
+  - The VSCode task runner side bar
+  - A terminal running on the host OS
+  - A terminal within this repositories docker container
+
+Running the `zsh-complete` command will enable tab completions of the CLI.
+See the zsh setup section for more information.
+
+### Command Groups
+
+Development commands are grouped by one of 10 prefixes:
+
+| Command    | Description                                                                        |
+| ---------- | ---------------------------------------------------------------------------------- |
+| build      | Commands for building packages for testing and pip publishing                      |
+| docker     | Common docker commands such as build, start and stop                               |
+| docs       | Commands for generating documentation and code metrics                             |
+| library    | Commands for managing python package dependencies                                  |
+| session    | Commands for starting interactive sessions such as jupyter lab and python          |
+| state      | Command to display the current state of the repo and container                     |
+| test       | Commands for running tests, linter and type annotations                            |
+| version    | Commands for bumping project versions                                              |
+| quickstart | Display this quickstart guide                                                      |
+| zsh        | Commands for running a zsh session in the container and generating zsh completions |
+
+### Common Commands
+
+Here are some frequently used commands to get you started:
+
+| Command           | Description                                               |
+| ----------------- | --------------------------------------------------------- |
+| docker-restart    | Restart container                                         |
+| docker-start      | Start container                                           |
+| docker-stop       | Stop container                                            |
+| docs-full         | Generate documentation, coverage report, diagram and code |
+| library-add       | Add a given package to a given dependency group           |
+| library-graph-dev | Graph dependencies in dev environment                     |
+| library-remove    | Remove a given package from a given dependency group      |
+| library-search    | Search for pip packages                                   |
+| library-update    | Update dev dependencies                                   |
+| session-lab       | Run jupyter lab server                                    |
+| state             | State of                                                  |
+| test-dev          | Run all tests                                             |
+| test-lint         | Run linting and type checking                             |
+| zsh               | Run ZSH session inside container                          |
+| zsh-complete      | Generate ZSH completion script                            |
+
+---
+
 # Development CLI
-bin/shot-glass is a command line interface (defined in cli.py) that works with
-any version of python 2.7 and above, as it has no dependencies.
+bin/shot-glass is a command line interface (defined in cli.py) that
+works with any version of python 2.7 and above, as it has no dependencies.
+Commands generally do not expect any arguments or flags.
 
 Its usage pattern is: `bin/shot-glass COMMAND [-a --args]=ARGS [-h --help] [--dryrun]`
 
 ### Commands
+The following is a complete list of all available development commands:
 
-| Command              | Description                                                         |
-| -------------------- | ------------------------------------------------------------------- |
-| build-package        | Build production version of repo for publishing                     |
-| build-prod           | Publish pip package of repo to PyPi                                 |
-| build-publish        | Run production tests first then publish pip package of repo to PyPi |
-| build-test           | Build test version of repo for prod testing                         |
-| docker-build         | Build image of shot-glass                                           |
-| docker-build-prod    | Build production image of shot-glass                                |
-| docker-container     | Display the Docker container id of shot-glass                       |
-| docker-destroy       | Shutdown shot-glass container and destroy its image                 |
-| docker-destroy-prod  | Shutdown shot-glass production container and destroy its image      |
-| docker-image         | Display the Docker image id of shot-glass                           |
-| docker-prod          | Start shot-glass production container                               |
-| docker-push          | Push shot-glass production image to Dockerhub                       |
-| docker-remove        | Remove shot-glass Docker image                                      |
-| docker-restart       | Restart shot-glass container                                        |
-| docker-start         | Start shot-glass container                                          |
-| docker-stop          | Stop shot-glass container                                           |
-| docs                 | Generate sphinx documentation                                       |
-| docs-architecture    | Generate architecture.svg diagram from all import statements        |
-| docs-full            | Generate documentation, coverage report, diagram and code           |
-| docs-metrics         | Generate code metrics report, plots and tables                      |
-| library-add          | Add a given package to a given dependency group                     |
-| library-graph-dev    | Graph dependencies in dev environment                               |
-| library-graph-prod   | Graph dependencies in prod environment                              |
-| library-install-dev  | Install all dependencies into dev environment                       |
-| library-install-prod | Install all dependencies into prod environment                      |
-| library-list-dev     | List packages in dev environment                                    |
-| library-list-prod    | List packages in prod environment                                   |
-| library-lock-dev     | Resolve dev.lock file                                               |
-| library-lock-prod    | Resolve prod.lock file                                              |
-| library-remove       | Remove a given package from a given dependency group                |
-| library-search       | Search for pip packages                                             |
-| library-sync-dev     | Sync dev environment with packages listed in dev.lock               |
-| library-sync-prod    | Sync prod environment with packages listed in prod.lock             |
-| library-update       | Update dev dependencies                                             |
-| library-update-pdm   | Update PDM                                                          |
-| session-lab          | Run jupyter lab server                                              |
-| session-python       | Run python session with dev dependencies                            |
-| state                | State of shot-glass                                                 |
-| test-coverage        | Generate test coverage report                                       |
-| test-dev             | Run all tests                                                       |
-| test-fast            | Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator  |
-| test-lint            | Run linting and type checking                                       |
-| test-prod            | Run tests across all support python versions                        |
-| version              | Full resolution of repo: dependencies, linting, tests, docs, etc    |
-| version-bump-major   | Bump pyproject major version                                        |
-| version-bump-minor   | Bump pyproject minor version                                        |
-| version-bump-patch   | Bump pyproject patch version                                        |
-| zsh                  | Run ZSH session inside shot-glass container                         |
-| zsh-complete         | Generate oh-my-zsh completions                                      |
-| zsh-root             | Run ZSH session as root inside shot-glass container                 |
+| Command                    | Description                                                         |
+| -------------------------- | ------------------------------------------------------------------- |
+| build-edit-prod-dockerfile | Edit prod.dockefile to use local package                            |
+| build-local-package        | Generate local pip package in docker/dist                           |
+| build-package              | Build production version of repo for publishing                     |
+| build-prod                 | Publish pip package of repo to PyPi                                 |
+| build-publish              | Run production tests first then publish pip package of repo to PyPi |
+| build-test                 | Build test version of repo for prod testing                         |
+| docker-build               | Build development image                                             |
+| docker-build-from-cache    | Build development image from registry cache                         |
+| docker-build-no-cache      | Build development image without cache                               |
+| docker-build-prod          | Build production image                                              |
+| docker-build-prod-no-cache | Build production image without cache                                |
+| docker-container           | Display the Docker container id                                     |
+| docker-destroy             | Shutdown container and destroy its image                            |
+| docker-destroy-prod        | Shutdown production container and destroy its image                 |
+| docker-image               | Display the Docker image id                                         |
+| docker-prod                | Start production container                                          |
+| docker-pull-dev            | Pull development image from Docker registry                         |
+| docker-pull-prod           | Pull production image from Docker registry                          |
+| docker-push-dev            | Push development image to Docker registry                           |
+| docker-push-dev-latest     | Push development image to Docker registry with dev-latest tag       |
+| docker-push-prod           | Push production image to Docker registry                            |
+| docker-push-prod-latest    | Push production image to Docker registry with prod-latest tag       |
+| docker-remove              | Remove Docker image                                                 |
+| docker-restart             | Restart container                                                   |
+| docker-start               | Start container                                                     |
+| docker-stop                | Stop container                                                      |
+| docs                       | Generate sphinx documentation                                       |
+| docs-architecture          | Generate architecture.svg diagram from all import statements        |
+| docs-full                  | Generate documentation, coverage report, diagram and code           |
+| docs-metrics               | Generate code metrics report, plots and tables                      |
+| library-add                | Add a given package to a given dependency group                     |
+| library-graph-dev          | Graph dependencies in dev environment                               |
+| library-graph-prod         | Graph dependencies in prod environment                              |
+| library-install-dev        | Install all dependencies into dev environment                       |
+| library-install-prod       | Install all dependencies into prod environment                      |
+| library-list-dev           | List packages in dev environment                                    |
+| library-list-prod          | List packages in prod environment                                   |
+| library-lock-dev           | Resolve dev.lock file                                               |
+| library-lock-prod          | Resolve prod.lock file                                              |
+| library-remove             | Remove a given package from a given dependency group                |
+| library-search             | Search for pip packages                                             |
+| library-sync-dev           | Sync dev environment with packages listed in dev.lock               |
+| library-sync-prod          | Sync prod environment with packages listed in prod.lock             |
+| library-update             | Update dev dependencies                                             |
+| library-update-pdm         | Update PDM                                                          |
+| quickstart                 | Display quickstart guide                                            |
+| session-lab                | Run jupyter lab server                                              |
+| session-python             | Run python session with dev dependencies                            |
+| state                      | State of repository and Docker container                            |
+| test-coverage              | Generate test coverage report                                       |
+| test-dev                   | Run all tests                                                       |
+| test-fast                  | Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator  |
+| test-format                | Format all python files                                             |
+| test-lint                  | Run linting and type checking                                       |
+| test-prod                  | Run tests across all support python versions                        |
+| version                    | Full resolution of repo: dependencies, linting, tests, docs, etc    |
+| version-bump-major         | Bump pyproject major version                                        |
+| version-bump-minor         | Bump pyproject minor version                                        |
+| version-bump-patch         | Bump pyproject patch version                                        |
+| version-commit             | Tag with version and commit changes to master                       |
+| zsh                        | Run ZSH session inside Docker container                             |
+| zsh-complete               | Generate oh-my-zsh completions                                      |
+| zsh-root                   | Run ZSH session as root inside Docker container                     |
 
 ### Flags
 
@@ -127,4 +223,29 @@ Its usage pattern is: `bin/shot-glass COMMAND [-a --args]=ARGS [-h --help] [--dr
 | ----- | --------- | ---------------------------------------------------- |
 | -a    | --args    | Additional arguments, this can generally be ignored  |
 | -h    | --help    | Prints command help message to stdout                |
-| -     | --dryrun  | Prints command that would otherwise be run to stdout |
+|       | --dryrun  | Prints command that would otherwise be run to stdout |
+
+---
+
+# Production CLI
+
+shot-glass comes with a command line interface defined in command.py.
+
+Its usage pattern is: `shot-glass COMMAND [ARGS] [FLAGS] [-h --help]`
+
+## Commands
+
+---
+
+### bash-completion
+Prints BASH completion code to be written to a _shot-glass completion file
+
+Usage: `shot-glass bash-completion`
+
+---
+
+### zsh-completion
+Prints ZSH completion code to be written to a _shot-glass completion file
+
+Usage: `shot-glass zsh-completion`
+

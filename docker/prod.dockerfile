@@ -52,6 +52,8 @@ ENV PATH /home/ubuntu/blender/$BLENDER_VERSION/python/bin:$PATH
 
 # install shot-glass
 USER ubuntu
-ENV REPO='shot-glass'
+ARG VERSION
 RUN echo "\n${CYAN}INSTALL SHOT-GLASS{CLEAR}"; \
-    $BLENDER_PYTHON install shot-glass
+    $BLENDER_PYTHON install shot-glass==$VERSION
+
+ENV PATH="$PATH:/home/ubuntu/.local/bin"

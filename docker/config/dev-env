@@ -1,3 +1,4 @@
+SKIP_S6_SERVICE=true
 # BLENDER_SYSTEM_PYTHON="Directory for system Python libraries"
 # BLENDER_USER_CONFIG="Directory for user configuration files"
 # BLENDER_USER_SCRIPTS="Directory for user scripts"
