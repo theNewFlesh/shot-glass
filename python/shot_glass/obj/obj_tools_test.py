@@ -8,9 +8,9 @@ from shot_glass.hifive.test_base import HiFiveTestBase
 class ValidatorsTests(HiFiveTestBase):
     def test_obj_face_to_edges(self):
         expected = DataFrame()
-        expected['v_id'] = [0, 1, 1, 2, 2, 3, 3, 0]
-        expected['e_id'] = [0, 0, 1, 1, 2, 2, 3, 3]
-        expected['v_i_draw_order'] = [0, 1, 1, 2, 2, 3, 3, 0]
+        expected['v_id'] = [0, 0, 1, 1, 2, 2, 3, 3]
+        expected['e_id'] = [0, 1, 1, 2, 2, 3, 3, 0]
+        expected['v_i_draw_order'] = [0, 0, 1, 1, 2, 2, 3, 3]
         expected['f_id'] = 0
 
         result = obt.obj_face_to_edges([0, 1, 2, 3])

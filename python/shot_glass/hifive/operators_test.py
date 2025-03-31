@@ -59,7 +59,7 @@ class HiFiveOperatorsTests(unittest.TestCase):
         ]
         self.assertEqual(result.data.columns.tolist(), expected)
         self.assertEqual(result.data.v_id.tolist(), [0, 0, 1, 1, 2, 2, 3, 3])
-        self.assertEqual(result.data.e_id.tolist(), [0, 3, 0, 1, 1, 2, 2, 3])
+        self.assertEqual(result.data.e_id.tolist(), [0, 1, 1, 2, 2, 3, 3, 0])
         self.assertEqual(result.data.f_id.tolist(), [0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(result.data.i_id.tolist(), [0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(

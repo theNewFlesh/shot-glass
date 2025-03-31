@@ -38,6 +38,7 @@ def obj_face_to_edges(vertex_ids):
                 v_i_draw_order=o_lut[v_id]
             )
             output.append(row)
+    output = [output[-1]] + output[:-1]
     output = DataFrame(output)
     return output
 
