@@ -145,6 +145,17 @@ FROM base AS dev
 USER ubuntu
 WORKDIR /home/ubuntu
 
+# install blender dependencies
+RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
+    apt update && \
+    apt install -y \
+        libgl1-mesa-glx \
+        libxfixes3 \
+        libxi6 \
+        libxkbcommon-x11-0 \
+        libxxf86vm-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # install dev dependencies
 RUN echo "\n${CYAN}INSTALL DEV DEPENDENCIES${CLEAR}"; \
     curl -sSL \
