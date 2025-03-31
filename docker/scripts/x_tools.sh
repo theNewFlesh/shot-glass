@@ -13,7 +13,6 @@ export CONFIG_DIR="$REPO_DIR/docker/config"
 export DOCS_DIR="$REPO_DIR/docs"
 export MIN_PYTHON_VERSION="3.10"
 export MAX_PYTHON_VERSION="3.10"
-export MIN_BPY_VERSION="3.4.0"
 export MKDOCS_DIR="$REPO_DIR/mkdocs"
 export PDM_DIR="$HOME/pdm"
 export PYPI_URL="pypi"
@@ -149,47 +148,6 @@ _x_set_uv_vars () {
     export UV_PROJECT_ENVIRONMENT=`find $PDM_DIR/envs -maxdepth 1 -type d | grep $1-$2`;
 }
 
-# BPY---------------------------------------------------------------------------
-x_env_activate () {
-    # Activate a virtual env given a mode and python version
-    # args: mode, python_version
-    local CWD=`pwd`;
-    cd $PDM_DIR;
-    _x_gen_pdm_files $1 $2;
-    . `pdm venv activate $1-$2 | awk '{print $2}'`;
-    _x_set_uv_vars $1 $2;
-    cd $CWD;
-}
-
-# TODO: remove this once PDM will install bpy
-_x_env_pip_install () {
-    # Pip install packages pdm refuses to
-    # args: mode, python_version, packages
-    cd $PDM_DIR;
-    x_env_activate $1 $2 && \
-    python3 -m pip install "$3";
-    deactivate;
-}
-
-# TODO: remove this once PDM will install bpy
-_x_env_install_bpy () {
-    # install bpy in given environment
-    # args: mode, python_version
-    echo "\n${CYAN2}INSTALL BPY${CLEAR}\n";
-    _x_env_pip_install $1 $2 "bpy>=$MIN_BPY_VERSION";
-}
-
-# TODO: remove this once PDM will install bpy
-_x_build_add_bpy () {
-    # add bpy to pyproject file
-    # args: pyproject.toml file
-    DEPS=`rolling-pin toml $1 --search project.dependencies \
-        | grep dependencies \
-        | sed 's/.* = \[/[/' \
-        | sed "s/\]/ \"bpy>=$MIN_BPY_VERSION\"]/"`;
-    rolling-pin toml $1 --edit "project.dependencies=$DEPS" --target $1;
-}
-
 # ENV-FUNCTIONS-----------------------------------------------------------------
 _x_env_exists () {
     # determines if given env exists
@@ -226,7 +184,18 @@ _x_env_create () {
     # args: mode, python_version
     cd $PDM_DIR;
     _x_gen_pdm_files $1 $2;
-    pdm venv create -n $1-$2 --with-pip;
+    pdm venv create -n $1-$2;
+}
+
+x_env_activate () {
+    # Activate a virtual env given a mode and python version
+    # args: mode, python_version
+    local CWD=`pwd`;
+    cd $PDM_DIR;
+    _x_gen_pdm_files $1 $2;
+    . `pdm venv activate $1-$2 | awk '{print $2}'`;
+    _x_set_uv_vars $1 $2;
+    cd $CWD;
 }
 
 _x_env_lock () {
@@ -250,8 +219,6 @@ _x_env_sync () {
         exit_code=`_x_resolve_exit_code $exit_code $?`;
     fi;
     pdm sync --no-self --dev --clean -v;
-    exit_code=`_x_resolve_exit_code $exit_code $?`;
-    _x_env_install_bpy $1 $2;
     exit_code=`_x_resolve_exit_code $exit_code $?`;
     deactivate;
     return $exit_code;
@@ -347,7 +314,6 @@ x_build_prod () {
     echo "${CYAN2}BUILDING PROD REPO${CLEAR}\n";
     _x_build prod;
     _x_gen_pyproject package > $BUILD_DIR/repo/pyproject.toml;
-    _x_build_add_bpy $BUILD_DIR/repo/pyproject.toml;
     _x_build_show_dir;
 }
 
@@ -454,7 +420,6 @@ _x_library_sync () {
     cd $PDM_DIR;
     pdm sync --no-self --dev --clean -v;
     deactivate;
-    _x_env_install_bpy $1 $2;
     x_env_activate_dev;
 }
 
