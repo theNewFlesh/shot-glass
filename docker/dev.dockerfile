@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 AS base
+FROM lscr.io/linuxserver/blender:latest AS base
 
 USER root
 
@@ -6,6 +6,11 @@ USER root
 ENV CYAN='\033[0;36m'
 ENV CLEAR='\033[0m'
 ENV DEBIAN_FRONTEND='noninteractive'
+
+# modify kasm-user
+RUN echo "\n${CYAN}MODIFY KASM-USER${CLEAR}"; \
+    usermod -u 1042 kasm-user && \
+    groupmod -g 1042 kasm-user
 
 # setup ubuntu user
 ARG UID_='1000'
@@ -39,7 +44,7 @@ RUN echo "\n${CYAN}INSTALL GENERIC DEPENDENCIES${CLEAR}"; \
         ca-certificates \
         cargo \
         curl \
-        exa \
+        eza \
         git \
         gnupg \
         graphviz \
@@ -143,26 +148,25 @@ ENV LC_ALL "C.UTF-8"
 FROM base AS dev
 
 USER root
+RUN echo "\n${CYAN}SETUP /CONFIG${CLEAR}"; \
+    mkdir -p /config/.local && chmod 666 /config && chmod 666 /config/.local
 
 # install blender dependencies
-RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
-    apt update && \
-    apt install -y \
-        libgl1-mesa-glx \
-        libxfixes3 \
-        libxi6 \
-        libxkbcommon-x11-0 \
-        libxxf86vm-dev \
-    && rm -rf /var/lib/apt/lists/*
+# RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
+#     apt update && \
+#     apt install -y \
+#         libgl1-mesa-glx \
+#         libxfixes3 \
+#         libxi6 \
+#         libxkbcommon-x11-0 \
+#         libxxf86vm-dev \
+#     && rm -rf /var/lib/apt/lists/*
 
 USER ubuntu
 WORKDIR /home/ubuntu
 
 # install dev dependencies
 RUN echo "\n${CYAN}INSTALL DEV DEPENDENCIES${CLEAR}"; \
-    curl -sSL \
-        https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py \
-        | python3.10 - && \
     pip3.10 install --upgrade --user \
         'pdm>=2.19.1' \
         'pdm-bump<0.7.0' \

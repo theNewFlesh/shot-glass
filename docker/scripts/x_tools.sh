@@ -263,7 +263,7 @@ _x_build () {
 
 _x_build_show_dir () {
     # Run tree command on build directory
-    exa --tree --all $BUILD_DIR;
+    eza --tree --all $BUILD_DIR;
     echo;
 }
 
@@ -274,7 +274,7 @@ _x_build_show_package () {
     local package=`ls | grep tar.gz`;
     tar xvf $package -C /tmp/dist;
     echo "\n${CYAN2}$package${CLEAR}";
-    exa --tree --all /tmp/dist;
+    eza --tree --all /tmp/dist;
     rm -rf /tmp/dist;
     echo;
 }

@@ -34,11 +34,11 @@ source $REPO_DIR/docker/scripts/x_tools.sh
 alias l='ls -hl'
 alias ll='ls -hlA'
 
-# exa aliases
+# eza aliases
 if [[ `which exa` != "* not found" ]]; then
-    alias l='exa --long --header';
-    alias ll='exa --long --header --all';
-    alias tree='exa --tree --all';
+    alias l='eza --long --header';
+    alias ll='eza --long --header --all';
+    alias tree='eza --tree --all';
 fi;
 
 # batcat aliases
