@@ -1,0 +1,51 @@
+{
+  "template": "https://github.com/thenewflesh/cookiecutter-datalus",
+  "commit": "ef58ed4d2f3be06b2b08c5161538d78dc96fda50",
+  "checkout": null,
+  "skip": [
+    "__init__\\.py$",
+    "\\.gitignore$",
+    "\\.gitkeep$",
+    "docker/config/.*\\.lock$",
+    "docker/config/build\\.yaml",
+    "docs/.*",
+    "mkdocs/md/(?!index\\.md|style\\.css)",
+    "public/.*",
+    "python/shot_glass/.*(?!command\\.py$)",
+    "resources/.*",
+    "sphinx/.*rst$"
+  ],
+  "context": {
+    "cookiecutter": {
+      "repo": "shot-glass",
+      "repo_type": "library",
+      "include_gcc": "no",
+      "include_helm": "no",
+      "include_mkdocs": "no",
+      "include_nvidia": "no",
+      "include_openexr": "no",
+      "include_prod_cli": "yes",
+      "include_prod_envs": "yes",
+      "include_secret_env": "no",
+      "include_vscode_server": "no",
+      "port_prefix": "21",
+      "git_user": "theNewFlesh",
+      "git_host": "github",
+      "git_organization": "thenewflesh",
+      "docker_registry": "dockerhub",
+      "organization_url": "github.com",
+      "description": "3D Data Science via Blender and Category Theory",
+      "author": "Alex Braun",
+      "email": "alexander.g.braun@gmail.com",
+      "website": "http://www.alexgbraun.com",
+      "volume": "",
+      "keywords": "blender, add-on, 3D, computer-vision, geometry, category-theory",
+      "year": "2022",
+      "python_min_version": "10",
+      "python_max_version": "10",
+      "initial_repo_version": "0.5.0",
+      "_template": "https://github.com/thenewflesh/cookiecutter-datalus"
+    }
+  },
+  "directory": null
+}
