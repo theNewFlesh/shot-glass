@@ -27,7 +27,7 @@ requires-python = ">=3.10"
 dependencies = [
     "bpy>=3.4.0",
     "click>=8.1.3",
-    "lunchbox",
+    "lunchbox>=0.6.1",
     "numpy",
     "pandas",
     "plotly",

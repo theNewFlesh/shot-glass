@@ -1,11 +1,14 @@
 import subprocess
 
 import click
+import lunchbox.theme as lbc
 # ------------------------------------------------------------------------------
 
 '''
 Command line interface to shot-glass library
 '''
+
+click.Context.formatter_class = lbc.ThemeFormatter
 
 
 @click.group()
@@ -16,9 +19,10 @@ def main():
 @main.command()
 def bash_completion():
     '''
-        BASH completion code to be written to a _shotglass completion file.
+    {white}BASH completion code to be written to a _shot-glass completion
+    file.{clear}
     '''
-    cmd = '_SHOTGLASS_COMPLETE=bash_source shot-glass'
+    cmd = '_SHOT_GLASS_COMPLETE=bash_source shot-glass'
     result = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     result.wait()
     click.echo(result.stdout.read())
@@ -27,9 +31,10 @@ def bash_completion():
 @main.command()
 def zsh_completion():
     '''
-        ZSH completion code to be written to a _shotglass completion file.
+    {white}ZSH completion code to be written to a _shot-glass completion
+    file.{clear}
     '''
-    cmd = '_SHOTGLASS_COMPLETE=zsh_source shot-glass'
+    cmd = '_SHOT_GLASS_COMPLETE=zsh_source shot-glass'
     result = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     result.wait()
     click.echo(result.stdout.read())
