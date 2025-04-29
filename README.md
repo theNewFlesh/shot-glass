@@ -248,4 +248,3 @@ Usage: `shot-glass bash-completion`
 Prints ZSH completion code to be written to a _shot-glass completion file
 
 Usage: `shot-glass zsh-completion`
-
