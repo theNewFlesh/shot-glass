@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/thenewflesh/cookiecutter-datalus",
-  "commit": "50c00ad5bf94d64ffe7a6e8552eb375a4349cf7b",
+  "commit": "d3c7d93f0ea9fe64cc76184eb84c7d27a8cc8f7b",
   "checkout": null,
   "skip": [
     "__init__\\.py$",
@@ -32,7 +32,8 @@
       "git_user": "theNewFlesh",
       "git_host": "github",
       "git_organization": "thenewflesh",
-      "docker_registry": "dockerhub",
+      "package_registry": "pypi",
+      "docker_registry": "docker.io",
       "organization_url": "github.com",
       "description": "3D Data Science via Blender and Category Theory",
       "author": "Alex Braun",
@@ -45,7 +46,7 @@
       "python_max_version": "10",
       "initial_repo_version": "0.5.0",
       "_template": "https://github.com/thenewflesh/cookiecutter-datalus",
-      "_commit": "50c00ad5bf94d64ffe7a6e8552eb375a4349cf7b"
+      "_commit": "d3c7d93f0ea9fe64cc76184eb84c7d27a8cc8f7b"
     }
   },
   "directory": null
