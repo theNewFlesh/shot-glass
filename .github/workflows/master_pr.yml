@@ -1,0 +1,62 @@
+# Please ensure the following GitHub repository action secrets are set up:
+#  - DOCKER_REGISTRY_USER
+#  - DOCKER_REGISTRY_PASSWORD
+
+name: Master Pull Request
+run-name: "PR: ${{ github.head_ref }} --> master | ${{ github.actor }}"
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize ]
+
+env:
+  repo: "${{ github.event.repository.name }}"
+  cli: "bin/${{ github.event.repository.name }}"
+  org: "thenewflesh"
+  org_url: "github.com"
+  docker_registry: "docker.io"
+
+jobs:
+  master-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+
+      - name: Change repo permissions
+        run: chmod -R o+w ../
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.docker_registry }}
+          username: ${{ secrets.DOCKER_REGISTRY_USER }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: Pull image
+        run: $($cli docker-pull-dev) || echo "docker image not found"
+
+      - name: Build image
+        run: $cli docker-build-from-cache
+
+      - name: Start container
+        run: $cli docker-start
+
+      - name: Generate docs
+        run: $cli docs
+
+      - name: Generate code metrics
+        run: $cli docs-metrics
+
+      - name: Generate architecture diagram
+        run: $cli docs-architecture
+
+      - name: Lint code
+        run: $cli test-lint
+
+      - name: Run tests
+        run: $cli test-coverage

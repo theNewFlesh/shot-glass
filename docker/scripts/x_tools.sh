@@ -16,6 +16,7 @@ export MAX_PYTHON_VERSION="3.10"
 export MKDOCS_DIR="$REPO_DIR/mkdocs"
 export PDM_DIR="$HOME/pdm"
 export PYPI_URL="pypi"
+export PYPI_TEST_URL="testpypi"
 export PYTHONPATH="$REPO_DIR/python:$HOME/.local/lib"
 export SCRIPT_DIR="$REPO_DIR/docker/scripts"
 export TEST_MAX_PROCS=16
@@ -339,6 +340,13 @@ x_build_publish () {
     _x_build_publish __token__ $1 $version $PYPI_URL;
 }
 
+x_build_publish_test () {
+    # Run tests and then publish pip package of repo to test PyPi
+    # args: token
+    local version=`_x_get_version`;
+    _x_build_publish __token__ $1 $version $PYPI_TEST_URL;
+}
+
 x_build_test () {
     # Build test version of repo for prod testing
     echo "${CYAN2}BUILDING TEST REPO${CLEAR}\n";
@@ -596,6 +604,13 @@ x_session_python () {
     # Run python session with dev dependencies
     x_env_activate_dev;
     python3;
+}
+
+x_session_server () {
+    # Run application server
+    x_env_activate_dev;
+    echo "${CYAN2}SERVER${CLEAR}\n";
+    python3 $REPO_SUBPACKAGE/server/app.py;
 }
 
 # TEST-FUNCTIONS----------------------------------------------------------------

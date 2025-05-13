@@ -1,0 +1,65 @@
+# Please ensure the following GitHub repository action secrets are set up:
+#  - DOCKER_REGISTRY_USER
+#  - DOCKER_REGISTRY_PASSWORD
+#  - PYPI_ACCESS_TOKEN
+
+name: Prod
+run-name: "${{ github.event.head_commit.message }} | ${{ github.actor }}"
+
+on:
+  push:
+    branches: [ prod ]
+
+env:
+  repo: "${{ github.event.repository.name }}"
+  cli: "bin/${{ github.event.repository.name }}"
+  org: "thenewflesh"
+  org_url: "github.com"
+  docker_registry: "docker.io"
+
+jobs:
+  prod:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+
+      - name: Change repo permissions
+        run: chmod -R o+w ../
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.docker_registry }}
+          username: ${{ secrets.DOCKER_REGISTRY_USER }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: Pull image
+        run: $($cli docker-pull-dev) || echo "docker image not found"
+
+      - name: Build image
+        run: $cli docker-build-from-cache
+
+      - name: Tag image
+        run: docker tag $repo:dev-latest $repo:dev
+
+      - name: Start container
+        run: $cli docker-start
+
+      - name: Run prod tests
+        run: $cli test-prod
+
+      - name: Publish python package
+        run: $cli build-publish -a ${{ secrets.PYPI_ACCESS_TOKEN }}
+
+      - name: Build prod image
+        run: $cli docker-build-prod-no-cache
+
+      - name: Push prod image
+        run: $cli docker-push-prod
+
+      - name: Push prod-latest image
+        run: $cli docker-push-prod-latest

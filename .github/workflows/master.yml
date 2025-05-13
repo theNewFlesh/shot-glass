@@ -1,0 +1,86 @@
+# Please ensure the following GitHub repository action secrets are set up:
+#  - DOCKER_REGISTRY_USER
+#  - DOCKER_REGISTRY_PASSWORD
+
+name: Master
+run-name: "${{ github.event.head_commit.message }} | ${{ github.actor }}"
+
+on:
+  push:
+    branches: [ master ]
+
+env:
+  repo: "${{ github.event.repository.name }}"
+  cli: "bin/${{ github.event.repository.name }}"
+  org: "thenewflesh"
+  org_url: "github.com"
+  docker_registry: "docker.io"
+
+jobs:
+  master:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+
+      - name: Change repo permissions
+        run: chmod -R o+w ../
+
+      - name: Setup git credentials
+        run: |
+          git config user.name ci && \
+          git config user.email "ci@$org_url"
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.docker_registry }}
+          username: ${{ secrets.DOCKER_REGISTRY_USER }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: Pull image
+        run: $($cli docker-pull-dev) || echo "docker image not found"
+
+      - name: Build image
+        run: $cli docker-build-from-cache
+
+      - name: Start container
+        run: $cli docker-start
+
+      - name: Version bump
+        run: $cli version-bump-patch
+
+      - name: Version
+        run: $cli version
+
+      - name: Commit new version
+        run: $cli version-commit
+
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      # - name: Push dev image
+      #   run: $cli docker-push-dev
+
+      # - name: Push dev-latest image
+      #   run: $cli docker-push-dev-latest
+
+  pages:
+    needs: master
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

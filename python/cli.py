@@ -135,6 +135,7 @@ def get_info():
     build-package              - Generate pip package of repo
     build-prod                 - Build production version of repo for publishing
     build-publish              - Run production tests first then publish pip package of repo to PyPi
+    build-publish-test         - Run tests and then publish pip package of repo to test PyPi
     build-test                 - Build test version of repo for prod testing
     docker-build               - Build development image
     docker-build-from-cache    - Build development image from registry cache
@@ -866,6 +867,7 @@ def main():
         'build-package': x_tools_command('x_build_package', args),
         'build-prod': x_tools_command('x_build_prod', args),
         'build-publish': x_tools_command('x_build_publish', args),
+        'build-publish-test': x_tools_command('x_build_publish_test', args),
         'build-test': x_tools_command('x_build_test', args),
         'docker-build': build_dev_command(),
         'docker-build-from-cache': build_dev_command(use_cache=True),
