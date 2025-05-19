@@ -2,11 +2,8 @@ import unittest
 
 import bpy
 import bmesh
-from pandas import DataFrame
-import pytest
 
 import baas.blender.blender_tools as blt
-from baas.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 
@@ -315,36 +312,6 @@ class BlenderToolsTests(unittest.TestCase):
         result = len(cube1.data.polygons)
         self.assertEqual(result, 12)
 
-    def test_dataframe_to_pydata(self):
-        bpy.ops.mesh.primitive_cube_add()
-        mesh = bpy.context.scene.objects[0]
-        mesh.name = '0'
-        data0 = blt.mesh_to_dataframe(mesh)
-        expected = blt.dataframe_to_pydata(data0)
-
-        name = '1'
-        mesh = bpy.data.meshes.new(name)
-        obj = bpy.data.objects.new(name, mesh)
-        bpy.context.collection.objects.link(obj)
-
-        mesh.from_pydata(*expected)
-        mesh.update()
-
-        data1 = blt.mesh_to_dataframe(obj)
-        result = blt.dataframe_to_pydata(data1)
-
-        # verts
-        self.assertEqual(result[0], expected[0])
-        self.assertEqual(len(result[0]), 8)
-
-        # edges
-        self.assertEqual(result[1], expected[1])
-        self.assertEqual(len(result[1]), 12)
-
-        # faces
-        self.assertEqual(result[2], expected[2])
-        self.assertEqual(len(result[2]), 6)
-
     def test_mesh_to_pydata(self):
         bpy.ops.mesh.primitive_plane_add()
         mesh = bpy.data.objects[0]
@@ -369,145 +336,3 @@ class BlenderToolsTests(unittest.TestCase):
         self.assertEqual(result[0], expected[0])
         self.assertEqual(result[1], expected[1])
         self.assertEqual(result[2], expected[2])
-
-    def test_mesh_to_dataframe_to_mesh(self):
-        bpy.ops.mesh.primitive_cube_add()
-
-        mesh = bpy.data.objects[0]
-
-        with pytest.raises(ValidationError) as e:
-            blt.mesh_to_dataframe(mesh)
-        expected = "Mesh name must be coercible to int. Found: Cube"
-        self.assertEqual(str(e.value), expected)
-
-        mesh.name = '0'
-        data = blt.mesh_to_dataframe(mesh)
-
-        expected = blt.mesh_to_pydata(mesh)
-        result = blt.dataframe_to_mesh(data)
-        result = blt.mesh_to_pydata(result)
-
-        # verts
-        self.assertEqual(result[0], expected[0])
-        self.assertEqual(len(result[0]), 8)
-
-        # edges
-        self.assertEqual(result[1], expected[1])
-        self.assertEqual(len(result[1]), 12)
-
-        # faces
-        self.assertEqual(result[2], expected[2])
-        self.assertEqual(len(result[2]), 6)
-
-    def test_dataframe_to_mesh_to_dataframe(self):
-        data = DataFrame()
-        data['v_id'] = [0, 1, 1, 2, 2, 3, 3, 0]
-        data['v_x'] = [0, 1, 1, 1, 1, 0, 0, 0]
-        data['v_y'] = [0, 0, 0, 1, 1, 1, 1, 0]
-        data['v_z'] = [0, 0, 0, 0, 0, 0, 0, 0]
-        data['e_id'] = [0, 0, 1, 1, 2, 2, 3, 3]
-        data['f_id'] = [0, 0, 0, 0, 0, 0, 0, 0]
-        data['i_id'] = [0, 0, 0, 0, 0, 0, 0, 0]
-
-        data.v_x = data.v_x.astype(float)
-        data.v_y = data.v_y.astype(float)
-        data.v_z = data.v_z.astype(float)
-
-        with pytest.raises(ValidationError):
-            blt.dataframe_to_mesh(data)
-
-        data.v_z = data.v_z.astype(int)
-        with pytest.raises(ValidationError):
-            blt.dataframe_to_mesh(data)
-
-        data.v_z = data.v_z.astype(float)
-
-        data['v_i_draw_order'] = [0, 1, 1, 2, 2, 3, 3, 0]
-        data.v_i_draw_order = data.v_i_draw_order.astype(float)
-        with pytest.raises(ValidationError):
-            blt.dataframe_to_mesh(data)
-
-        # previous calls to _dataframe to mesh have populated the scene
-        blt.delete_all_scenes()
-
-        data.v_i_draw_order = data.v_i_draw_order.astype(int)
-        data.sort_values(
-            ['i_id', 'f_id', 'e_id', 'v_i_draw_order'],
-            inplace=True
-        )
-        data.reset_index(drop=True, inplace=True)
-
-        result = blt.dataframe_to_mesh(data)
-        result = blt.mesh_to_dataframe(result)
-
-        result = blt.dataframe_to_pydata(result)
-        expected = blt.dataframe_to_pydata(data)
-
-        # verts
-        self.assertEqual(result[0], expected[0])
-        self.assertEqual(len(result[0]), 4)
-
-        # edges
-        self.assertEqual(result[1], expected[1])
-        self.assertEqual(len(result[1]), 4)
-
-        # faces
-        self.assertEqual(result[2], expected[2])
-        self.assertEqual(len(result[2]), 1)
-
-    def test_scene_to_dataframe_to_scene(self):
-        bpy.ops.mesh.primitive_plane_add()
-        bpy.ops.mesh.primitive_cube_add()
-        scene = bpy.context.scene
-        for i, obj in enumerate(list(scene.objects)):
-            obj.name = str(i)
-        expected = blt.scene_to_dataframe(scene)
-
-        # expected reflects scene
-        self.assertEqual(expected.i_id.nunique(), 2)
-        self.assertEqual(expected[expected.i_id == 0].v_id.nunique(), 4)
-        self.assertEqual(expected[expected.i_id == 1].v_id.nunique(), 8)
-
-        scene = blt.dataframe_to_scene(expected)
-        result = blt.scene_to_dataframe(scene)
-
-        # DataFrame
-        self.assertEqual(result.shape, expected.shape)
-        self.assertEqual(result.columns.tolist(), expected.columns.tolist())
-
-        # vertices
-        self.assertEqual(result.v_id.min(), expected.v_id.min())
-        self.assertEqual(result.v_id.max(), expected.v_id.max())
-        self.assertEqual(result.v_id.nunique(), expected.v_id.nunique())
-
-        # edges
-        self.assertEqual(result.e_id.min(), expected.e_id.min())
-        self.assertEqual(result.e_id.max(), expected.e_id.max())
-        self.assertEqual(result.e_id.nunique(), expected.e_id.nunique())
-
-        # faces
-        self.assertEqual(result.f_id.min(), expected.f_id.min())
-        self.assertEqual(result.f_id.max(), expected.f_id.max())
-        self.assertEqual(result.f_id.nunique(), expected.f_id.nunique())
-
-        # items
-        self.assertEqual(result.i_id.min(), expected.i_id.min())
-        self.assertEqual(result.i_id.max(), expected.i_id.max())
-        self.assertEqual(result.i_id.nunique(), expected.i_id.nunique())
-        self.assertEqual(result[result.i_id == 0].v_id.nunique(), 4)
-        self.assertEqual(result[result.i_id == 1].v_id.nunique(), 8)
-
-        result = blt.dataframe_to_pydata(result)
-        expected = blt.dataframe_to_pydata(expected)
-
-        # verts
-        self.assertEqual(result[0], expected[0])
-        self.assertEqual(len(result[0]), 12)
-
-        # edges
-        self.assertEqual(result[1], expected[1])
-        self.assertEqual(len(result[1]), 16)
-
-        # faces
-        self.assertEqual(result[2], expected[2])
-        self.assertEqual(len(result[2]), 7)
