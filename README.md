@@ -26,38 +26,38 @@
     </a>
 </p>
 
-[![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/thenewflesh/shot-glass/blob/master/LICENSE)
-[![](https://img.shields.io/pypi/pyversions/shot-glass?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/thenewflesh/shot-glass/blob/master/docker/config/pyproject.toml)
-[![](https://img.shields.io/pypi/v/shot-glass?style=for-the-badge&label=PyPI&color=5F95DE&logo=pypi&logoColor=5F95DE)](https://pypi.org/project/shot-glass/)
-[![](https://img.shields.io/pypi/dm/shot-glass?style=for-the-badge&label=Downloads&color=5F95DE)](https://pepy.tech/project/shot-glass)
+[![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/thenewflesh/baas/blob/master/LICENSE)
+[![](https://img.shields.io/pypi/pyversions/baas?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/thenewflesh/baas/blob/master/docker/config/pyproject.toml)
+[![](https://img.shields.io/pypi/v/baas?style=for-the-badge&label=PyPI&color=5F95DE&logo=pypi&logoColor=5F95DE)](https://pypi.org/project/baas/)
+[![](https://img.shields.io/pypi/dm/baas?style=for-the-badge&label=Downloads&color=5F95DE)](https://pepy.tech/project/baas)
 
 <!-- <img id="logo" src="sphinx/images/logo.png" style="max-width: 717px"> -->
 
 # Introduction
 3D Data Science via Blender and Category Theory.
 
-See [documentation](https://thenewflesh.github.io/shot-glass/) for details.
+See [documentation](https://thenewflesh.github.io/baas/) for details.
 
 # Installation for Developers
 
 ### Docker
 1. Install [docker-desktop](https://docs.docker.com/desktop/)
 2. Ensure docker-desktop has at least 4 GB of memory allocated to it.
-3. `git clone git@github.com:theNewFlesh/shot-glass.git`
-4. `cd shot-glass`
-5. `chmod +x bin/shot-glass`
-6. `bin/shot-glass docker-start`
+3. `git clone git@github.com:theNewFlesh/baas.git`
+4. `cd baas`
+5. `chmod +x bin/baas`
+6. `bin/baas docker-start`
    - If building on a M1 Mac run `export DOCKER_DEFAULT_PLATFORM=linux/amd64` first.
 
 The service should take a few minutes to start up.
 
-Run `bin/shot-glass --help` for more help on the command line tool.
+Run `bin/baas --help` for more help on the command line tool.
 
 ### ZSH Setup
-1. `bin/shot-glass` must be run from this repository's top level directory.
+1. `bin/baas` must be run from this repository's top level directory.
 2. Therefore, if using zsh, it is recommended that you paste the following line
     in your ~/.zshrc file:
-    - `alias shot-glass="cd [parent dir]/shot-glass; bin/shot-glass"`
+    - `alias baas="cd [parent dir]/baas; bin/baas"`
     - Replace `[parent dir]` with the parent directory of this repository
 3. Consider adding the following line to your ~/.zshrc if you are using a M1 Mac:
     - `export DOCKER_DEFAULT_PLATFORM=linux/amd64`
@@ -65,22 +65,22 @@ Run `bin/shot-glass --help` for more help on the command line tool.
    commands, in the next shell session.
 
    For example:
-   - `shot-glass [tab]` will show you all the cli options, which you can press
+   - `baas [tab]` will show you all the cli options, which you can press
      tab to cycle through
-   - `shot-glass docker-[tab]` will show you only the cli options that begin with
+   - `baas docker-[tab]` will show you only the cli options that begin with
      "docker-"
 
 # Installation for Production
 
 ### Python
-`pip install shot-glass`
+`pip install baas`
 
 Please see the prod.dockerfile for an official example of how to build a docker
-image with shot-glass.
+image with baas.
 
 ### Docker
 1. Install [docker-desktop](https://docs.docker.com/desktop/)
-2. `docker pull theNewFlesh/shot-glass:[mode]-[version]`
+2. `docker pull theNewFlesh/baas:[mode]-[version]`
 
 
 ---
@@ -142,11 +142,11 @@ Here are some frequently used commands to get you started:
 ---
 
 # Development CLI
-bin/shot-glass is a command line interface (defined in cli.py) that
+bin/baas is a command line interface (defined in cli.py) that
 works with any version of python 2.7 and above, as it has no dependencies.
 Commands generally do not expect any arguments or flags.
 
-Its usage pattern is: `bin/shot-glass COMMAND [-a --args]=ARGS [-h --help] [--dryrun]`
+Its usage pattern is: `bin/baas COMMAND [-a --args]=ARGS [-h --help] [--dryrun]`
 
 ### Commands
 The following is a complete list of all available development commands:
@@ -230,22 +230,22 @@ The following is a complete list of all available development commands:
 
 # Production CLI
 
-shot-glass comes with a command line interface defined in command.py.
+baas comes with a command line interface defined in command.py.
 
-Its usage pattern is: `shot-glass COMMAND [ARGS] [FLAGS] [-h --help]`
+Its usage pattern is: `baas COMMAND [ARGS] [FLAGS] [-h --help]`
 
 ## Commands
 
 ---
 
 ### bash-completion
-Prints BASH completion code to be written to a _shot-glass completion file
+Prints BASH completion code to be written to a _baas completion file
 
-Usage: `shot-glass bash-completion`
+Usage: `baas bash-completion`
 
 ---
 
 ### zsh-completion
-Prints ZSH completion code to be written to a _shot-glass completion file
+Prints ZSH completion code to be written to a _baas completion file
 
-Usage: `shot-glass zsh-completion`
+Usage: `baas zsh-completion`

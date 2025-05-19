@@ -11,13 +11,13 @@
     "docs/.*",
     "mkdocs/md/(?!index\\.md|style\\.css)",
     "public/.*",
-    "python/shot_glass/.*(?!command\\.py$)",
+    "python/baas/.*(?!command\\.py$)",
     "resources/.*",
     "sphinx/.*rst$"
   ],
   "context": {
     "cookiecutter": {
-      "repo": "shot-glass",
+      "repo": "baas",
       "repo_type": "library",
       "include_gcc": "no",
       "include_helm": "no",

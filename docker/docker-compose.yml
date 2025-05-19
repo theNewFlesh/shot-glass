@@ -1,7 +1,7 @@
 services:
-  shot-glass:
-    container_name: shot-glass
-    image: shot-glass:dev
+  baas:
+    container_name: baas
+    image: baas:dev
     platform: linux/amd64
     build:
       context: .
@@ -14,7 +14,7 @@ services:
     env_file:
       - config/dev-env
     volumes:
-      - ../:/home/ubuntu/shot-glass
+      - ../:/home/ubuntu/baas
       - ~/.ssh:/home/ubuntu/.ssh:ro
       - ./config/jupyter:/home/ubuntu/.jupyter
       - ./config/zshrc:/home/ubuntu/.zshrc

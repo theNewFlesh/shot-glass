@@ -5,8 +5,8 @@ import bmesh
 from pandas import DataFrame
 import pytest
 
-import shot_glass.blender.blender_tools as blt
-from shot_glass.core.tools import ValidationError
+import baas.blender.blender_tools as blt
+from baas.core.tools import ValidationError
 # ------------------------------------------------------------------------------
 
 

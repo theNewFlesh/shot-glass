@@ -50,10 +50,10 @@ ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10/site-
 ENV PYTHONPATH $PYTHONPATH:/home/ubuntu/blender/$BLENDER_VERSION/scripts/modules
 ENV PATH /home/ubuntu/blender/$BLENDER_VERSION/python/bin:$PATH
 
-# install shot-glass
+# install baas
 USER ubuntu
 ARG VERSION
 RUN echo "\n${CYAN}INSTALL SHOT-GLASS{CLEAR}"; \
-    $BLENDER_PYTHON install shot-glass==$VERSION
+    $BLENDER_PYTHON install baas==$VERSION
 
 ENV PATH="$PATH:/home/ubuntu/.local/bin"

@@ -17,7 +17,7 @@ import toml
 sys.path.insert(0, os.path.abspath('../python'))
 # -- Project information -----------------------------------------------------
 
-project = 'shot-glass'
+project = 'baas'
 copyright = '2022, Alex Braun <alexander.g.braun@gmail.com>'
 author = 'Alex Braun <alexander.g.braun@gmail.com>'
 version = toml.load('../docker/config/pyproject.toml')['project']['version']

@@ -5,7 +5,7 @@ import mathutils
 import pandas as pd
 from pandas import DataFrame
 
-import shot_glass.hifive.validators as validators
+import baas.hifive.validators as validators
 
 import logging
 LOGGER = logging.getLogger(__name__)

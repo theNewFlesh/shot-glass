@@ -1,6 +1,6 @@
-.. shot-glass documentation master file
+.. baas documentation master file
 
-Welcome to shot-glass's documentation!
+Welcome to baas's documentation!
 ======================================
 .. toctree::
    :maxdepth: 1

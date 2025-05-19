@@ -203,8 +203,8 @@ RUN echo "\n${CYAN}INSTALL PROD ENVIRONMENTS${CLEAR}"; \
 
 # install prod cli
 RUN echo "\n${CYAN}INSTALL PROD CLI${CLEAR}"; \
-    cp /home/ubuntu/scripts/prod-cli /home/ubuntu/.local/bin/shot-glass && \
-    chmod 755 /home/ubuntu/.local/bin/shot-glass
+    cp /home/ubuntu/scripts/prod-cli /home/ubuntu/.local/bin/baas && \
+    chmod 755 /home/ubuntu/.local/bin/baas
 
 # build jupyter lab
 RUN echo "\n${CYAN}BUILD JUPYTER LAB${CLEAR}"; \
@@ -229,7 +229,7 @@ WORKDIR /home/ubuntu
 RUN echo "\n${CYAN}REMOVE DIRECTORIES${CLEAR}"; \
     rm -rf /home/ubuntu/config /home/ubuntu/scripts
 
-ENV REPO='shot-glass'
+ENV REPO='baas'
 ENV PYTHONPATH ":/home/ubuntu/$REPO/python:/home/ubuntu/.local/lib"
 ENV PYTHONPYCACHEPREFIX "/home/ubuntu/.python_cache"
 ENV HOME /home/ubuntu

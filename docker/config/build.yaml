@@ -1,17 +1,17 @@
 source_rules:
-  - path: /home/ubuntu/shot-glass
+  - path: /home/ubuntu/baas
     include: "LICENSE|README\\.md"
     exclude: "/\\.|docker"
-  - path: /home/ubuntu/shot-glass/python/shot_glass
+  - path: /home/ubuntu/baas/python/baas
     include: "\\.py$"
-  - path: /home/ubuntu/shot-glass/docker/config
+  - path: /home/ubuntu/baas/docker/config
     include: "prod\\.lock"
     exclude: "cache|__pypackages__"
-  - path: /home/ubuntu/shot-glass/resources
+  - path: /home/ubuntu/baas/resources
     include: ".*"
     exclude: "__pycache__"
 rename_rules:
-  - regex: "/home/ubuntu/shot-glass"
+  - regex: "/home/ubuntu/baas"
     replace: "/home/ubuntu/build/repo"
   - regex: ".*/resources"
     replace: "/home/ubuntu/build/resources"

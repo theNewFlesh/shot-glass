@@ -1,1 +1,1 @@
-import shot_glass.blender.blender_tools # noqa F401
+import baas.blender.blender_tools # noqa F401
