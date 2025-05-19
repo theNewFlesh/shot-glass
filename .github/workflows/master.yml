@@ -34,12 +34,12 @@ jobs:
           git config user.name ci && \
           git config user.email "ci@$org_url"
 
-      - name: Docker login
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.docker_registry }}
-          username: ${{ secrets.DOCKER_REGISTRY_USER }}
-          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+    #   - name: Docker login
+    #     uses: docker/login-action@v3
+    #     with:
+    #       registry: ${{ env.docker_registry }}
+    #       username: ${{ secrets.DOCKER_REGISTRY_USER }}
+    #       password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
       - name: Pull image
         run: $($cli docker-pull-dev) || echo "docker image not found"
