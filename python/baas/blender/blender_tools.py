@@ -265,4 +265,3 @@ def mesh_to_pydata(mesh):
     faces = list(map(lambda x: list(x.vertices), mesh.data.polygons.values()))
 
     return (verts, edges, faces)
-
