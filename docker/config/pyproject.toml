@@ -1,9 +1,9 @@
 [project]
 name = "baas"
 version = "0.1.0"
-description = "3D Data Science via Blender and Category Theory"
+description = "Blender as a Service"
 authors = [
-    { name = "Alex Braun", email = "alexander.g.braun@gmail.com" },
+    {name = "Alex Braun", email = "alex.braun@vizcom.co"},
 ]
 readme = "README.md"
 license = "MIT"
@@ -13,7 +13,6 @@ keywords = [
     "3D",
     "computer-vision",
     "geometry",
-    "category-theory",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -37,7 +36,7 @@ dependencies = [
 ]
 
 [project.urls]
-repository = "https://github.com/thenewflesh/baas"
+repository = "https://github.com/vizcomtech/baas"
 documentation = "https://theNewFlesh.github.io/baas"
 
 [project.scripts]

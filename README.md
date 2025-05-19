@@ -1,42 +1,15 @@
-<p>
-    <a href="https://www.linkedin.com/in/alexandergbraun" rel="nofollow noreferrer">
-        <img src="https://www.gomezaparicio.com/wp-content/uploads/2012/03/linkedin-logo-1-150x150.png"
-             alt="linkedin" width="30px" height="30px"
-        >
-    </a>
-    <a href="https://github.com/theNewFlesh" rel="nofollow noreferrer">
-        <img src="https://tadeuzagallo.com/GithubPulse/assets/img/app-icon-github.png"
-             alt="github" width="30px" height="30px"
-        >
-    </a>
-    <a href="https://pypi.org/user/the-new-flesh" rel="nofollow noreferrer">
-        <img src="https://cdn.iconscout.com/icon/free/png-256/python-2-226051.png"
-             alt="pypi" width="30px" height="30px"
-        >
-    </a>
-    <a href="http://vimeo.com/user3965452" rel="nofollow noreferrer">
-        <img src="https://cdn.iconscout.com/icon/free/png-512/movie-52-151107.png?f=avif&w=512"
-             alt="vimeo" width="30px" height="30px"
-        >
-    </a>
-    <a href="https://alexgbraun.com" rel="nofollow noreferrer">
-        <img src="https://i.ibb.co/fvyMkpM/logo.png"
-             alt="alexgbraun" width="30px" height="30px"
-        >
-    </a>
-</p>
-
-[![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/thenewflesh/baas/blob/master/LICENSE)
-[![](https://img.shields.io/pypi/pyversions/baas?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/thenewflesh/baas/blob/master/docker/config/pyproject.toml)
+[![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/vizcomtech/baas/blob/master/LICENSE)
+[![](https://img.shields.io/pypi/pyversions/baas?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/vizcomtech/baas/blob/master/docker/config/pyproject.toml)
 [![](https://img.shields.io/pypi/v/baas?style=for-the-badge&label=PyPI&color=5F95DE&logo=pypi&logoColor=5F95DE)](https://pypi.org/project/baas/)
 [![](https://img.shields.io/pypi/dm/baas?style=for-the-badge&label=Downloads&color=5F95DE)](https://pepy.tech/project/baas)
 
 <!-- <img id="logo" src="sphinx/images/logo.png" style="max-width: 717px"> -->
 
 # Introduction
-3D Data Science via Blender and Category Theory.
 
-See [documentation](https://thenewflesh.github.io/baas/) for details.
+Blender as a Service
+
+See [documentation](https://vizcomtech.github.io/baas/) for details.
 
 # Installation for Developers
 

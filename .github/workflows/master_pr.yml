@@ -13,7 +13,7 @@ on:
 env:
   repo: "${{ github.event.repository.name }}"
   cli: "bin/${{ github.event.repository.name }}"
-  org: "thenewflesh"
+  org: "vizcomtech"
   org_url: "github.com"
   docker_registry: "docker.io"
 

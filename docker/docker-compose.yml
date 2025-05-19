@@ -7,8 +7,8 @@ services:
       context: .
       dockerfile: dev.dockerfile
     ports:
-      - "2100:9000"
-      - "2180:8080"
+      - "2200:9000"
+      - "2280:8080"
     userns_mode: "host"
     user: ubuntu
     env_file:
