@@ -3,7 +3,3 @@
 
    cli
    blender
-   core
-   hifive
-   obj
-   plotly
