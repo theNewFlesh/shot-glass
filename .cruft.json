@@ -31,7 +31,7 @@
       "port_prefix": "22",
       "git_user": "theNewFlesh",
       "git_host": "github",
-      "git_organization": "vizcom",
+      "git_organization": "vizcomtech",
       "package_registry": "pypi",
       "docker_registry": "docker.io",
       "organization_url": "github.com",
