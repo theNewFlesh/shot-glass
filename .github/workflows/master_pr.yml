@@ -1,6 +1,6 @@
 # Please ensure the following GitHub repository action secrets are set up:
-#  - DOCKER_REGISTRY_USER
-#  - DOCKER_REGISTRY_PASSWORD
+#  - AWS_ACCESS_KEY_ID
+#  - AWS_SECRET_ACCESS_KEY
 
 name: Master Pull Request
 run-name: "PR: ${{ github.head_ref }} --> master | ${{ github.actor }}"
@@ -15,7 +15,7 @@ env:
   cli: "bin/${{ github.event.repository.name }}"
   org: "vizcomtech"
   org_url: "github.com"
-  docker_registry: "docker.io"
+  docker_registry: "714286101732.dkr.ecr.us-east-2.amazonaws.com/repos/baas"
 
 jobs:
   master-pr:
@@ -34,8 +34,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.docker_registry }}
-          username: ${{ secrets.DOCKER_REGISTRY_USER }}
-          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Pull image
         run: $($cli docker-pull-dev) || echo "docker image not found"
