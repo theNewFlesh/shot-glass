@@ -27,9 +27,8 @@
 </p>
 
 [![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/thenewflesh/shot-glass/blob/master/LICENSE)
-[![](https://img.shields.io/pypi/pyversions/shot-glass?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/thenewflesh/shot-glass/blob/master/docker/config/pyproject.toml)
-[![](https://img.shields.io/pypi/v/shot-glass?style=for-the-badge&label=PyPI&color=5F95DE&logo=pypi&logoColor=5F95DE)](https://pypi.org/project/shot-glass/)
-[![](https://img.shields.io/pypi/dm/shot-glass?style=for-the-badge&label=Downloads&color=5F95DE)](https://pepy.tech/project/shot-glass)
+![](https://img.shields.io/badge/dynamic/regex?url=https%3A%2F%2Fraw.githubusercontent.com%2FtheNewFlesh%2Fshot-glass%2Frefs%2Fheads%2Fmaster%2Fdocker%2Fscripts%2Fx_tools.sh&search=.*MIN_PY.*_VER.*%3D.(.*).%5Cn.*MAX_PY.*_VER.*%3D.(.*).&replace=%241%20%7C%20%242&style=for-the-badge&logo=python&logoColor=5F95DE&label=python&color=A0D17B)
+![](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FtheNewFlesh%2Fshot-glass%2Frefs%2Fheads%2Fmaster%2Fdocker%2Fconfig%2Fpyproject.toml&query=project.version&style=for-the-badge&logoColor=5F95DE&label=version&color=5F95DE)
 
 <!-- <img id="logo" src="sphinx/images/logo.png" style="max-width: 717px"> -->
 
