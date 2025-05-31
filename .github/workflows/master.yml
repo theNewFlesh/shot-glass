@@ -49,11 +49,11 @@ jobs:
         with:
           path: docs/
 
-      - name: Push dev image
-        run: $cli docker-push-dev
+    #   - name: Push dev image
+    #     run: $cli docker-push-dev
 
-      - name: Push dev-latest image
-        run: $cli docker-push-dev-latest
+    #   - name: Push dev-latest image
+    #     run: $cli docker-push-dev-latest
 
   pages:
     needs: master
