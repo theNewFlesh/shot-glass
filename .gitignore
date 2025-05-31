@@ -33,7 +33,6 @@ docker/dist/*
 .Python
 *.egg
 *.egg-info
-build
 develop-eggs
 dist
 eggs

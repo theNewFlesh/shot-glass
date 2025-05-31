@@ -24,17 +24,16 @@ RUN echo "\n${CYAN}INSTALL GENERIC DEPENDENCIES${CLEAR}"; \
     apt update --fix-missing && \
     apt install -y \
         curl \
-        software-properties-common \
-        wget && \
+        software-properties-common && \
     rm -rf /var/lib/apt/lists/*
 
 # install blender
 ARG VER=3.4.0
 ENV BLENDER_VERSION=3.4
 RUN echo "\n${CYAN}INSTALL BLENDER${NO_COLOR}"; \
-    wget \
+    curl -fsSL \
         https://mirror.clarkson.edu/blender/release/Blender$BLENDER_VERSION/blender-$VER-linux-x64.tar.xz \
-        -O blender.tar.xz && \
+        -o blender.tar.xz && \
     tar xf blender.tar.xz && \
     rm blender.tar.xz && \
     mv blender-$VER-linux-x64 blender && \
@@ -43,7 +42,7 @@ RUN echo "\n${CYAN}INSTALL BLENDER${NO_COLOR}"; \
 # setup python
 ARG BLENDER_PYTHON=/home/ubuntu/blender/$BLENDER_VERSION/python/bin/python3.10
 RUN echo "\n${CYAN}SETUP PYTHON${NO_COLOR}"; \
-    wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py && \
+    curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     chown -R ubuntu:ubuntu get-pip.py && \
     $BLENDER_PYTHON get-pip.py
 ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10
