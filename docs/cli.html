@@ -38,7 +38,7 @@
             shot-glass
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -60,6 +60,13 @@
 <p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">cli</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cli.BetterHelpFormatter"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cli.BetterHelpFormatter.__init__"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cli.BetterHelpFormatter.__module__"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter.__module__</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cli.BetterHelpFormatter._format_action"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter._format_action()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cli.BetterHelpFormatter.add_text"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter.add_text()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#cli.PORT"><code class="docutils literal notranslate"><span class="pre">PORT</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cli.build_dev_command"><code class="docutils literal notranslate"><span class="pre">build_dev_command()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cli.build_prod_command"><code class="docutils literal notranslate"><span class="pre">build_prod_command()</span></code></a></li>
@@ -105,6 +112,13 @@
 <p class="caption" role="heading"><span class="caption-text">Development CLI</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">cli</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cli.BetterHelpFormatter"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cli.BetterHelpFormatter.__init__"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cli.BetterHelpFormatter.__module__"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter.__module__</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cli.BetterHelpFormatter._format_action"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter._format_action()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cli.BetterHelpFormatter.add_text"><code class="docutils literal notranslate"><span class="pre">BetterHelpFormatter.add_text()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#cli.PORT"><code class="docutils literal notranslate"><span class="pre">PORT</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cli.build_dev_command"><code class="docutils literal notranslate"><span class="pre">build_dev_command()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cli.build_prod_command"><code class="docutils literal notranslate"><span class="pre">build_prod_command()</span></code></a></li>
@@ -170,6 +184,55 @@
              
   <section id="module-cli">
 <span id="cli"></span><h1>cli<a class="headerlink" href="#module-cli" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cli.BetterHelpFormatter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cli.</span></span><span class="sig-name descname"><span class="pre">BetterHelpFormatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent_increment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_help_position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cli.html#BetterHelpFormatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cli.BetterHelpFormatter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RawTextHelpFormatter</span></code></p>
+<p>HelpFormatter with better indentation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cli.BetterHelpFormatter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent_increment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_help_position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cli.html#BetterHelpFormatter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cli.BetterHelpFormatter.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cli.BetterHelpFormatter.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cli'</span></em><a class="headerlink" href="#cli.BetterHelpFormatter.__module__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cli.BetterHelpFormatter._format_action">
+<span class="sig-name descname"><span class="pre">_format_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cli.html#BetterHelpFormatter._format_action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cli.BetterHelpFormatter._format_action" title="Link to this definition"></a></dt>
+<dd><p>Adds colorized table formatting to information provided via
+parser.add_argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>action</strong> (<em>object</em>) – Parser action.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cli.BetterHelpFormatter.add_text">
+<span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cli.html#BetterHelpFormatter.add_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cli.BetterHelpFormatter.add_text" title="Link to this definition"></a></dt>
+<dd><p>Adds color to description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>object</em>) – Text.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="cli.PORT">
 <span class="sig-prename descclassname"><span class="pre">cli.</span></span><span class="sig-name descname"><span class="pre">PORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8080</span></em><a class="headerlink" href="#cli.PORT" title="Link to this definition"></a></dt>

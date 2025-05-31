@@ -35,7 +35,7 @@
             shot-glass
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -120,6 +120,101 @@
 <span class="sd">&#39;&#39;&#39;</span>
 
 
+<span class="n">COLORS</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">blue</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;34m&#39;</span><span class="p">,</span>
+    <span class="n">cyan</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;96m&#39;</span><span class="p">,</span>
+    <span class="n">green</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;92m&#39;</span><span class="p">,</span>
+    <span class="n">grey</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;90m&#39;</span><span class="p">,</span>
+    <span class="n">purple</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;35m&#39;</span><span class="p">,</span>
+    <span class="n">red</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;31m&#39;</span><span class="p">,</span>
+    <span class="n">white</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[1;97m&#39;</span><span class="p">,</span>
+    <span class="n">yellow</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;33m&#39;</span><span class="p">,</span>
+    <span class="n">clear</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="BetterHelpFormatter">
+<a class="viewcode-back" href="../cli.html#cli.BetterHelpFormatter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BetterHelpFormatter</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    HelpFormatter with better indentation.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="BetterHelpFormatter.__init__">
+<a class="viewcode-back" href="../cli.html#cli.BetterHelpFormatter.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">prog</span><span class="p">,</span> <span class="n">indent_increment</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_help_position</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">prog</span><span class="p">,</span> <span class="n">indent_increment</span><span class="p">,</span> <span class="n">max_help_position</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BetterHelpFormatter.add_text">
+<a class="viewcode-back" href="../cli.html#cli.BetterHelpFormatter.add_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="c1"># type: (Any) -&gt; None</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Adds color to description.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text (object): Text.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="s1">&#39;CLI&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{white}{text}{clear}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">COLORS</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BetterHelpFormatter._format_action">
+<a class="viewcode-back" href="../cli.html#cli.BetterHelpFormatter._format_action">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_format_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="c1"># type: (Any) -&gt; str</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Adds colorized table formatting to information provided via</span>
+<span class="sd">        parser.add_argument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            action (object): Parser action.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Formatted string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">dest</span> <span class="o">==</span> <span class="s1">&#39;command&#39;</span><span class="p">:</span>
+            <span class="n">metavar</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{purple}</span><span class="s1">COMMAND&#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">+</span> <span class="s1">&#39;| DESCRIPTION</span><span class="si">{clear}</span><span class="s1">&#39;</span>
+            <span class="n">action</span><span class="o">.</span><span class="n">metavar</span> <span class="o">=</span> <span class="n">metavar</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">COLORS</span><span class="p">)</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_format_action</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39; </span><span class="si">{28}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;    &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">27</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">68</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;    </span><span class="si">{purple}{sep}{clear}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span> <span class="o">**</span><span class="n">COLORS</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39; - &#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">cmd</span><span class="p">,</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; - &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">prefix</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;-.*| +&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">prefix</span> <span class="o">!=</span> <span class="n">prev</span><span class="p">:</span>
+                    <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+                    <span class="n">flag</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">flag</span>
+                    <span class="n">prev</span> <span class="o">=</span> <span class="n">prefix</span>
+
+                <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+                    <span class="n">color</span> <span class="o">=</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;yellow&#39;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">color</span> <span class="o">=</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;cyan&#39;</span><span class="p">]</span>
+
+                <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{color}{cmd}{clear}</span><span class="s1"> </span><span class="si">{purple}</span><span class="s1">|</span><span class="si">{clear}</span><span class="s1"> </span><span class="si">{desc}</span><span class="s1">&#39;</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span> <span class="o">**</span><span class="n">COLORS</span><span class="p">)</span>
+
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">+=</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;green&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+</div>
+
+
+
 <div class="viewcode-block" id="get_info">
 <a class="viewcode-back" href="../cli.html#cli.get_info">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_info</span><span class="p">():</span>
@@ -130,27 +225,26 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple[str]: Mode and arguments.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;A CLI for developing and deploying the </span><span class="si">{repo}</span><span class="s1"> app.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">repo</span><span class="o">=</span><span class="n">REPO</span>
-    <span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;A CLI for developing and deploying the </span><span class="si">{repo}</span><span class="s1"> app.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">repo</span><span class="o">=</span><span class="n">REPO</span><span class="p">)</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">BetterHelpFormatter</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
-        <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n\t</span><span class="s1">python cli.py COMMAND [-a --args]=ARGS [-h --help]&#39;</span>
+        <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;  python cli.py COMMAND [-a --args]=ARGS [-h --help] [--dryrun]&#39;</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s1">&#39;command&#39;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;command&#39;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;COMMAND&#39;</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;Command to run in </span><span class="si">{repo}</span><span class="s1"> app.</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">    build-edit-prod-dockerfile - Edit prod.dockefile to use local package</span>
 <span class="s1">    build-local-package        - Generate pip package of repo and copy it to docker/dist</span>
-<span class="s1">    build-package              - Build production version of repo for publishing</span>
-<span class="s1">    build-prod                 - Publish pip package of repo to PyPi</span>
+<span class="s1">    build-package              - Generate pip package of repo</span>
+<span class="s1">    build-prod                 - Build production version of repo for publishing</span>
 <span class="s1">    build-publish              - Run production tests first then publish pip package of repo to PyPi</span>
+<span class="s1">    build-publish-test         - Run tests and then publish pip package of repo to test PyPi</span>
 <span class="s1">    build-test                 - Build test version of repo for prod testing</span>
 <span class="s1">    docker-build               - Build development image</span>
 <span class="s1">    docker-build-from-cache    - Build development image from registry cache</span>
@@ -168,13 +262,13 @@
 <span class="s1">    docker-push-dev-latest     - Push development image to Docker registry with dev-latest tag</span>
 <span class="s1">    docker-push-prod           - Push production image to Docker registry</span>
 <span class="s1">    docker-push-prod-latest    - Push production image to Docker registry with prod-latest tag</span>
-<span class="s1">    docker-remove              - Remove Docker image</span>
+<span class="s1">    docker-remove              - Remove Docker container</span>
 <span class="s1">    docker-restart             - Restart container</span>
 <span class="s1">    docker-start               - Start container</span>
 <span class="s1">    docker-stop                - Stop container</span>
 <span class="s1">    docs                       - Generate sphinx documentation</span>
 <span class="s1">    docs-architecture          - Generate architecture.svg diagram from all import statements</span>
-<span class="s1">    docs-full                  - Generate documentation, coverage report, diagram and code</span>
+<span class="s1">    docs-full                  - Generate documentation, coverage report, diagram and code metrics</span>
 <span class="s1">    docs-metrics               - Generate code metrics report, plots and tables</span>
 <span class="s1">    library-add                - Add a given package to a given dependency group</span>
 <span class="s1">    library-graph-dev          - Graph dependencies in dev environment</span>
@@ -197,11 +291,12 @@
 <span class="s1">    state                      - State of repository and Docker container</span>
 <span class="s1">    test-coverage              - Generate test coverage report</span>
 <span class="s1">    test-dev                   - Run all tests</span>
-<span class="s1">    test-fast                  - Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator</span>
+<span class="s1">    test-fast                  - Test all code excepts tests marked with SKIP_SLOW_TESTS decorator</span>
 <span class="s1">    test-format                - Format all python files</span>
 <span class="s1">    test-lint                  - Run linting and type checking</span>
 <span class="s1">    test-prod                  - Run tests across all support python versions</span>
 <span class="s1">    version                    - Full resolution of repo: dependencies, linting, tests, docs, etc</span>
+<span class="s1">    version-bump               - Bump repo patch version up to x.x.20, then bump minor version</span>
 <span class="s1">    version-bump-major         - Bump pyproject major version</span>
 <span class="s1">    version-bump-minor         - Bump pyproject minor version</span>
 <span class="s1">    version-bump-patch         - Bump pyproject patch version</span>
@@ -209,7 +304,7 @@
 <span class="s1">    zsh                        - Run ZSH session inside Docker container</span>
 <span class="s1">    zsh-complete               - Generate oh-my-zsh completions</span>
 <span class="s1">    zsh-root                   - Run ZSH session as root inside Docker container</span>
-<span class="s1">&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">repo</span><span class="o">=</span><span class="n">REPO</span><span class="p">))</span>  <span class="c1"># noqa: E501</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">repo</span><span class="o">=</span><span class="n">REPO</span><span class="p">))</span>  <span class="c1"># noqa: E501</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s1">&#39;-a&#39;</span><span class="p">,</span>
@@ -248,15 +343,6 @@
     <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39; &amp;&amp; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span>
 
     <span class="n">all_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">black</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;30m&#39;</span><span class="p">,</span>
-        <span class="n">blue</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;34m&#39;</span><span class="p">,</span>
-        <span class="n">clear</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">,</span>
-        <span class="n">cyan</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;36m&#39;</span><span class="p">,</span>
-        <span class="n">green</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;32m&#39;</span><span class="p">,</span>
-        <span class="n">purple</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;35m&#39;</span><span class="p">,</span>
-        <span class="n">red</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;31m&#39;</span><span class="p">,</span>
-        <span class="n">white</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;37m&#39;</span><span class="p">,</span>
-        <span class="n">yellow</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;33m&#39;</span><span class="p">,</span>
         <span class="n">git_user</span><span class="o">=</span><span class="n">GIT_USER</span><span class="p">,</span>
         <span class="n">registry</span><span class="o">=</span><span class="n">DOCKER_REGISTRY</span><span class="p">,</span>
         <span class="n">port</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">PORT</span><span class="p">),</span>
@@ -266,6 +352,7 @@
         <span class="n">repo_</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">REPO</span><span class="p">),</span>
         <span class="n">user</span><span class="o">=</span><span class="n">USER</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">all_</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">COLORS</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="s1">&#39;{&#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
@@ -868,9 +955,9 @@
         <span class="n">enter_repo</span><span class="p">(),</span>
         <span class="n">version_variable</span><span class="p">(),</span>
         <span class="s1">&#39;git add --all&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;git commit --message $VERSION&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;git commit --message &quot;$VERSION &lt;no ci&gt;&quot;&#39;</span><span class="p">,</span>
         <span class="s1">&#39;git tag --annotate $VERSION --message &quot;version: $VERSION&quot;&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;git push --follow-tags origin HEAD:&#39;</span> <span class="o">+</span> <span class="n">branch</span> <span class="o">+</span> <span class="s1">&#39; --push-option ci.skip&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;git push --follow-tags origin HEAD:&#39;</span> <span class="o">+</span> <span class="n">branch</span><span class="p">,</span>
         <span class="n">exit_repo</span><span class="p">(),</span>
     <span class="p">]</span>
     <span class="k">return</span> <span class="n">resolve</span><span class="p">(</span><span class="n">cmds</span><span class="p">)</span></div>
@@ -913,11 +1000,13 @@
         <span class="s1">&#39;echo &quot;local -a _subcommands&quot; &gt;&gt; $_COMP&#39;</span><span class="p">,</span>
         <span class="s1">&#39;echo &quot;_subcommands=(&quot; &gt;&gt; $_COMP&#39;</span><span class="p">,</span>
         <span class="n">line</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">            bin/</span><span class="si">{repo}</span><span class="s1"> --help</span>
-<span class="s1">                | grep &#39;    - &#39;</span>
-<span class="s1">                | sed -E &#39;s/ +- /:/g&#39;</span>
-<span class="s1">                | sed -E &#39;s/^ +//g&#39;</span>
-<span class="s1">                | sed -E &quot;s/(.*)/    &#39;</span><span class="se">\\</span><span class="s1">1&#39;/g&quot;</span>
+<span class="s1">            /bin/cat -v &lt;&lt;&lt; `bin/</span><span class="si">{repo}</span><span class="s1"> --help | tr &#39;</span><span class="se">\\</span><span class="s1">n&#39; &#39;@&#39;`</span>
+<span class="s1">                | tr &#39;@&#39; &#39;</span><span class="se">\\</span><span class="s1">n&#39;</span>
+<span class="s1">                | sed -E &#39;s/</span><span class="se">\\</span><span class="s1">^</span><span class="se">\\</span><span class="s1">[</span><span class="se">\\</span><span class="s1">[.(;..)?m//g&#39;</span>
+<span class="s1">                | grep &#39; | &#39;</span>
+<span class="s1">                | grep -v &#39;COMMAND&#39;</span>
+<span class="s1">                | sed -E &#39;s/ +</span><span class="se">\\</span><span class="s1">| /:/g&#39;</span>
+<span class="s1">                | sed -E &quot;s/^ +(.+)/  &#39;</span><span class="se">\\</span><span class="s1">1&#39;/g&quot;</span>
 <span class="s1">                | parallel &quot;echo {{}} &gt;&gt; $_COMP&quot;</span>
 <span class="s1">        &#39;&#39;&#39;</span><span class="p">),</span>
         <span class="s1">&#39;echo &quot;)&quot; &gt;&gt; $_COMP&#39;</span><span class="p">,</span>
@@ -960,8 +1049,8 @@
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">cmds</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">line</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">            echo &quot;That is not a legal command.</span>
-<span class="s1">            Please call </span><span class="si">{cyan}{repo}</span><span class="s1"> --help</span><span class="si">{clear}</span><span class="s1"> to see a list of legal</span>
+<span class="s1">            echo &quot;</span><span class="si">{red}</span><span class="s1">That is not a legal command.</span><span class="si">{clear}</span>
+<span class="s1">            Please call </span><span class="si">{green}{repo}</span><span class="s1"> --help</span><span class="si">{clear}</span><span class="s1"> to see a list of legal</span>
 <span class="s1">            commands.&quot;</span>
 <span class="s1">        &#39;&#39;&#39;</span><span class="p">)</span>
     <span class="p">]</span>
@@ -984,6 +1073,7 @@
         <span class="s1">&#39;build-package&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_build_package&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;build-prod&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_build_prod&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;build-publish&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_build_publish&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
+        <span class="s1">&#39;build-publish-test&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_build_publish_test&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;build-test&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_build_test&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;docker-build&#39;</span><span class="p">:</span> <span class="n">build_dev_command</span><span class="p">(),</span>
         <span class="s1">&#39;docker-build-from-cache&#39;</span><span class="p">:</span> <span class="n">build_dev_command</span><span class="p">(</span><span class="n">use_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
@@ -1035,6 +1125,7 @@
         <span class="s1">&#39;test-lint&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_test_lint&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;test-prod&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_test_prod&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_version&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
+        <span class="s1">&#39;version-bump&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_version_bump&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;version-bump-major&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_version_bump_major&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;version-bump-minor&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_version_bump_minor&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
         <span class="s1">&#39;version-bump-patch&#39;</span><span class="p">:</span> <span class="n">x_tools_command</span><span class="p">(</span><span class="s1">&#39;x_version_bump_patch&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
