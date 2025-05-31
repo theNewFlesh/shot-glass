@@ -27,9 +27,8 @@
 </p>
 
 [![](https://img.shields.io/badge/License-MIT-F77E70?style=for-the-badge)](https://github.com/thenewflesh/shot-glass/blob/master/LICENSE)
-[![](https://img.shields.io/pypi/pyversions/shot-glass?style=for-the-badge&label=Python&color=A0D17B&logo=python&logoColor=A0D17B)](https://github.com/thenewflesh/shot-glass/blob/master/docker/config/pyproject.toml)
-[![](https://img.shields.io/pypi/v/shot-glass?style=for-the-badge&label=PyPI&color=5F95DE&logo=pypi&logoColor=5F95DE)](https://pypi.org/project/shot-glass/)
-[![](https://img.shields.io/pypi/dm/shot-glass?style=for-the-badge&label=Downloads&color=5F95DE)](https://pepy.tech/project/shot-glass)
+![](https://img.shields.io/badge/dynamic/regex?url=https%3A%2F%2Fraw.githubusercontent.com%2FtheNewFlesh%2Fshot-glass%2Frefs%2Fheads%2Fmaster%2Fdocker%2Fscripts%2Fx_tools.sh&search=.*MIN_PY.*_VER.*%3D.(.*).%5Cn.*MAX_PY.*_VER.*%3D.(.*).&replace=%241%20%7C%20%242&style=for-the-badge&logo=python&logoColor=5F95DE&label=python&color=A0D17B)
+![](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FtheNewFlesh%2Fshot-glass%2Frefs%2Fheads%2Fmaster%2Fdocker%2Fconfig%2Fpyproject.toml&query=project.version&style=for-the-badge&logoColor=5F95DE&label=version&color=5F95DE)
 
 <!-- <img id="logo" src="_images/logo.png" style="max-width: 717px"> -->
 
@@ -121,23 +120,23 @@ Development commands are grouped by one of 10 prefixes:
 
 Here are some frequently used commands to get you started:
 
-| Command           | Description                                               |
-| ----------------- | --------------------------------------------------------- |
-| docker-restart    | Restart container                                         |
-| docker-start      | Start container                                           |
-| docker-stop       | Stop container                                            |
-| docs-full         | Generate documentation, coverage report, diagram and code |
-| library-add       | Add a given package to a given dependency group           |
-| library-graph-dev | Graph dependencies in dev environment                     |
-| library-remove    | Remove a given package from a given dependency group      |
-| library-search    | Search for pip packages                                   |
-| library-update    | Update dev dependencies                                   |
-| session-lab       | Run jupyter lab server                                    |
-| state             | State of                                                  |
-| test-dev          | Run all tests                                             |
-| test-lint         | Run linting and type checking                             |
-| zsh               | Run ZSH session inside container                          |
-| zsh-complete      | Generate ZSH completion script                            |
+| Command           | Description                                                       |
+| ----------------- | ----------------------------------------------------------------- |
+| docker-restart    | Restart container                                                 |
+| docker-start      | Start container                                                   |
+| docker-stop       | Stop container                                                    |
+| docs-full         | Generate documentation, coverage report, diagram and code metrics |
+| library-add       | Add a given package to a given dependency group                   |
+| library-graph-dev | Graph dependencies in dev environment                             |
+| library-remove    | Remove a given package from a given dependency group              |
+| library-search    | Search for pip packages                                           |
+| library-update    | Update dev dependencies                                           |
+| session-lab       | Run jupyter lab server                                            |
+| state             | State of                                                          |
+| test-dev          | Run all tests                                                     |
+| test-lint         | Run linting and type checking                                     |
+| zsh               | Run ZSH session inside container                                  |
+| zsh-complete      | Generate ZSH completion script                                    |
 
 ---
 
@@ -155,9 +154,10 @@ The following is a complete list of all available development commands:
 | -------------------------- | ------------------------------------------------------------------- |
 | build-edit-prod-dockerfile | Edit prod.dockefile to use local package                            |
 | build-local-package        | Generate local pip package in docker/dist                           |
-| build-package              | Build production version of repo for publishing                     |
-| build-prod                 | Publish pip package of repo to PyPi                                 |
+| build-package              | Generate pip package of repo                                        |
+| build-prod                 | Build production version of repo for publishing                     |
 | build-publish              | Run production tests first then publish pip package of repo to PyPi |
+| build-publish-test         | Run tests and then publish pip package of repo to test PyPi         |
 | build-test                 | Build test version of repo for prod testing                         |
 | docker-build               | Build development image                                             |
 | docker-build-from-cache    | Build development image from registry cache                         |
@@ -175,13 +175,13 @@ The following is a complete list of all available development commands:
 | docker-push-dev-latest     | Push development image to Docker registry with dev-latest tag       |
 | docker-push-prod           | Push production image to Docker registry                            |
 | docker-push-prod-latest    | Push production image to Docker registry with prod-latest tag       |
-| docker-remove              | Remove Docker image                                                 |
+| docker-remove              | Remove Docker container                                             |
 | docker-restart             | Restart container                                                   |
 | docker-start               | Start container                                                     |
 | docker-stop                | Stop container                                                      |
 | docs                       | Generate sphinx documentation                                       |
 | docs-architecture          | Generate architecture.svg diagram from all import statements        |
-| docs-full                  | Generate documentation, coverage report, diagram and code           |
+| docs-full                  | Generate documentation, coverage report, diagram and code metrics   |
 | docs-metrics               | Generate code metrics report, plots and tables                      |
 | library-add                | Add a given package to a given dependency group                     |
 | library-graph-dev          | Graph dependencies in dev environment                               |
@@ -204,11 +204,12 @@ The following is a complete list of all available development commands:
 | state                      | State of repository and Docker container                            |
 | test-coverage              | Generate test coverage report                                       |
 | test-dev                   | Run all tests                                                       |
-| test-fast                  | Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator  |
+| test-fast                  | Test all code excepts tests marked with SKIP_SLOW_TESTS decorator   |
 | test-format                | Format all python files                                             |
 | test-lint                  | Run linting and type checking                                       |
 | test-prod                  | Run tests across all support python versions                        |
 | version                    | Full resolution of repo: dependencies, linting, tests, docs, etc    |
+| version-bump               | Bump repo's patch version up to x.x.20, then bump minor version     |
 | version-bump-major         | Bump pyproject major version                                        |
 | version-bump-minor         | Bump pyproject minor version                                        |
 | version-bump-patch         | Bump pyproject patch version                                        |
@@ -248,4 +249,3 @@ Usage: `shot-glass bash-completion`
 Prints ZSH completion code to be written to a _shot-glass completion file
 
 Usage: `shot-glass zsh-completion`
-
