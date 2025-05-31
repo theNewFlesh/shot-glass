@@ -182,11 +182,12 @@ def get_info():
     state                      - State of repository and Docker container
     test-coverage              - Generate test coverage report
     test-dev                   - Run all tests
-    test-fast                  - Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator
+    test-fast                  - Test all code excepts tests marked with SKIP_SLOW_TESTS decorator
     test-format                - Format all python files
     test-lint                  - Run linting and type checking
     test-prod                  - Run tests across all support python versions
     version                    - Full resolution of repo: dependencies, linting, tests, docs, etc
+    version-bump               - Bump repo patch version up to x.x.20, then bump minor version
     version-bump-major         - Bump pyproject major version
     version-bump-minor         - Bump pyproject minor version
     version-bump-patch         - Bump pyproject patch version
@@ -764,9 +765,9 @@ def version_commit_command(args=[]):
         enter_repo(),
         version_variable(),
         'git add --all',
-        'git commit --message $VERSION',
+        'git commit --message "$VERSION <no ci>"',
         'git tag --annotate $VERSION --message "version: $VERSION"',
-        'git push --follow-tags origin HEAD:' + branch + ' --push-option ci.skip',
+        'git push --follow-tags origin HEAD:' + branch,
         exit_repo(),
     ]
     return resolve(cmds)
@@ -919,6 +920,7 @@ def main():
         'test-lint': x_tools_command('x_test_lint', args),
         'test-prod': x_tools_command('x_test_prod', args),
         'version': x_tools_command('x_version', args),
+        'version-bump': x_tools_command('x_version_bump', args),
         'version-bump-major': x_tools_command('x_version_bump_major', args),
         'version-bump-minor': x_tools_command('x_version_bump_minor', args),
         'version-bump-patch': x_tools_command('x_version_bump_patch', args),

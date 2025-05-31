@@ -204,11 +204,12 @@ The following is a complete list of all available development commands:
 | state                      | State of repository and Docker container                            |
 | test-coverage              | Generate test coverage report                                       |
 | test-dev                   | Run all tests                                                       |
-| test-fast                  | Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator  |
+| test-fast                  | Test all code excepts tests marked with SKIP_SLOW_TESTS decorator   |
 | test-format                | Format all python files                                             |
 | test-lint                  | Run linting and type checking                                       |
 | test-prod                  | Run tests across all support python versions                        |
 | version                    | Full resolution of repo: dependencies, linting, tests, docs, etc    |
+| version-bump               | Bump repo's patch version up to x.x.20, then bump minor version     |
 | version-bump-major         | Bump pyproject major version                                        |
 | version-bump-minor         | Bump pyproject minor version                                        |
 | version-bump-patch         | Bump pyproject patch version                                        |

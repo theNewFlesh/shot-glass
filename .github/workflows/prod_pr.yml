@@ -1,9 +1,3 @@
-# Please ensure the following GitHub repository action secrets are set up:
-#  - DOCKER_REGISTRY_USER
-#  - DOCKER_REGISTRY_PASSWORD
-#  - PYPI_ACCESS_TOKEN
-#  - PYPI_TEST_ACCESS_TOKEN
-
 name: Prod Pull Request
 run-name: "PR: ${{ github.head_ref }} --> prod | ${{ github.actor }}"
 
@@ -13,11 +7,8 @@ on:
     types: [ opened, synchronize ]
 
 env:
-  repo: "${{ github.event.repository.name }}"
   cli: "bin/${{ github.event.repository.name }}"
-  org: "thenewflesh"
-  org_url: "github.com"
-  docker_registry: "docker.io"
+  GH_TOKEN: "${{ secrets.GH_TOKEN }}"
 
 jobs:
   prod-pr:
@@ -26,27 +17,25 @@ jobs:
       contents: write
 
     steps:
+      - name: Check merge branch
+        if: github.head_ref != 'master'
+        run: |
+          echo "ERROR: Only master may be merged into prod" && \
+          exit 1
+
       - name: Clone repo
         uses: actions/checkout@v4
-
-      - name: Change repo permissions
-        run: chmod -R o+w ../
-
-      - name: Docker login
-        uses: docker/login-action@v3
         with:
-          registry: ${{ env.docker_registry }}
-          username: ${{ secrets.DOCKER_REGISTRY_USER }}
-          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+          token: ${{ secrets.GH_TOKEN }}
 
-      - name: Pull image
-        run: $($cli docker-pull-dev) || echo "docker image not found"
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          docker_registry_user: ${{ secrets.DOCKER_REGISTRY_USER }}
+          docker_registry_password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
-      - name: Build image
-        run: $cli docker-build-from-cache
-
-      - name: Tag image
-        run: docker tag $repo:dev-latest $repo:dev
+      - name: Build dev image
+        uses: ./.github/actions/build
 
       - name: Start container
         run: $cli docker-start
@@ -54,11 +43,11 @@ jobs:
       - name: Run prod tests
         run: $cli test-prod
 
-    #   - name: Publish python package
-    #     run: $cli build-publish-test -a ${{ secrets.PYPI_TEST_ACCESS_TOKEN }}
+      # - name: Publish python package
+      #   run: $cli build-publish-test -a ${{ secrets.PYPI_TEST_ACCESS_TOKEN }}
 
-    #   - name: Build prod image
-    #     run: $cli docker-build-prod-no-cache
+      # - name: Build prod image
+      #   run: $cli docker-build-prod-no-cache
 
-    #   - name: Unpublish python package
-    #     run: - $cli build-unpublish -a ${{ secrets.PYPI_ACCESS_TOKEN }}
+      # - name: Unpublish python package
+      #   run: $cli build-unpublish -a ${{ secrets.PYPI_ACCESS_TOKEN }}

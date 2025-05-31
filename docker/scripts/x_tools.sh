@@ -650,7 +650,7 @@ x_test_dev () {
 }
 
 x_test_fast () {
-    # Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator
+    # Test all code excepts tests marked with SKIP_SLOW_TESTS decorator
     x_env_activate_dev;
     echo "${CYAN2}FAST TESTING DEV${CLEAR}\n";
     cd $REPO_DIR;
@@ -766,13 +766,25 @@ x_version_bump_patch () {
     _x_version_bump patch;
 }
 
+x_version_bump () {
+    # Bump repo's patch version up to x.x.20, then bump minor version
+    local minor=`python3 -c \
+        "v = '$(_x_get_version)'.split('.')[-1]; print(int(v) >= 20)"
+    `;
+    if [ "$minor" = "True" ]; then
+        x_version_bump_minor;
+    else
+        x_version_bump_patch;
+    fi;
+}
+
 x_version_commit () {
     # Tag with version and commit changes to master with given message
     # args: message
     local version=`_x_get_version`;
-    git commit --message $version;
+    git commit --message "$version <no ci>";
     git tag --annotate $version --message "$1";
-    git push --follow-tags origin HEAD:master --push-option ci.skip;
+    git push --follow-tags origin HEAD:master;
 }
 
 # VSCODE-FUNCTIONS--------------------------------------------------------------

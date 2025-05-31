@@ -36,6 +36,9 @@
             "**/docs": true,
             "**/public": true,
         },
+        "files.associations": {
+            "*.yml": "github-actions-workflow"
+        },
         "files.exclude": {
             "**/__pypackages__": true,
             "**/.classpath": true,
@@ -371,7 +374,7 @@
             },
             {
                 "label": "[test] fast",
-                "detail": "Test all code excepts tests marked with SKIP_SLOWS_TESTS decorator",
+                "detail": "Test all code excepts tests marked with SKIP_SLOW_TESTS decorator",
                 "icon": {"id": "check", "color": "terminal.ansiGreen"},
                 "command": [
                     "source $X_TOOLS_PATH &&",
@@ -466,6 +469,15 @@
                 "command": [
                     "source $X_TOOLS_PATH &&",
                     "x_version_bump_patch"
+                ]
+            },
+            {
+                "label": "[version] bump",
+                "detail": "Bump repo's patch version up to x.x.20, then bump minor version",
+                "icon": {"id": "plus", "color": "terminal.ansiRed"},
+                "command": [
+                    "source $X_TOOLS_PATH &&",
+                    "x_version_bump"
                 ]
             },
             {
