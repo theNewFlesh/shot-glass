@@ -1,0 +1,55 @@
+# Please ensure the following GitHub repository action secrets are set up:
+#  - GH_TOKEN
+#  - DOCKER_REGISTRY_USER
+#  - DOCKER_REGISTRY_PASSWORD
+#  - PYPI_ACCESS_TOKEN
+#  - PYPI_TEST_ACCESS_TOKEN
+
+name: Setup
+description: Setup for all CI workflows
+
+inputs:
+  docker_registry:
+    default: "docker.io"
+    description: Docker registry
+    required: true
+
+  docker_registry_password:
+    description: Docker registry password
+    required: true
+
+  docker_registry_user:
+    description: Docker registry user
+    required: true
+
+  org_url:
+    default: "github.com"
+    description: Company URL
+    required: true
+
+runs:
+  using: composite
+  steps:
+      - name: Change repo permissions
+        shell: bash
+        run: chmod -R o+w ../
+
+      - name: Configure git
+        shell: bash
+        run: |
+          git config --global user.name ci && \
+          git config --global user.email "ci@${{ inputs.org_url }}"
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.docker_registry }}
+          username: ${{ inputs.docker_registry_user }}
+          password: ${{ inputs.docker_registry_password }}
+
+      - name: Write PyPI access token to secret-env
+        shell: bash
+        run: |
+          echo "export PYPI_ACCESS_TOKEN=$PYPI_ACCESS_TOKEN" \
+            > docker/config/secret-env
+
