@@ -35,7 +35,7 @@
             shot-glass
           </a>
               <div class="version">
-                0.6.1
+                0.6.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -93,7 +93,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for shot_glass.blender.blender_tools</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bpy</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">shot_glass.core.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Filepath</span>  <span class="c1"># noqa F401</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tempfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">bpy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bmesh</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">lunchbox.tools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lbt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mathutils</span>
@@ -652,6 +657,146 @@
         <span class="n">item</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">i_id</span> <span class="o">==</span> <span class="n">i_id</span><span class="p">]</span>
         <span class="n">dataframe_to_mesh</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span></div>
+
+
+
+<span class="c1"># IO-FUNCTIONS------------------------------------------------------------------</span>
+<div class="viewcode-block" id="read_mesh">
+<a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.read_mesh">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_mesh</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="c1"># type: (Filepath) -&gt; None</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Read mesh from given filepath.</span>
+<span class="sd">    The following formats are supported:</span>
+
+<span class="sd">        * abc</span>
+<span class="sd">        * dae</span>
+<span class="sd">        * fbx</span>
+<span class="sd">        * glb</span>
+<span class="sd">        * obj</span>
+<span class="sd">        * stl</span>
+<span class="sd">        * usd</span>
+<span class="sd">        * usdc</span>
+<span class="sd">        * usdz</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): Path to mesh file.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: If file is not found.</span>
+<span class="sd">        ValueError: If file extension is unknown.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">Path</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">(),</span> <span class="sa">f</span><span class="s1">&#39;File not found: </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">match</span> <span class="n">ext</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s1">&#39;abc&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">alembic_import</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_glob</span><span class="o">=</span><span class="s1">&#39;*.abc&#39;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;dae&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">collada_import</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_glob</span><span class="o">=</span><span class="s1">&#39;*.dae&#39;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;fbx&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">import_scene</span><span class="o">.</span><span class="n">fbx</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_glob</span><span class="o">=</span><span class="s1">&#39;*.fbx&#39;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;glb&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">import_scene</span><span class="o">.</span><span class="n">gltf</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_glob</span><span class="o">=</span><span class="s1">&#39;*.glb&#39;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;obj&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">obj_import</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_glob</span><span class="o">=</span><span class="s1">&#39;*.obj&#39;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;stl&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">stl_import</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_glob</span><span class="o">=</span><span class="s1">&#39;*.stl&#39;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;usd&#39;</span> <span class="o">|</span> <span class="s1">&#39;usdc&#39;</span> <span class="o">|</span> <span class="s1">&#39;usdz&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">usd_import</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">filter_glob</span><span class="o">=</span><span class="s1">&#39;*.usd&#39;</span><span class="p">)</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown file extension: </span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Read: </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="write_mesh">
+<a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.write_mesh">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_mesh</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="c1"># type: (Filepath) -&gt; None</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Write scene to mesh file.</span>
+<span class="sd">    The following formats are supported:</span>
+
+<span class="sd">        * abc</span>
+<span class="sd">        * fbx</span>
+<span class="sd">        * glb</span>
+<span class="sd">        * obj</span>
+<span class="sd">        * stl</span>
+<span class="sd">        * usd</span>
+<span class="sd">        * usdc</span>
+<span class="sd">        * usdz</span>
+
+<span class="sd">       Args:</span>
+<span class="sd">           filepath (str): Target filepath.</span>
+
+<span class="sd">       Raises:</span>
+<span class="sd">           ValueError: If file extension is unknown.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">match</span> <span class="n">ext</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s1">&#39;abc&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">alembic_export</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;fbx&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">export_scene</span><span class="o">.</span><span class="n">fbx</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;glb&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">export_scene</span><span class="o">.</span><span class="n">gltf</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">export_materials</span><span class="o">=</span><span class="s1">&#39;PLACEHOLDER&#39;</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;obj&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">obj_export</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">export_materials</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;stl&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">stl_export</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;usd&#39;</span> <span class="o">|</span> <span class="s1">&#39;usdc&#39;</span> <span class="o">|</span> <span class="s1">&#39;usdz&#39;</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">wm</span><span class="o">.</span><span class="n">usd_export</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">export_materials</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown file extension: </span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Wrote: </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="convert_mesh">
+<a class="viewcode-back" href="../../../blender.html#shot_glass.blender.blender_tools.convert_mesh">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_mesh</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">source_format</span><span class="p">,</span> <span class="n">target_format</span><span class="p">):</span>
+    <span class="c1"># type: (bytes, str, str) -&gt; bytes</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts a given mesh from a source format to a target format.</span>
+<span class="sd">    The following formats are supported:</span>
+
+<span class="sd">        * abc</span>
+<span class="sd">        * dae</span>
+<span class="sd">        * fbx</span>
+<span class="sd">        * glb</span>
+<span class="sd">        * obj</span>
+<span class="sd">        * stl</span>
+<span class="sd">        * usd</span>
+<span class="sd">        * usdc</span>
+<span class="sd">        * usdz</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        content (bytes): File content.</span>
+<span class="sd">        source_format (str): Source file format.</span>
+<span class="sd">        target_format (str): Target file format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: Target file as bytes.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">delete_all_scenes</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;shot-glass_&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">root</span><span class="p">:</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;source.</span><span class="si">{</span><span class="n">source_format</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">read_mesh</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+        <span class="n">target</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;target.</span><span class="si">{</span><span class="n">target_format</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">write_mesh</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">output</span></div>
 
 </pre></div>
 
