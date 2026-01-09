@@ -14,14 +14,13 @@ Contain the HiFive operator decorator function.
 
 
 def operator(wrapped=None, **validators):
-    '''
+    r'''
     A decorator for functions that faciltates validation and execution logic.
 
     Adds these two keyword arguments to given function:
 
         * execute - Whether to execute the wrapped code. Default: True.
-        * validate - Whether to validate the data or parameters. Options \
-        include:
+        * validate - Whether to validate the data or parameters. Options include:
 
             * none (validate nothing)
             * parameters (validate parameters only)
