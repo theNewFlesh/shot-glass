@@ -45,9 +45,9 @@
       "volume": "",
       "keywords": "blender, add-on, 3D, computer-vision, geometry, category-theory",
       "year": "2022",
-      "python_min_version": "10",
-      "python_max_version": "10",
-      "initial_repo_version": "0.5.0",
+      "python_min_version": "11",
+      "python_max_version": "11",
+      "initial_repo_version": "0.6.1",
       "_template": "https://github.com/thenewflesh/cookiecutter-datalus",
       "_commit": "a2818069ae0ff0a7a4a98e3f3884cc579b8963cd"
     }
