@@ -35,7 +35,7 @@
             shot-glass
           </a>
               <div class="version">
-                0.6.2
+                0.6.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -56,7 +56,6 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">cli</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../blender.html">blender</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../core.html">core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../hifive.html">hifive</a></li>
@@ -111,14 +110,13 @@
 <div class="viewcode-block" id="operator">
 <a class="viewcode-back" href="../../../hifive.html#shot_glass.hifive.operator_tools.operator">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">operator</span><span class="p">(</span><span class="n">wrapped</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">validators</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    A decorator for functions that faciltates validation and execution logic.</span>
 
 <span class="sd">    Adds these two keyword arguments to given function:</span>
 
 <span class="sd">        * execute - Whether to execute the wrapped code. Default: True.</span>
-<span class="sd">        * validate - Whether to validate the data or parameters. Options \</span>
-<span class="sd">        include:</span>
+<span class="sd">        * validate - Whether to validate the data or parameters. Options include:</span>
 
 <span class="sd">            * none (validate nothing)</span>
 <span class="sd">            * parameters (validate parameters only)</span>
