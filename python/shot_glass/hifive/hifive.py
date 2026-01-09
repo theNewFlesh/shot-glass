@@ -149,7 +149,7 @@ class HiFive():
             HiFive: self.
         '''
         hft.validate_file_extension(fullpath, HIFIVE_FILE_EXTENSION)
-        self.data.to_hdf(fullpath, 'data')
+        self.data.to_hdf(path_or_buf=fullpath, key='data')
         LOGGER.info(f'HiFive data written to {fullpath}')
         return self
     # --------------------------------------------------------------------------

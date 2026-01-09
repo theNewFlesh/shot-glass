@@ -26,37 +26,37 @@ class ObjParser():
         '''
         # numbers
         flt = pyparsing.pyparsing_common.number\
-            .setParseAction(lambda s, _, t: float(t[0]))
+            .set_parse_action(lambda s, _, t: float(t[0]))
         int_ = pyparsing.pyparsing_common.integer
 
         # vertex
-        v_key = Keyword('v').setParseAction(lambda s, _, t: 'vertex')
+        v_key = Keyword('v').set_parse_action(lambda s, _, t: 'vertex')
         v = Group(v_key + flt + flt + flt + Optional(flt))\
-            .setResultsName('component')\
-            .setParseAction(lambda s, _, t: self.__vertex_to_dict(t, list('xyzw')))
+            .set_results_name('component')\
+            .set_parse_action(lambda s, _, t: self.__vertex_to_dict(t, list('xyzw')))
         self.__v = v
 
         # vertex normal
-        vn_key = Keyword('vn').setParseAction(lambda s, _, t: 'vertex_normal')
+        vn_key = Keyword('vn').set_parse_action(lambda s, _, t: 'vertex_normal')
         vn = Group(vn_key + flt + flt + flt)\
-            .setResultsName('component')\
-            .setParseAction(lambda s, _, t: self.__vertex_to_dict(t, list('ijk')))
+            .set_results_name('component')\
+            .set_parse_action(lambda s, _, t: self.__vertex_to_dict(t, list('ijk')))
         self.__vn = vn
 
         # vertex parametric point
-        vp_key = Keyword('vp').setParseAction(lambda s, _, t: 'vertex_point')
+        vp_key = Keyword('vp').set_parse_action(lambda s, _, t: 'vertex_point')
         vp_w = Optional(flt, default=1.0)
         vp = Group(vp_key + flt + flt + vp_w)\
-            .setResultsName('component')\
-            .setParseAction(lambda s, _, t: self.__vertex_to_dict(t, list('uvw')))
+            .set_results_name('component')\
+            .set_parse_action(lambda s, _, t: self.__vertex_to_dict(t, list('uvw')))
         self.__vp = vp
 
         # vertex texture
-        vt_key = Keyword('vt').setParseAction(lambda s, _, t: 'vertex_texture')
+        vt_key = Keyword('vt').set_parse_action(lambda s, _, t: 'vertex_texture')
         vt_w = Optional(flt, default=0.0)
         vt = Group(vt_key + flt + flt + vt_w)\
-            .setResultsName('component')\
-            .setParseAction(lambda s, _, t: self.__vertex_to_dict(t, list('uvw')))
+            .set_results_name('component')\
+            .set_parse_action(lambda s, _, t: self.__vertex_to_dict(t, list('uvw')))
         self.__vt = vt
 
         # generic vertex
@@ -65,20 +65,20 @@ class ObjParser():
 
         # face
         f_key = Keyword('f')\
-            .setResultsName('component_type')\
-            .setParseAction(lambda s, _, t: 'face')
+            .set_results_name('component_type')\
+            .set_parse_action(lambda s, _, t: 'face')
 
-        f_v = int_.setResultsName('vertex_id')
+        f_v = int_.set_results_name('vertex_id')
 
-        f_vt = Optional(int_, default=None).setResultsName('vertex_texture_id')
+        f_vt = Optional(int_, default=None).set_results_name('vertex_texture_id')
         f_vt_empty = empty\
-            .setResultsName('vertex_texture_id')\
-            .setParseAction(lambda s, _, t: [None])
+            .set_results_name('vertex_texture_id')\
+            .set_parse_action(lambda s, _, t: [None])
 
-        f_vn = Optional(int_, default=None).setResultsName('vertex_normal_id')
+        f_vn = Optional(int_, default=None).set_results_name('vertex_normal_id')
         f_vn_empty = empty\
-            .setResultsName('vertex_normal_id')\
-            .setParseAction(lambda s, _, t: [None])
+            .set_results_name('vertex_normal_id')\
+            .set_parse_action(lambda s, _, t: [None])
 
         # face item are delimited with '/' but can omit elements which makes
         # parsing them difficult
@@ -89,14 +89,14 @@ class ObjParser():
         d = f_v + f_vt_empty + f_vn_empty
         f_item = Group(a | b | c | d)
 
-        face = f_key + OneOrMore(f_item).setResultsName('parts')
+        face = f_key + OneOrMore(f_item).set_results_name('parts')
         self.__face = face
 
         # parser
         component = StringStart() + (vertex | face) + StringEnd()
         self.__component = component
         comment = Suppress(Regex('^#'))
-        comment = comment + Regex('.*').setResultsName('comment') + StringEnd()
+        comment = comment + Regex('.*').set_results_name('comment') + StringEnd()
         parser = component | comment | empty
 
         self._parser = parser
@@ -125,7 +125,7 @@ class ObjParser():
         Returns:
             object: Pyparsing object.
         '''
-        return self._parser.parseString(line.strip('\n'))
+        return self._parser.parse_string(line.strip('\n'))
 
     def parse(self, fullpath):
         '''

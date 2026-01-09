@@ -284,7 +284,7 @@ def write_obj(data='required', fullpath='required'):
     faces = data \
         .dropna(subset=['f_id', 'e_id']) \
         .groupby('f_id') \
-        .apply(obt.row_to_obj_face) \
+        .apply(obt.row_to_obj_face, include_groups=False) \
         .tolist()
 
     header = ['# Generated from HiFive data']

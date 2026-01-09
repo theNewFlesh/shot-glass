@@ -9,19 +9,19 @@ from shot_glass.obj.obj_parser import ObjParser
 class ObjParserTest(unittest.TestCase):
     def test_vertex(self):
         parser = ObjParser()
-        result = parser._ObjParser__v.parseString('v 1 2 3').asDict()
+        result = parser._ObjParser__v.parse_string('v 1 2 3').asDict()
         expected = dict(
             component=dict(component_type='vertex', x=1.0, y=2.0, z=3.0)
         )
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__v.parseString('v 1.0 2.0 3').asDict()
+        result = parser._ObjParser__v.parse_string('v 1.0 2.0 3').asDict()
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__v.parseString('v 1.0e0 2.0 3').asDict()
+        result = parser._ObjParser__v.parse_string('v 1.0e0 2.0 3').asDict()
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__v.parseString('v 1.0e0 2.0 3 4.1').asDict()
+        result = parser._ObjParser__v.parse_string('v 1.0e0 2.0 3 4.1').asDict()
         expected = dict(
             component=dict(component_type='vertex', x=1.0, y=2.0, z=3.0, w=4.1)
         )
@@ -29,33 +29,33 @@ class ObjParserTest(unittest.TestCase):
 
     def test_vertex_normal(self):
         parser = ObjParser()
-        result = parser._ObjParser__vn.parseString('vn 1 2 3').asDict()
+        result = parser._ObjParser__vn.parse_string('vn 1 2 3').asDict()
         expected = dict(
             component=dict(component_type='vertex_normal', i=1.0, j=2.0, k=3.0)
         )
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vn.parseString('vn 1.0 2.0 3').asDict()
+        result = parser._ObjParser__vn.parse_string('vn 1.0 2.0 3').asDict()
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vn.parseString('vn 1.0e0 2.0 3').asDict()
+        result = parser._ObjParser__vn.parse_string('vn 1.0e0 2.0 3').asDict()
         self.assertEqual(result, expected)
 
     def test_vertex_point(self):
         parser = ObjParser()
-        result = parser._ObjParser__vp.parseString('vp 1 2').asDict()
+        result = parser._ObjParser__vp.parse_string('vp 1 2').asDict()
         expected = dict(
             component=dict(component_type='vertex_point', u=1.0, v=2.0, w=1.0)
         )
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vp.parseString('vp 1.0 2.0').asDict()
+        result = parser._ObjParser__vp.parse_string('vp 1.0 2.0').asDict()
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vp.parseString('vp 1.0e0 2.0').asDict()
+        result = parser._ObjParser__vp.parse_string('vp 1.0e0 2.0').asDict()
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vp.parseString('vp 1.0e0 2.0 4.1').asDict()
+        result = parser._ObjParser__vp.parse_string('vp 1.0e0 2.0 4.1').asDict()
         expected = dict(
             component=dict(component_type='vertex_point', u=1.0, v=2.0, w=4.1)
         )
@@ -63,19 +63,19 @@ class ObjParserTest(unittest.TestCase):
 
     def test_vertex_texture(self):
         parser = ObjParser()
-        result = parser._ObjParser__vt.parseString('vt 1 2').asDict()
+        result = parser._ObjParser__vt.parse_string('vt 1 2').asDict()
         expected = dict(
             component=dict(component_type='vertex_texture', u=1.0, v=2.0, w=0.0)
         )
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vt.parseString('vt 1.0 2.0').asDict()
+        result = parser._ObjParser__vt.parse_string('vt 1.0 2.0').asDict()
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vt.parseString('vt 1.0e0 2.0').asDict()
+        result = parser._ObjParser__vt.parse_string('vt 1.0e0 2.0').asDict()
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vt.parseString('vt 1.0e0 2.0 4.1').asDict()
+        result = parser._ObjParser__vt.parse_string('vt 1.0e0 2.0 4.1').asDict()
         expected = dict(
             component=dict(component_type='vertex_texture', u=1.0, v=2.0, w=4.1)
         )
@@ -85,26 +85,26 @@ class ObjParserTest(unittest.TestCase):
         parser = ObjParser()
 
         result = parser._ObjParser__vertex\
-            .parseString('v 1e0 2e1 3e0 9.1e0')\
+            .parse_string('v 1e0 2e1 3e0 9.1e0')\
             .asDict()
         expected = dict(
             component=dict(component_type='vertex', x=1.0, y=20.0, z=3.0, w=9.1)
         )
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vertex.parseString('vn 1 2.2 3e0').asDict()
+        result = parser._ObjParser__vertex.parse_string('vn 1 2.2 3e0').asDict()
         expected = dict(
             component=dict(component_type='vertex_normal', i=1.0, j=2.2, k=3.0)
         )
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vertex.parseString('vp 1 2').asDict()
+        result = parser._ObjParser__vertex.parse_string('vp 1 2').asDict()
         expected = dict(
             component=dict(component_type='vertex_point', u=1.0, v=2.0, w=1.0)
         )
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__vertex.parseString('vt 1.0 2.0').asDict()
+        result = parser._ObjParser__vertex.parse_string('vt 1.0 2.0').asDict()
         expected = dict(
             component=dict(component_type='vertex_texture', u=1.0, v=2.0, w=0.0)
         )
@@ -114,7 +114,7 @@ class ObjParserTest(unittest.TestCase):
         parser = ObjParser()
 
         result = parser._ObjParser__face\
-            .parseString('f 1/1/1 2/2/2 3/3/3')\
+            .parse_string('f 1/1/1 2/2/2 3/3/3')\
             .asDict()
         expected = dict(
             component_type='face', parts=[
@@ -126,7 +126,7 @@ class ObjParserTest(unittest.TestCase):
         self.assertEqual(result, expected)
 
         result = parser._ObjParser__face\
-            .parseString('f 1 2 3')\
+            .parse_string('f 1 2 3')\
             .asDict()
         expected = dict(
             component_type='face', parts=[
@@ -138,7 +138,7 @@ class ObjParserTest(unittest.TestCase):
         self.assertEqual(result, expected)
 
         result = parser._ObjParser__face\
-            .parseString('f 1/1 2/2 3/3')\
+            .parse_string('f 1/1 2/2 3/3')\
             .asDict()
         expected = dict(
             component_type='face', parts=[
@@ -150,7 +150,7 @@ class ObjParserTest(unittest.TestCase):
         self.assertEqual(result, expected)
 
         result = parser._ObjParser__face\
-            .parseString('f 1//1 2//2 3//3')\
+            .parse_string('f 1//1 2//2 3//3')\
             .asDict()
         expected = dict(
             component_type='face', parts=[
@@ -165,7 +165,7 @@ class ObjParserTest(unittest.TestCase):
         parser = ObjParser()
 
         result = parser._ObjParser__component\
-            .parseString('f 1 2 3')\
+            .parse_string('f 1 2 3')\
             .asDict()
         expected = dict(
             component_type='face', parts=[
@@ -176,7 +176,7 @@ class ObjParserTest(unittest.TestCase):
         )
         self.assertEqual(result, expected)
 
-        result = parser._ObjParser__component.parseString('v 1 2 3 4').asDict()
+        result = parser._ObjParser__component.parse_string('v 1 2 3 4').asDict()
         expected = dict(
             component=dict(component_type='vertex', x=1.0, y=2.0, z=3.0, w=4.0)
         )

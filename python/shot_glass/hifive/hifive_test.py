@@ -55,7 +55,7 @@ class HiFiveTest(HiFiveTestBase):
         with TemporaryDirectory() as temp:
             target = os.path.join(temp, 'foo.hi5')
             data = self.fake_data
-            data.to_hdf(target, 'data')
+            data.to_hdf(path_or_buf=target, key='data')
 
             hi = HiFive().read_hi5(target)
             for col in data.columns.tolist():

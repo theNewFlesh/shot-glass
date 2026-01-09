@@ -1,3 +1,4 @@
+from xml.etree.ElementInclude import include
 from pandas import DataFrame
 
 import shot_glass.obj.obj_tools as obt
@@ -31,7 +32,7 @@ class ValidatorsTests(HiFiveTestBase):
     def test_row_to_obj_face(self):
         data = self.fake_data
         result = data.groupby('f_id') \
-            .apply(obt.row_to_obj_face) \
+            .apply(obt.row_to_obj_face, include_groups=False) \
             .tolist()
         expected = ['f 1 2 3 4']
         self.assertEqual(result, expected)
