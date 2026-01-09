@@ -148,9 +148,12 @@ USER root
 #     apt update && \
 #     apt install -y \
 #         libgl1-mesa-glx \
+#         libgomp1 \
+#         libsm6 \
 #         libxfixes3 \
 #         libxi6 \
 #         libxkbcommon-x11-0 \
+#         libxrender1 \
 #         libxxf86vm-dev \
 #     && rm -rf /var/lib/apt/lists/*
 
