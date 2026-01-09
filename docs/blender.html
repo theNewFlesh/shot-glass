@@ -38,7 +38,7 @@
             shot-glass
           </a>
               <div class="version">
-                0.6.1
+                0.6.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -64,6 +64,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-shot_glass.blender.blender_tools">blender_tools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.activate_edit_mode"><code class="docutils literal notranslate"><span class="pre">activate_edit_mode()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.activate_object_mode"><code class="docutils literal notranslate"><span class="pre">activate_object_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.convert_mesh"><code class="docutils literal notranslate"><span class="pre">convert_mesh()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.dataframe_to_mesh"><code class="docutils literal notranslate"><span class="pre">dataframe_to_mesh()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.dataframe_to_pydata"><code class="docutils literal notranslate"><span class="pre">dataframe_to_pydata()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.dataframe_to_scene"><code class="docutils literal notranslate"><span class="pre">dataframe_to_scene()</span></code></a></li>
@@ -79,6 +80,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.filter_select_objects"><code class="docutils literal notranslate"><span class="pre">filter_select_objects()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.mesh_to_dataframe"><code class="docutils literal notranslate"><span class="pre">mesh_to_dataframe()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.mesh_to_pydata"><code class="docutils literal notranslate"><span class="pre">mesh_to_pydata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.read_mesh"><code class="docutils literal notranslate"><span class="pre">read_mesh()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.scene_to_dataframe"><code class="docutils literal notranslate"><span class="pre">scene_to_dataframe()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.select_all_faces"><code class="docutils literal notranslate"><span class="pre">select_all_faces()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.select_all_objects"><code class="docutils literal notranslate"><span class="pre">select_all_objects()</span></code></a></li>
@@ -87,6 +89,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.set_scene"><code class="docutils literal notranslate"><span class="pre">set_scene()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.triangulate_all_objects"><code class="docutils literal notranslate"><span class="pre">triangulate_all_objects()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.triangulate_faces"><code class="docutils literal notranslate"><span class="pre">triangulate_faces()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shot_glass.blender.blender_tools.write_mesh"><code class="docutils literal notranslate"><span class="pre">write_mesh()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -140,6 +143,41 @@
 <dt class="sig sig-object py" id="shot_glass.blender.blender_tools.activate_object_mode">
 <span class="sig-prename descclassname"><span class="pre">shot_glass.blender.blender_tools.</span></span><span class="sig-name descname"><span class="pre">activate_object_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/blender/blender_tools.html#activate_object_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.blender.blender_tools.activate_object_mode" title="Link to this definition"></a></dt>
 <dd><p>Set Blender interaction mode to object.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.blender.blender_tools.convert_mesh">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.blender.blender_tools.</span></span><span class="sig-name descname"><span class="pre">convert_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/blender/blender_tools.html#convert_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.blender.blender_tools.convert_mesh" title="Link to this definition"></a></dt>
+<dd><p>Converts a given mesh from a source format to a target format.
+The following formats are supported:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>abc</p></li>
+<li><p>dae</p></li>
+<li><p>fbx</p></li>
+<li><p>glb</p></li>
+<li><p>obj</p></li>
+<li><p>stl</p></li>
+<li><p>usd</p></li>
+<li><p>usdc</p></li>
+<li><p>usdz</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<em>bytes</em>) – File content.</p></li>
+<li><p><strong>source_format</strong> (<em>str</em>) – Source file format.</p></li>
+<li><p><strong>target_format</strong> (<em>str</em>) – Target file format.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Target file as bytes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -343,6 +381,40 @@ pattern.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.blender.blender_tools.read_mesh">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.blender.blender_tools.</span></span><span class="sig-name descname"><span class="pre">read_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/blender/blender_tools.html#read_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.blender.blender_tools.read_mesh" title="Link to this definition"></a></dt>
+<dd><p>Read mesh from given filepath.
+The following formats are supported:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>abc</p></li>
+<li><p>dae</p></li>
+<li><p>fbx</p></li>
+<li><p>glb</p></li>
+<li><p>obj</p></li>
+<li><p>stl</p></li>
+<li><p>usd</p></li>
+<li><p>usdc</p></li>
+<li><p>usdz</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – Path to mesh file.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>AssertionError</strong> – If file is not found.</p></li>
+<li><p><strong>ValueError</strong> – If file extension is unknown.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="shot_glass.blender.blender_tools.scene_to_dataframe">
 <span class="sig-prename descclassname"><span class="pre">shot_glass.blender.blender_tools.</span></span><span class="sig-name descname"><span class="pre">scene_to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/blender/blender_tools.html#scene_to_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.blender.blender_tools.scene_to_dataframe" title="Link to this definition"></a></dt>
 <dd><p>Converts given Blender scene into a DataFrame.</p>
@@ -425,6 +497,34 @@ face indices.</p>
 triangulation.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="shot_glass.blender.blender_tools.write_mesh">
+<span class="sig-prename descclassname"><span class="pre">shot_glass.blender.blender_tools.</span></span><span class="sig-name descname"><span class="pre">write_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/shot_glass/blender/blender_tools.html#write_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#shot_glass.blender.blender_tools.write_mesh" title="Link to this definition"></a></dt>
+<dd><p>Write scene to mesh file.
+The following formats are supported:
+:rtype: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<blockquote>
+<div><blockquote>
+<div><ul class="simple">
+<li><p>abc</p></li>
+<li><p>fbx</p></li>
+<li><p>glb</p></li>
+<li><p>obj</p></li>
+<li><p>stl</p></li>
+<li><p>usd</p></li>
+<li><p>usdc</p></li>
+<li><p>usdz</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filepath (str): Target filepath.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If file extension is unknown.</p>
+</dd>
+</dl>
+</div></blockquote>
 </dd></dl>
 
 </section>
