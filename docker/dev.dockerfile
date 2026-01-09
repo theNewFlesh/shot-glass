@@ -172,7 +172,6 @@ RUN echo "\n${CYAN}INSTALL DEV DEPENDENCIES${CLEAR}"; \
     pdm completion zsh > /home/ubuntu/.oh-my-zsh/custom/completions/_pdm
 
 # setup pdm
-COPY --chown=ubuntu:ubuntu config/build.yaml /home/ubuntu/config/
 COPY --chown=ubuntu:ubuntu config/dev.lock /home/ubuntu/config/
 COPY --chown=ubuntu:ubuntu config/pdm.toml /home/ubuntu/config/
 COPY --chown=ubuntu:ubuntu config/prod.lock /home/ubuntu/config/
