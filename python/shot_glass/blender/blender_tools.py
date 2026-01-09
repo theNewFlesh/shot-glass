@@ -1,3 +1,8 @@
+from shot_glass.core.types import Filepath  # noqa F401
+
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
 import bpy
 import bmesh
 import lunchbox.tools as lbt
@@ -483,3 +488,134 @@ def dataframe_to_scene(data):
         item = data[data.i_id == i_id]
         dataframe_to_mesh(item)
     return bpy.context.scene
+
+
+# IO-FUNCTIONS------------------------------------------------------------------
+def read_mesh(filepath):
+    # type: (Filepath) -> None
+    '''
+    Read mesh from given filepath.
+    The following formats are supported:
+
+        * abc
+        * dae
+        * fbx
+        * glb
+        * obj
+        * stl
+        * usd
+        * usdc
+        * usdz
+
+    Args:
+        filepath (str): Path to mesh file.
+
+    Raises:
+        AssertionError: If file is not found.
+        ValueError: If file extension is unknown.
+    '''
+    source = Path(filepath).as_posix()
+    assert Path(source).is_file(), f'File not found: {source}'
+
+    ext = Path(source).suffix[1:]
+    match ext:
+        case 'abc':
+            bpy.ops.wm.alembic_import(filepath=source, filter_glob='*.abc')
+        case 'dae':
+            bpy.ops.wm.collada_import(filepath=source, filter_glob='*.dae')
+        case 'fbx':
+            bpy.ops.import_scene.fbx(filepath=source, filter_glob='*.fbx')
+        case 'glb':
+            bpy.ops.import_scene.gltf(filepath=source, filter_glob='*.glb')
+        case 'obj':
+            bpy.ops.wm.obj_import(filepath=source, filter_glob='*.obj')
+        case 'stl':
+            bpy.ops.wm.stl_import(filepath=source, filter_glob='*.stl')
+        case 'usd' | 'usdc' | 'usdz':
+            bpy.ops.wm.usd_import(filepath=source, filter_glob='*.usd')
+        case _:
+            raise ValueError(f'Unknown file extension: {ext}.')
+
+    LOGGER.debug(f'Read: {source}')
+
+
+def write_mesh(filepath):
+    # type: (Filepath) -> None
+    '''
+    Write scene to mesh file.
+    The following formats are supported:
+
+        * abc
+        * fbx
+        * glb
+        * obj
+        * stl
+        * usd
+        * usdc
+        * usdz
+
+       Args:
+           filepath (str): Target filepath.
+
+       Raises:
+           ValueError: If file extension is unknown.
+    '''
+    target = Path(filepath).as_posix()
+    ext = Path(target).suffix[1:]
+    match ext:
+        case 'abc':
+            bpy.ops.wm.alembic_export(filepath=target)
+        case 'fbx':
+            bpy.ops.export_scene.fbx(filepath=target)
+        case 'glb':
+            bpy.ops.export_scene.gltf(filepath=target, export_materials='PLACEHOLDER')
+        case 'obj':
+            bpy.ops.wm.obj_export(filepath=target, export_materials=False)
+        case 'stl':
+            bpy.ops.wm.stl_export(filepath=target)
+        case 'usd' | 'usdc' | 'usdz':
+            bpy.ops.wm.usd_export(filepath=target, export_materials=False)
+        case _:
+            raise ValueError(f'Unknown file extension: {ext}.')
+
+    LOGGER.debug(f'Wrote: {target}')
+
+
+def convert_mesh(content, source_format, target_format):
+    # type: (bytes, str, str) -> bytes
+    '''
+    Converts a given mesh from a source format to a target format.
+    The following formats are supported:
+
+        * abc
+        * dae
+        * fbx
+        * glb
+        * obj
+        * stl
+        * usd
+        * usdc
+        * usdz
+
+    Args:
+        content (bytes): File content.
+        source_format (str): Source file format.
+        target_format (str): Target file format.
+
+    Returns:
+        bytes: Target file as bytes.
+    '''
+    delete_all_scenes()
+
+    with TemporaryDirectory(prefix='shot-glass_') as root:
+        source = Path(root, f'source.{source_format}')
+        with open(source, 'wb') as f:
+            f.write(content)
+        read_mesh(source)
+
+        target = Path(root, f'target.{target_format}')
+        write_mesh(target)
+        with open(target, 'rb') as f:
+            output = f.read()
+
+    return output

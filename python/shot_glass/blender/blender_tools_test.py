@@ -1,7 +1,10 @@
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 
 import bpy
 import bmesh
+import lunchbox.tools as lbt
 from pandas import DataFrame
 import pytest
 
@@ -511,3 +514,66 @@ class BlenderToolsTests(unittest.TestCase):
         # faces
         self.assertEqual(result[2], expected[2])
         self.assertEqual(len(result[2]), 7)
+
+    def test_read_mesh(self):
+        source = lbt.relative_path(__file__, '../../../resources/cube.obj')
+        assert len(bpy.data.objects) == 0
+        blt.read_mesh(source)
+        assert len(bpy.data.objects) == 1
+
+    def test_read_mesh_errors(self):
+        with TemporaryDirectory() as root:
+            source = Path(root, 'foo.bar')
+            with open(source, 'w') as f:
+                f.write('foo')
+
+            expected = 'Unknown file extension: bar.'
+            with self.assertRaisesRegex(ValueError, expected):
+                blt.read_mesh(source)
+
+    def test_write_mesh(self):
+        source = lbt.relative_path(__file__, '../../../resources/cube.obj')
+        blt.read_mesh(source)
+        with TemporaryDirectory() as root:
+            target = Path(root, 'target.obj')
+            blt.write_mesh(target)
+            assert target.exists()
+
+    def test_write_mesh_errors(self):
+        source = lbt.relative_path(__file__, '../../../resources/cube.obj')
+        blt.read_mesh(source)
+        with TemporaryDirectory() as root:
+            target = Path(root, 'foo.bar')
+            expected = 'Unknown file extension: bar.'
+            with self.assertRaisesRegex(ValueError, expected):
+                blt.write_mesh(target)
+
+    def test_convert_mesh(self):
+        source = lbt.relative_path(__file__, '../../../resources/cube.obj')
+        with open(source, 'rb') as f:
+            content = f.read()
+
+        src_fmt = 'obj'
+        formats = [
+            'abc', 'fbx', 'glb', 'obj', 'stl', 'usd', 'usdc', 'usdz'
+        ]
+        for tgt_fmt in formats:
+            content = blt.convert_mesh(content, src_fmt, tgt_fmt)
+            self.assertGreater(len(content), 0)
+            src_fmt = tgt_fmt
+
+    def test_convert_mesh_identity(self):
+        # comvert to stl
+        source = lbt.relative_path(__file__, '../../../resources/cube.obj')
+        with open(source, 'rb') as f:
+            obj = f.read()
+        stl = blt.convert_mesh(obj, 'obj', 'stl')
+        self.assertGreater(len(stl), 0)
+
+        # convert back to obj
+        with TemporaryDirectory(prefix='shot-glass-test_') as root:
+            target = Path(root, 'target.stl')
+            with open(target, 'wb') as f:
+                f.write(stl)
+            result = blt.convert_mesh(stl, 'stl', 'obj')
+            self.assertEqual(result[:10], obj[:10])
