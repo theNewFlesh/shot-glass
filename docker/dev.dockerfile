@@ -65,16 +65,16 @@ RUN echo "\n${CYAN}INSTALL PYTHON${CLEAR}"; \
     apt update && \
     apt install -y \
         python3-pydot \
-        python3.10-dev \
-        python3.10-venv \
-        python3.10-distutils \
+        python3.11-dev \
+        python3.11-venv \
+        python3.11-distutils \
     && rm -rf /var/lib/apt/lists/*
 
 # install pip
 RUN echo "\n${CYAN}INSTALL PIP${CLEAR}"; \
     wget https://bootstrap.pypa.io/get-pip.py && \
-    python3.10 get-pip.py && \
-    pip3.10 install --upgrade pip && \
+    python3.11 get-pip.py && \
+    pip3.11 install --upgrade pip && \
     rm -rf get-pip.py
 
 # install nodejs (needed by jupyter lab)
@@ -144,15 +144,15 @@ FROM base AS dev
 USER root
 
 # install blender dependencies
-RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
-    apt update && \
-    apt install -y \
-        libgl1-mesa-glx \
-        libxfixes3 \
-        libxi6 \
-        libxkbcommon-x11-0 \
-        libxxf86vm-dev \
-    && rm -rf /var/lib/apt/lists/*
+# RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
+#     apt update && \
+#     apt install -y \
+#         libgl1-mesa-glx \
+#         libxfixes3 \
+#         libxi6 \
+#         libxkbcommon-x11-0 \
+#         libxxf86vm-dev \
+#     && rm -rf /var/lib/apt/lists/*
 
 USER ubuntu
 WORKDIR /home/ubuntu
@@ -161,8 +161,8 @@ WORKDIR /home/ubuntu
 RUN echo "\n${CYAN}INSTALL DEV DEPENDENCIES${CLEAR}"; \
     curl -sSL \
         https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py \
-        | python3.10 - && \
-    pip3.10 install --upgrade --user \
+        | python3.11 - && \
+    pip3.11 install --upgrade --user \
         'pdm>=2.19.1' \
         'pdm-bump<0.7.0' \
         'rolling-pin>=0.11.1' \
@@ -188,17 +188,17 @@ RUN echo "\n${CYAN}INSTALL DEV ENVIRONMENT${CLEAR}"; \
     . /home/ubuntu/scripts/x_tools.sh && \
     export CONFIG_DIR=/home/ubuntu/config && \
     export SCRIPT_DIR=/home/ubuntu/scripts && \
-    x_env_init dev 3.10 && \
+    x_env_init dev 3.11 && \
     cd /home/ubuntu && \
-    ln -s `_x_env_get_path dev 3.10` .dev-env && \
-    ln -s `_x_env_get_path dev 3.10`/lib/python3.10/site-packages .dev-packages
+    ln -s `_x_env_get_path dev 3.11` .dev-env && \
+    ln -s `_x_env_get_path dev 3.11`/lib/python3.11/site-packages .dev-packages
 
 # create prod envs
 RUN echo "\n${CYAN}INSTALL PROD ENVIRONMENTS${CLEAR}"; \
     . /home/ubuntu/scripts/x_tools.sh && \
     export CONFIG_DIR=/home/ubuntu/config && \
     export SCRIPT_DIR=/home/ubuntu/scripts && \
-    x_env_init prod 3.10
+    x_env_init prod 3.11
 
 # install prod cli
 RUN echo "\n${CYAN}INSTALL PROD CLI${CLEAR}"; \
@@ -229,7 +229,7 @@ RUN echo "\n${CYAN}REMOVE DIRECTORIES${CLEAR}"; \
     rm -rf /home/ubuntu/config /home/ubuntu/scripts
 
 ENV REPO='shot-glass'
-ENV PYTHONPATH="$PYTHONPATH:/home/ubuntu/$REPO/python:/home/ubuntu/.local/lib"
+ENV PYTHONPATH="/home/ubuntu/$REPO/python:/home/ubuntu/.local/lib"
 ENV PYTHONPYCACHEPREFIX="/home/ubuntu/.python_cache"
 ENV HOME="/home/ubuntu"
 ENV JUPYTER_RUNTIME_DIR="/tmp/jupyter_runtime"

@@ -33,7 +33,7 @@
 <!-- <img id="logo" src="sphinx/images/logo.png" style="max-width: 717px"> -->
 
 # Introduction
-3D Data Science via Blender and Category Theory.
+3D Data Science via Blender and Category Theory
 
 See [documentation](https://thenewflesh.github.io/shot-glass/) for details.
 
@@ -183,6 +183,7 @@ The following is a complete list of all available development commands:
 | docs-architecture          | Generate architecture.svg diagram from all import statements        |
 | docs-full                  | Generate documentation, coverage report, diagram and code metrics   |
 | docs-metrics               | Generate code metrics report, plots and tables                      |
+| docs-sphinx                | Generate sphinx rst files                                           |
 | library-add                | Add a given package to a given dependency group                     |
 | library-graph-dev          | Graph dependencies in dev environment                               |
 | library-graph-prod         | Graph dependencies in prod environment                              |

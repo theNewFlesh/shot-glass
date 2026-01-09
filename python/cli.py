@@ -161,6 +161,7 @@ def get_info():
     docs-architecture          - Generate architecture.svg diagram from all import statements
     docs-full                  - Generate documentation, coverage report, diagram and code metrics
     docs-metrics               - Generate code metrics report, plots and tables
+    docs-sphinx                - Generate sphinx rst files
     library-add                - Add a given package to a given dependency group
     library-graph-dev          - Graph dependencies in dev environment
     library-graph-prod         - Graph dependencies in prod environment
@@ -894,6 +895,7 @@ def main():
         'docs-architecture': x_tools_command('x_docs_architecture', args),
         'docs-full': x_tools_command('x_docs_full', args),
         'docs-metrics': x_tools_command('x_docs_metrics', args),
+        'docs-sphinx': x_tools_command('x_docs_sphinx', args),
         'library-add': x_tools_command('x_library_add', args),
         'library-graph-dev': x_tools_command('x_library_graph_dev', args),
         'library-graph-prod': x_tools_command('x_library_graph_prod', args),

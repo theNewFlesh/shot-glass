@@ -27,43 +27,20 @@ RUN echo "\n${CYAN}INSTALL GENERIC DEPENDENCIES${CLEAR}"; \
         software-properties-common && \
     rm -rf /var/lib/apt/lists/*
 
-# install blender
-ARG VER=3.4.0
-ENV BLENDER_VERSION=3.4
-RUN echo "\n${CYAN}INSTALL BLENDER${NO_COLOR}"; \
-    curl -fsSL \
-        https://mirror.clarkson.edu/blender/release/Blender$BLENDER_VERSION/blender-$VER-linux-x64.tar.xz \
-        -o blender.tar.xz && \
-    tar xf blender.tar.xz && \
-    rm blender.tar.xz && \
-    mv blender-$VER-linux-x64 blender && \
-    chown -R ubuntu:ubuntu blender
-
-# setup python
-ARG BLENDER_PYTHON=/home/ubuntu/blender/$BLENDER_VERSION/python/bin/python3.10
-RUN echo "\n${CYAN}SETUP PYTHON${NO_COLOR}"; \
-    curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-    chown -R ubuntu:ubuntu get-pip.py && \
-    $BLENDER_PYTHON get-pip.py
-ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10
-ENV PYTHONPATH $PYTHONPATH:/blender/$BLENDER_VERSION/python/lib/python3.10/site-packages
-ENV PYTHONPATH $PYTHONPATH:/home/ubuntu/blender/$BLENDER_VERSION/scripts/modules
-ENV PATH /home/ubuntu/blender/$BLENDER_VERSION/python/bin:$PATH
-
-# install python3.10 and pip
-RUN echo "\n${CYAN}SETUP PYTHON3.10${CLEAR}"; \
+# install python3.11 and pip
+RUN echo "\n${CYAN}SETUP PYTHON3.11${CLEAR}"; \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt update && \
     apt install --fix-missing -y \
-        python3.10-dev \
-        python3.10-venv && \
+        python3.11-dev \
+        python3.11-venv && \
     rm -rf /var/lib/apt/lists/*
 
 # install pip
 RUN echo "\n${CYAN}INSTALL PIP${CLEAR}"; \
     curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-    python3.10 get-pip.py && \
-    pip3.10 install --upgrade pip && \
+    python3.11 get-pip.py && \
+    pip3.11 install --upgrade pip && \
     rm -rf get-pip.py
 
 # install pdm
@@ -72,17 +49,17 @@ ENV PATH="$PATH:/home/ubuntu/.local/bin"
 RUN echo "\n${CYAN}INSTALL PDM${CLEAR}"; \
     curl -sSL \
     https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py \
-    | python3.10 - && \
-    pip3.10 install --upgrade --user pdm && \
+    | python3.11 - && \
+    pip3.11 install --upgrade --user pdm && \
     pdm self update --pip-args='--user'
 
 # setup pdm environment
 RUN echo "\n${CYAN}SETUP PDM${CLEAR}"; \
     mkdir /home/ubuntu/pdm && \
     cd /home/ubuntu/pdm && \
-    pdm init --python 3.10 --non-interactive && \
+    pdm init --python 3.11 --non-interactive && \
     rm -rf src tests README.md __pycache__ .gitignore && \
-    pdm venv create -n prod-3.10;
+    pdm venv create -n prod-3.11;
 
 # install shot-glass
 USER ubuntu

@@ -47,9 +47,3 @@ runs:
           username: ${{ inputs.docker_registry_user }}
           password: ${{ inputs.docker_registry_password }}
 
-      - name: Write PyPI access token to secret-env
-        shell: bash
-        run: |
-          echo "export PYPI_ACCESS_TOKEN=$PYPI_ACCESS_TOKEN" \
-            > docker/config/secret-env
-

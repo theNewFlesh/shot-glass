@@ -11,14 +11,15 @@ export REPO_COMMAND_FILE="$REPO_SUBPACKAGE/command.py"
 export BUILD_DIR="$HOME/build"
 export CONFIG_DIR="$REPO_DIR/docker/config"
 export DOCS_DIR="$REPO_DIR/docs"
-export MIN_PYTHON_VERSION="3.10"
-export MAX_PYTHON_VERSION="3.10"
+export MIN_PYTHON_VERSION="3.11"
+export MAX_PYTHON_VERSION="3.11"
 export MKDOCS_DIR="$REPO_DIR/mkdocs"
 export PDM_DIR="$HOME/pdm"
 export PYPI_URL="pypi"
 export PYPI_TEST_URL="testpypi"
 export PYTHONPATH="$REPO_DIR/python:$HOME/.local/lib"
 export SCRIPT_DIR="$REPO_DIR/docker/scripts"
+export SPHINX_DIR="$REPO_DIR/sphinx"
 export TEST_MAX_PROCS=16
 export TEST_PROCS="auto"
 export TEST_VERBOSITY=0
@@ -306,7 +307,7 @@ x_build_edit_prod_dockerfile () {
         's/ARG VERSION/COPY \--chown=ubuntu:ubuntu dist\/pkg.tar.gz \/home\/ubuntu\/pkg.tar.gz/' \
         $REPO_DIR/docker/prod.dockerfile;
     sed --in-place -E \
-        's/--user.*==\$VERSION/--user \/home\/ubuntu\/pkg.tar.gz/' \
+        's/pdm add -v .*==\$VERSION/pdm add -v \/home\/ubuntu\/pkg.tar.gz/' \
         $REPO_DIR/docker/prod.dockerfile;
 }
 
@@ -363,11 +364,11 @@ x_docs () {
     echo "${CYAN2}GENERATING DOCS${CLEAR}\n";
     rm -rf $DOCS_DIR;
     mkdir -p $DOCS_DIR;
-    cp $REPO_DIR/README.md $REPO_DIR/sphinx/readme.md;
-    sed --in-place -E 's/sphinx\/images/_images/g' $REPO_DIR/sphinx/readme.md;
+    cp $REPO_DIR/README.md $SPHINX_DIR/readme.md;
+    sed --in-place -E 's/sphinx\/images/_images/g' $SPHINX_DIR/readme.md;
     sphinx-build sphinx $DOCS_DIR;
     exit_code=`_x_resolve_exit_code $exit_code $?`;
-    rm -f $REPO_DIR/sphinx/readme.md;
+    rm -f $SPHINX_DIR/readme.md;
     cp -f sphinx/style.css $DOCS_DIR/_static/style.css;
     touch $DOCS_DIR/.nojekyll;
     # mkdir -p $DOCS_DIR/resources;
@@ -403,6 +404,56 @@ x_docs_metrics () {
         $REPO_DIR/python $DOCS_DIR/plots.html;
     rolling-pin table \
         $REPO_DIR/python $DOCS_DIR;
+}
+
+_x_docs_sphinx () {
+    # Generate sphinx rst file
+    # args: subpackage name, absolute module paths
+    echo "$1";
+    echo "$1" | sed 's/./=/g';
+
+    local items=`echo "$2" | tr ' ' '\n'`;
+    echo $items | while read -r item; do
+        local module=`echo $item | sed -E 's/.*\.//'`;
+        local sep=`echo $module | sed 's/./-/g'`;
+        echo "
+$module
+$sep
+.. automodule:: $item
+    :members:
+    :private-members:
+    :undoc-members:
+    :show-inheritance:";
+    done;
+}
+
+x_docs_sphinx () {
+    # Generate sphinx rst files for all python modules
+    echo "${CYAN2}GENERATING SPHINX RST FILES${CLEAR}\n";
+
+    # modules.rst
+    local tmp=`find $REPO_SUBPACKAGE -mindepth 1 -maxdepth 1 -type d`;
+    local modules=`echo "$tmp" | sed -E 's/.*\//   /' | sort`;
+    echo ".. toctree::
+   :maxdepth: 4
+
+$modules" > $SPHINX_DIR/modules.rst;
+
+    # all other rst files
+    local dirs=`find $REPO_SUBPACKAGE -mindepth 1 -maxdepth 1 -type d`;
+    echo $dirs | while read -r dir; do
+        local name=`echo $dir | tr ' ' '\n' | head -n 1 | sed -E 's/^.*\///'`;
+        local items=` \
+            find $dir -type f \
+            | grep -vE '(test|test_base|__init__|/command)\.py' \
+            | sed -E 's/.*python\///' \
+            | sed -E 's/\//./g' \
+            | sed -E 's/\.py//' \
+            | sort \
+            | tr '\n' ' '
+        `;
+        _x_docs_sphinx "$name" "$items" > $SPHINX_DIR/$name.rst;
+    done;
 }
 
 # LIBRARY-FUNCTIONS-------------------------------------------------------------
@@ -573,7 +624,7 @@ x_library_update () {
 x_library_update_pdm () {
     # Update PDM in all environments
     echo "${CYAN2}UPDATE PDM${CLEAR}\n";
-    pip3.10 install --user --upgrade pdm;
+    pip3.11 install --user --upgrade pdm;
     echo "${GREEN2}LIBRARY UPDATE COMPLETE${CLEAR}";
 }
 
@@ -732,6 +783,11 @@ _x_get_version () {
         | sed 's/\"//g';
 }
 
+_x_version_file_update () {
+    # update non-pyproject files with new pyproject version
+    # args: old_version, new_version
+}
+
 x_version () {
     # Full resolution of repo: dependencies, linting, tests, docs, etc
     x_library_install_dev;
@@ -744,10 +800,14 @@ _x_version_bump () {
     # args: type
     x_env_activate_dev;
     local title=`echo $1 | tr '[a-z]' '[A-Z]'`;
+    local old_version=`_x_get_version`;
+
     echo "${CYAN2}BUMPING $title VERSION${CLEAR}\n";
     cd $PDM_DIR
     pdm bump $1;
     _x_library_pdm_to_repo_dev;
+    local new_version=`_x_get_version`;
+    _x_version_file_update $old_version $new_version;
 }
 
 x_version_bump_major () {

@@ -60,6 +60,10 @@
             "**/jupyter/serverconfig": true,
             "*/*/**/node_modules": true,
             "**/.Trash*": true,
+        },
+        "workbench.colorCustomizations": {
+            "statusBar.background": "#EBB483",
+            "statusBar.foreground": "#000000"
         }
     },
     "tasks": {
@@ -190,6 +194,15 @@
                 "command": [
                     "source $X_TOOLS_PATH &&",
                     "x_docs_metrics"
+                ]
+            },
+            {
+                "label": "[docs] sphinx",
+                "detail": "Generate sphinx rst files",
+                "icon": {"id": "book", "color": "terminal.ansiYellow"},
+                "command": [
+                    "source $X_TOOLS_PATH &&",
+                    "x_docs_sphinx"
                 ]
             },
             {
@@ -400,12 +413,12 @@
                 ]
             },
             {
-                "label": "_[test] prod-3.10",
-                "detail": "Run tests in prod-3.10 environment",
+                "label": "_[test] prod-3.11",
+                "detail": "Run tests in prod-3.11 environment",
                 "command": [
                     "source $X_TOOLS_PATH &&",
                     "TEST_PROCS=1 &&",
-                    "x_test_run prod 3.10"
+                    "x_test_run prod 3.11"
                 ],
                 "hide": true,
                 "presentation": {
@@ -417,7 +430,7 @@
                 "label": "_[test] prod",
                 "detail": "Run tests across all support python versions",
                 "dependsOn": [
-                    "_[test] prod-3.10",
+                    "_[test] prod-3.11",
                 ],
                 "hide": true,
                 "dependsOrder": "parallel",
@@ -557,7 +570,7 @@
             },
             {
                 "id": "commit_message",
-                "description": "Git commit message",
+                "description": "Git commit message:",
                 "type": "promptString",
                 "default": ""
             }
