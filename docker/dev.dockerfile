@@ -144,18 +144,18 @@ FROM base AS dev
 USER root
 
 # install blender dependencies
-# RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
-#     apt update && \
-#     apt install -y \
-#         libgl1-mesa-glx \
-#         libgomp1 \
-#         libsm6 \
-#         libxfixes3 \
-#         libxi6 \
-#         libxkbcommon-x11-0 \
-#         libxrender1 \
-#         libxxf86vm-dev \
-#     && rm -rf /var/lib/apt/lists/*
+RUN echo "\n${CYAN}INSTALL BLENDER DEPENDENCIES${CLEAR}"; \
+    apt update && \
+    apt install -y \
+        libgl1-mesa-glx \
+        libgomp1 \
+        libsm6 \
+        libxfixes3 \
+        libxi6 \
+        libxkbcommon-x11-0 \
+        libxrender1 \
+        libxxf86vm-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 USER ubuntu
 WORKDIR /home/ubuntu
