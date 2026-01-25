@@ -2,7 +2,6 @@ from tempfile import TemporaryDirectory
 import json
 import os
 import re
-import warnings
 
 import pandas as pd
 import numpy as np
@@ -138,10 +137,8 @@ class HiFiveTest(HiFiveTestBase):
             self.assertEqual(e.type, TypeError)
         del hi.data['v_f_foo']
 
-        with warnings.catch_warnings():
-            warnings.filterwarnings('ignore', category=FutureWarning)
-            hi.data.loc[1, 'v_id'] = 'foo'
-
+        hi.data.v_id = hi.data.v_id.astype(object)
+        hi.data.loc[1, 'v_id'] = 'foo'
         with pytest.raises(TypeError) as e:
             hi.validate_column('v_id')
             self.assertEqual(e.type, TypeError)
@@ -159,10 +156,8 @@ class HiFiveTest(HiFiveTestBase):
 
         hi.data['v_i_foo'] = hi.data.v_id
         hi.validate()
-
-        with warnings.catch_warnings():
-            warnings.filterwarnings('ignore', category=FutureWarning)
-            hi.data.loc[1, 'v_i_foo'] = 'bar'
+        hi.data.v_id = hi.data.v_id.astype(object)
+        hi.data.loc[1, 'v_i_foo'] = 'bar'
 
         with pytest.raises(TypeError) as e:
             hi.validate()
@@ -241,11 +236,8 @@ class HiFiveTest(HiFiveTestBase):
 
         hi.data['v_i_foo'] = 1
         hi._validate_column_values('v_i_foo')
-
-
-        with warnings.catch_warnings():
-            warnings.filterwarnings('ignore', category=FutureWarning)
-            hi.data.loc[1, 'v_i_foo'] = 'bar'
+        hi.data.v_i_foo = hi.data.v_i_foo.astype(object)
+        hi.data.loc[1, 'v_i_foo'] = 'bar'
 
         with pytest.raises(TypeError) as e:
             hi._validate_column_values('v_i_foo')
