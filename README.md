@@ -46,7 +46,7 @@ See [documentation](https://thenewflesh.github.io/shot-glass/) for details.
 4. `cd shot-glass`
 5. `chmod +x bin/shot-glass`
 6. `bin/shot-glass docker-start`
-   - If building on a M1 Mac run `export DOCKER_DEFAULT_PLATFORM=linux/amd64` first.
+   - If building on a M1 Mac run `export DOCKER_DEFAULT_PLATFORM=linux/arm64` first.
 
 The service should take a few minutes to start up.
 
@@ -59,7 +59,7 @@ Run `bin/shot-glass --help` for more help on the command line tool.
     - `alias shot-glass="cd [parent dir]/shot-glass; bin/shot-glass"`
     - Replace `[parent dir]` with the parent directory of this repository
 3. Consider adding the following line to your ~/.zshrc if you are using a M1 Mac:
-    - `export DOCKER_DEFAULT_PLATFORM=linux/amd64`
+    - `export DOCKER_DEFAULT_PLATFORM=linux/arm64`
 4. Running the `zsh-complete` command will enable tab completions of the cli
    commands, in the next shell session.
 
