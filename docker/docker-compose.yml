@@ -2,7 +2,7 @@ services:
   shot-glass:
     container_name: shot-glass
     image: shot-glass:dev
-    platform: linux/arm64
+    platform: linux/amd64
     build:
       context: .
       dockerfile: dev.dockerfile
