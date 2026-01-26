@@ -38,7 +38,7 @@
             shot-glass
           </a>
               <div class="version">
-                0.6.4
+                0.6.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -165,7 +165,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">bin/shot-glass</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">bin/shot-glass</span> <span class="pre">docker-start</span></code></p>
 <ul class="simple">
-<li><p>If building on a M1 Mac run <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">DOCKER_DEFAULT_PLATFORM=linux/amd64</span></code> first.</p></li>
+<li><p>If building on a silicon Mac change the value of the <code class="docutils literal notranslate"><span class="pre">PLATFORM</span></code> variable in
+the cli.py module to <code class="docutils literal notranslate"><span class="pre">linux/arm64</span></code>.</p></li>
 </ul>
 </li>
 </ol>
@@ -183,9 +184,9 @@ in your ~/.zshrc file:</p>
 <li><p>Replace <code class="docutils literal notranslate"><span class="pre">[parent</span> <span class="pre">dir]</span></code> with the parent directory of this repository</p></li>
 </ul>
 </li>
-<li><p>Consider adding the following line to your ~/.zshrc if you are using a M1 Mac:</p>
+<li><p>Consider adding the following line to your ~/.zshrc if you are using a silicon Mac:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">DOCKER_DEFAULT_PLATFORM=linux/amd64</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">DOCKER_DEFAULT_PLATFORM=linux/arm64</span></code></p></li>
 </ul>
 </li>
 <li><p>Running the <code class="docutils literal notranslate"><span class="pre">zsh-complete</span></code> command will enable tab completions of the cli
