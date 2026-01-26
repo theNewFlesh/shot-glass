@@ -156,7 +156,7 @@ class HiFiveTest(HiFiveTestBase):
 
         hi.data['v_i_foo'] = hi.data.v_id
         hi.validate()
-        hi.data.v_id = hi.data.v_id.astype(object)
+        hi.data.v_i_foo = hi.data.v_i_foo.astype(object)
         hi.data.loc[1, 'v_i_foo'] = 'bar'
 
         with pytest.raises(TypeError) as e:
